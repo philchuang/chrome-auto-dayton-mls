@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+
+  "name": "DABR-AUTO",
+  "description": "This extension automates a dabr.com search.",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs",
+    "http://*.dabr.com/",
+    "http://*.rapmls.com/"
+  ],
+
+  "browser_action": {
+    "default_icon": "dabr.png"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://*.dabr.com/"],
+      "js": ["jquery-2.1.0.min.js", "dabr.com.js"]
+    },
+    {
+      "matches": ["http://*.rapmls.com/*"],
+      "js": ["jquery-2.1.0.min.js", "rapmls.com.js"]
+    }
+  ]
+}
