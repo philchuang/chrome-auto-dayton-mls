@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/app/lib/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="/app/lib/string.js"></script>
+		<script type="text/javascript" src="/app/js/popup.js"></script>
+	</head>
+	<body>
+		<form>
+			<table width="200">
+				<tr>
+					<td style="white-space: nowrap;"><label for="minPrice">Price min $</label></td>
+					<td><input type="text" id="minPrice" size="4" />,000</td>
+				</tr>
+				<tr>
+					<td style="white-space: nowrap;"><label for="maxPrice">Price max $</label></td>
+					<td><input type="text" id="maxPrice" size="4" />,000</td>
+				</tr>
+				<tr>
+					<td style="white-space: nowrap;"><label for="bedrooms">Bdrms</label></td>
+					<td><input type="text" id="bedrooms" size="2" /></td>
+				</tr>
+				<tr>
+					<td style="white-space: nowrap;"><label for="zipCodes">zips</label></td>
+					<td><textarea id="zipCodes" height="3"></textarea></td>
+				</tr>
+				<tr><td colspan="2"><hr/></td></tr>
+				<tr>
+					<td style="white-space: nowrap;"><label for="mls">MLS #s</label></td>
+					<td><textarea id="mls" height="3"></textarea></td>
+				</tr>
+			</table>
+			<input type="submit" id="searchButton" value="Search" />
+		</form>
+	</body>
+</html>

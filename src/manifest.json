@@ -3,30 +3,25 @@
 
   "name": "DABR-AUTO",
   "description": "This extension automates a dabr.com search.",
-  "version": "1.0",
+  "version": "1.1",
 
   "permissions": [
-    "tabs",
-    "http://*.dabr.com/",
-    "http://*.rapmls.com/"
+    "tabs", "notifications", "storage"
   ],
 
-  "browser_action": {
-    "default_icon": "dabr.png"
-  },
-
   "background": {
-    "scripts": ["background.js"]
+    "persistent": true,
+    "scripts": ["/app/lib/string.js", "/app/js/app.js"]
+    },
+
+  "browser_action": {
+    "default_icon": "/dabr.png",
+    "default_title": "DABR-Auto",
+    "default_popup": "/app/templates/popup.html"
   },
 
-  "content_scripts": [
-    {
-      "matches": ["http://*.dabr.com/"],
-      "js": ["jquery-2.1.0.min.js", "dabr.com.js"]
-    },
-    {
-      "matches": ["http://*.rapmls.com/*"],
-      "js": ["jquery-2.1.0.min.js", "rapmls.com.js"]
-    }
-  ]
+  "content_scripts": [{
+    "matches": ["http://dayton.rapmls.com/*"],
+    "js": ["/app/lib/jquery-2.1.0.min.js", "/app/js/rapmls.com.js"]
+  }]
 }
