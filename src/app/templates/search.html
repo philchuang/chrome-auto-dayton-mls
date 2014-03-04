@@ -1,8 +1,9 @@
 <html>
 	<head>
 		<script type="text/javascript" src="/app/lib/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="/app/lib/jquery.ba-bbq.min.js"></script>
 		<script type="text/javascript" src="/app/lib/string.js"></script>
-		<script type="text/javascript" src="/app/js/popup.js"></script>
+		<script type="text/javascript" src="/app/js/search.js"></script>
 	</head>
 	<body>
 		<form>
@@ -16,8 +17,19 @@
 					<td><input type="text" id="maxPrice" size="4" />,000</td>
 				</tr>
 				<tr>
-					<td style="white-space: nowrap;"><label for="bedrooms">Bdrms</label></td>
-					<td><input type="text" id="bedrooms" size="2" /></td>
+					<td style="white-space: nowrap;"><label for="minBedrooms">Bdrms</label></td>
+					<td><select id="minBedrooms">
+						<option />
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+					</select></td>
 				</tr>
 				<tr>
 					<td style="white-space: nowrap;"><label for="zipCodes">zips</label></td>
@@ -29,7 +41,12 @@
 					<td><textarea id="mls" height="3"></textarea></td>
 				</tr>
 			</table>
-			<input type="submit" id="searchButton" value="Search" />
+			<input type="submit" id="searchButton" value="Search" /><br/>
+			<br/>
+			<label for="bookmarkLink">Bookmark</label><br/>
+			<a id="bookmarkLink" href="#">Create bookmark</a>
+			<!--hr/>
+			<textarea id="debug" style="width: 95%; height: 100px;"></textarea-->
 		</form>
 	</body>
 </html>

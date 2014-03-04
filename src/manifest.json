@@ -3,10 +3,10 @@
 
   "name": "DABR-AUTO",
   "description": "This extension automates a dabr.com search.",
-  "version": "1.1",
+  "version": "1.0",
 
   "permissions": [
-    "tabs", "notifications", "storage"
+    "tabs", "notifications", "storage", "bookmarks"
   ],
 
   "background": {
@@ -17,7 +17,7 @@
   "browser_action": {
     "default_icon": "/dabr.png",
     "default_title": "DABR-Auto",
-    "default_popup": "/app/templates/popup.html"
+    "default_popup": "/app/templates/search.html"
   },
 
   "content_scripts": [{
