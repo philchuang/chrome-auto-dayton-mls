@@ -9,12 +9,12 @@ var _currentCriteria;
 
 function displayDebugNotification (message)
 {
-	chrome.notifications.create ("", { type: "basic", title: "DEBUG", message: message, iconUrl: "/dabr.png" }, function (id) {});
+	chrome.notifications.create ("", { type: "basic", title: "DEBUG", message: message, iconUrl: "/app/resources/icons/icon80.png" }, function (id) {});
 }
 
 function displayNotification (title, message)
 {
-	chrome.notifications.create ("", { type: "basic", title: title, message: message, iconUrl: "/dabr.png" }, function (id) {});
+	chrome.notifications.create ("", { type: "basic", title: title, message: message, iconUrl: "/app/resources/icons/icon80.png" }, function (id) {});
 }
 
 // BIZ LOGIC

@@ -85,6 +85,9 @@ function getBookmarkTitle (criteria)
 	if (title.substr (title.length - 2) == ", ");
 		title = title.substr (0, title.length - 2);
 
+	if (title.length == 0)
+		title = "Empty search";
+
 	return title;
 }
 

@@ -5,6 +5,12 @@
   "description": "This extension automates a Dayton, OH MLS search.",
   "version": "1.0",
 
+  "icons": {
+    "128": "/app/resources/icons/icon128.png", 
+    "48": "/app/resources/icons/icon48.png", 
+    "16": "/app/resources/icons/icon16.png"
+  },
+
   "permissions": [
     "tabs", "notifications", "storage", "bookmarks"
   ],
@@ -15,7 +21,7 @@
     },
 
   "browser_action": {
-    "default_icon": "/dabr.png",
+    "default_icon": "/app/resources/icons/icon19.png",
     "default_title": "Auto DAY-MLS",
     "default_popup": "/app/templates/search.html"
   },
