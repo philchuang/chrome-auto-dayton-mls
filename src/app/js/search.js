@@ -2,24 +2,24 @@ function setForm (criteria) {
 	if (typeof criteria == "undefined" || criteria == null)
 		criteria = {};
 
-	$("input#minPrice").val (criteria.minPriceK);
-	$("input#maxPrice").val (criteria.maxPriceK);
-	$("select#minBedrooms").val (criteria.minBedrooms);
-	$("textarea#zipCodes").val (criteria.zipCodes);
+	$("input[name='minPrice']").val (criteria.minPriceK);
+	$("input[name='maxPrice']").val (criteria.maxPriceK);
+	$("select[name='minBedrooms']").val (criteria.minBedrooms);
+	$("textarea[name='zipCodes']").val (criteria.zipCodes);
 	if (criteria && criteria.mls && criteria.mls.length)
-		$("textarea#mls").val (S(criteria.mls).toCSV (", ", null));
+		$("textarea[name='mls']").val (S(criteria.mls).toCSV (", ", null));
 	else
-		$("textarea#mls").val ();
+		$("textarea[name='mls']").val ();
 }
 
 function generateCriteria ()
 {
 	var criteria = {};
-	criteria.minPriceK = $("input#minPrice").val ();
-	criteria.maxPriceK = $("input#maxPrice").val ();
-	criteria.minBedrooms = $("select#minBedrooms").val ();
-	criteria.zipCodes = $("textarea#zipCodes").val ();
-	criteria.mls = $("textarea#mls").val ().split (",");
+	criteria.minPriceK = $("input[name='minPrice']").val ();
+	criteria.maxPriceK = $("input[name='maxPrice']").val ();
+	criteria.minBedrooms = $("select[name='minBedrooms']").val ();
+	criteria.zipCodes = $("textarea[name='zipCodes']").val ();
+	criteria.mls = $("textarea[name='mls']").val ().split (",");
 	if (criteria.mls.length == 1 && criteria.mls[0] == "")
 	{
 		criteria.mls = [];
@@ -162,7 +162,7 @@ document.addEventListener ("DOMContentLoaded", function ()
     });
 
 
-	$("a#bookmarkLink").click (function (e) {
+	$("#bookmarkButton").click (function (e) {
 		e.preventDefault ();
 		addOrUpdateBookmark ();
     });
