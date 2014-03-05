@@ -12,6 +12,14 @@ The Dayton, OH MLS site is difficult to use. You can't bookmark searches, and it
 
 So I wrote an extension for Chrome that simplifies the search to the primary fields and also allows you to create a bookmark to re-run that search.
 
+How do I get it?
+----------------
+
+1. Save the [Auto Dayton-MLS.crx](https://github.com/philchuang/chrome-auto-dayton-mls/blob/master/crx/Auto%20DAY-MLS.crx) chrome extension file to your computer.
+2. Open a new Chrome tab to the extensions management page, `chrome://extensions` - *sorry, chrome blocks this from being a link*
+3. Drag & drop the Auto Dayton MLS.crx file into the extensions management page.
+4. Look for it in the browser actions section to the right of the address bar.
+
 Status
 ------
 
