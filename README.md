@@ -16,20 +16,24 @@ How do I get it?
 ----------------
 
 1. Save the [Auto Dayton-MLS.crx](https://github.com/philchuang/chrome-auto-dayton-mls/blob/master/crx/Auto%20DAY-MLS.crx) chrome extension file to your computer.
-2. Open a new Chrome tab to the extensions management page, `chrome://extensions` - *sorry, chrome blocks this from being a link*
-3. Drag & drop the Auto Dayton MLS.crx file into the extensions management page.
+2. Open a new Chrome tab to the extensions management page, `chrome://extensions` - *sorry, chrome blocks this from being a link, so type it in or copy & paste*.
+3. Drag & drop the crx file into the extensions management page.
 4. Look for it in the browser actions section to the right of the address bar.
 
 Status
 ------
 
-v1.0 has been released.
+Current Version: **v1.1**
 
-To Dos:
+Latest features
 
-* Add a few more search fields (perhaps make that configurable)
-* Rewrite search form and use bootstrap css
+* Rewrote search form to use bootstrap
+* Now supports multiple concurrent searches
+
+To Dos
+
 * Rewrite javascript and use angular
+* Add a few more search fields (perhaps make that configurable)
 
 License
 -------
