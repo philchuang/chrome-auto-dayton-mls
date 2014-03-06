@@ -176,8 +176,10 @@ function getUrlCriteriaAndExecute ()
 
 function wireSearchButton ()
 {
-	$("#searchButton").click (function (e) {
+	var searchButton = $("#searchButton");
+	searchButton.click (function (e) {
 		e.preventDefault ();
+		searchButton.prop('disabled', true);
 		chrome.extension.getBackgroundPage ().searchDaytonRapmls (generateCriteria ());
 	});
 }
