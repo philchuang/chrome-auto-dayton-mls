@@ -1,3 +1,5 @@
+// -- FORM METHODS --------------------------------------------------------------------------------
+
 function setForm (criteria) {
 	if (typeof criteria == "undefined" || criteria == null)
 		criteria = {};
@@ -34,6 +36,8 @@ function generateCriteria ()
 
 	return criteria;
 }
+
+// -- BOOKMARK METHODS ----------------------------------------------------------------------------
 
 function getBookmarkLink (criteria)
 {
@@ -82,7 +86,7 @@ function getBookmarkTitle (criteria)
 		title += "zips " + criteria.zipCodes + ", ";
 
 	// cleanup
-	if (title.substr (title.length - 2) == ", ");
+	if (title.substr (title.length - 2) == ", ")
 		title = title.substr (0, title.length - 2);
 
 	if (title.length == 0)
@@ -134,47 +138,83 @@ function addOrUpdateBookmark ()
 
 		createOrGetBookmark (folderId, title, function (node) {
 			if (typeof node == "undefined" || node == null)
-		    {
-		    	chrome.bookmarks.create ({ parentId: folderId, title: title, url: url }, function (_) {
-		    		chrome.extension.getBackgroundPage ().displayNotification ("Bookmark created", title);
+			{
+				chrome.bookmarks.create ({ parentId: folderId, title: title, url: url }, function (_) {
+					chrome.extension.getBackgroundPage ().displayNotification ("Bookmark created", title);
 				});
-		    }
-		    else
-		    {
-		    	chrome.bookmarks.update (node.id, { url: url }, function (_) {
-		    		chrome.extension.getBackgroundPage ().displayNotification ("Bookmark updated", title);
-		    	});
-		    }
-    	});
+			}
+			else
+			{
+				chrome.bookmarks.update (node.id, { url: url }, function (_) {
+					chrome.extension.getBackgroundPage ().displayNotification ("Bookmark updated", title);
+				});
+			}
+		});
+	});
+}
+
+// -- INITIALIZATION ------------------------------------------------------------------------------
+
+function getLastCriteriaAndSetForm ()
+{
+	chrome.extension.getBackgroundPage ().getLastCriteria (function (items) {
+		var criteria = items["lastCriteria"];
+		setForm (criteria);
+	});
+}
+
+function getUrlCriteriaAndExecute ()
+{
+	if (location.search.length == 0) return;
+
+	chrome.tabs.getCurrent (function (tab) {
+		var criteria = jQuery.deparam (location.search.substr (1));
+		setForm (criteria);
+		chrome.extension.getBackgroundPage ().searchDaytonRapmls (criteria, tab);
+	});
+}
+
+function wireSearchButton ()
+{
+	$("#searchButton").click (function (e) {
+		e.preventDefault ();
+		chrome.extension.getBackgroundPage ().searchDaytonRapmls (generateCriteria ());
+	});
+}
+
+function wireBookmarkButton ()
+{
+	$("#bookmarkButton").click (function (e) {
+		e.preventDefault ();
+		addOrUpdateBookmark ();
+	});
+}
+
+/// Bootstrap dropdown
+function wireMinBedroomsDropdown ()
+{
+	var $pickButton = $("#minBedroomsDropdownBtn");
+
+	$("#minBedroomsDropdown li a").on ("click", function () {
+		var text = $(this).text();
+		$pickButton.text (text);
 	});
 }
 
 document.addEventListener ("DOMContentLoaded", function ()
 {
-	chrome.extension.getBackgroundPage().getLastCriteria (function (items) {
-		var criteria = items["lastCriteria"];
-		setForm (criteria);
-	});
+	getLastCriteriaAndSetForm ();
 
-	$("#searchButton").click (function (e) {
-        e.preventDefault ();
-        chrome.extension.getBackgroundPage ().searchDaytonRapmls (generateCriteria ());
-    });
+	//wireMinBedroomsDropdown ();
 
+	wireSearchButton ();
 
-	$("#bookmarkButton").click (function (e) {
-		e.preventDefault ();
-		addOrUpdateBookmark ();
-    });
+	wireBookmarkButton ();
 
-	if (location.search.length > 1)
-	{
-		chrome.tabs.getCurrent (function (tab) {
-			var criteria = jQuery.deparam (location.search.substr (1));
-	        chrome.extension.getBackgroundPage ().searchDaytonRapmls (criteria, tab);
-		});
-	}
+	getUrlCriteriaAndExecute ();
 });
+
+// -- UTILITY METHODS -----------------------------------------------------------------------------
 
 function debug (message)
 {
