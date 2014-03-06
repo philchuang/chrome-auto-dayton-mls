@@ -69,9 +69,14 @@ $(document).ready (function ()
 {
 	chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
 		if (request.action == "setCriteriaAndExecute")
+		{
 			setCriteriaAndExecute (request.criteria);
+			sendResponse (true);
+		}
 		else
+		{
 			console.log ("Don't know how to to handle request: " + request);
+		}
 	});
 
 	chrome.runtime.sendMessage ({ "action": "consumeCriteria" }, function (response) {
