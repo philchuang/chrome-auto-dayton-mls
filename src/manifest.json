@@ -3,7 +3,7 @@
 
   "name": "Auto Dayton MLS",
   "description": "This extension automates a Dayton, OH MLS search.",
-  "version": "1.0",
+  "version": "1.1",
 
   "icons": {
     "128": "/app/resources/icons/icon128.png", 

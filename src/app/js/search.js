@@ -140,13 +140,13 @@ function addOrUpdateBookmark ()
 			if (typeof node == "undefined" || node == null)
 			{
 				chrome.bookmarks.create ({ parentId: folderId, title: title, url: url }, function (_) {
-					chrome.extension.getBackgroundPage ().displayNotification ("Bookmark created", title);
+					chrome.extension.getBackgroundPage ().displayNotification ("bookmark", "Bookmark created", title);
 				});
 			}
 			else
 			{
 				chrome.bookmarks.update (node.id, { url: url }, function (_) {
-					chrome.extension.getBackgroundPage ().displayNotification ("Bookmark updated", title);
+					chrome.extension.getBackgroundPage ().displayNotification ("bookmark", "Bookmark updated", title);
 				});
 			}
 		});
