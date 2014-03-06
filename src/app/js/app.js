@@ -1,3 +1,7 @@
+// TODO can this background page be eliminated?
+
+var App = angular.module ("AutoDaytonMls", []);
+
 // CONSTANTS
 var DAYTON_RAPMLS_PARTIAL_URL = "http://dayton.rapmls.com/scripts/mgrqispi.dll?APPNAME=Dayton";
 var DAYTON_RAPMLS_URL = "http://dayton.rapmls.com/scripts/mgrqispi.dll?APPNAME=Dayton&PRGNAME=MLSLogin&ARGUMENT=1qpfrF1qRkQqOropCefZ1w%3D%3D&KeyRid=1";
@@ -43,7 +47,10 @@ function searchDaytonRapmls (criteria, tab)
 		else
 		{
 			publishCriteria (criteria, tabs[0].id);
-			setCriteriaAndExecute (tabs[0].id, consumeCriteria (tabs[0].id));
+			setCriteriaAndExecute (tabs[0].id, criteria, function (response) {
+				if (typeof response != "undefined" && response != null && response === true)
+					consumeCriteria (tabs[0].id);
+			});
 		}
 	});
 }
