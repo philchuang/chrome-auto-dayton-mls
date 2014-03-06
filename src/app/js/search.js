@@ -1,5 +1,6 @@
 /*
  * Codebehind for /app/templates/search.html
+ * TO BE DEPRECATED once angular rewrite is complete
  */
 
 // -- FORM METHODS --------------------------------------------------------------------------------

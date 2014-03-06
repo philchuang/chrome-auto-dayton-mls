@@ -17,7 +17,7 @@
 
   "background": {
     "persistent": true,
-    "scripts": ["/lib/string.js", "/app/js/app.js"]
+    "scripts": ["/lib/string.js", "/lib/angular.min.js", "/app/js/app.js"]
     },
 
   "browser_action": {
