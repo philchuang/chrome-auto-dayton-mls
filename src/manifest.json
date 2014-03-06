@@ -3,7 +3,7 @@
 
   "name": "Auto Dayton MLS",
   "description": "This extension automates a Dayton, OH MLS search.",
-  "version": "1.1",
+  "version": "1.2",
 
   "icons": {
     "128": "/app/resources/icons/icon128.png", 
@@ -17,7 +17,7 @@
 
   "background": {
     "persistent": true,
-    "scripts": ["/app/lib/string.js", "/app/js/app.js"]
+    "scripts": ["/lib/string.js", "/app/js/app.js"]
     },
 
   "browser_action": {
@@ -28,6 +28,6 @@
 
   "content_scripts": [{
     "matches": ["http://dayton.rapmls.com/*"],
-    "js": ["/app/lib/jquery-2.1.0.min.js", "/app/js/rapmls.com.js"]
+    "js": ["/lib/jquery-2.1.0.min.js", "/app/js/rapmls.com.js"]
   }]
 }

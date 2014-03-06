@@ -1,3 +1,7 @@
+/*
+ * Codebehind for /app/templates/search.html
+ */
+
 // -- FORM METHODS --------------------------------------------------------------------------------
 
 function setForm (criteria) {
