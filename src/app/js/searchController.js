@@ -1,145 +1,59 @@
-'use strict'
+'use strict';
 
-// -- BOOKMARK METHODS ----------------------------------------------------------------------------
+var criteriaUtils = criteriaUtils || {
+    updateMls: function (criteria) {
+        if (typeof criteria.mlsStr == "undefined" || criteria.mlsStr == null) {
+            criteria.mls = [];
+            return;
+        }
+        criteria.mls = criteria.mlsStr.split(",");
+        if (criteria.mls.length == 1 && S(criteria.mls[0]).trim().s == "")
+        {
+            criteria.mls = [];
+        }
+        else
+        {
+            for (var i = 0; i < criteria.mls.length; i++)
+            {
+                criteria.mls[i] = S(criteria.mls[i]).trim().s;
+            }
+        }
+    }
+}
 
-function addOrUpdateBookmark (criteria)
+/*
+function getUrlCriteriaAndExecute ()
 {
-	createOrGetBookmarkFolder (function (folderId) {
-		var title = getBookmarkTitle (criteria);
-		var url = getBookmarkLink (criteria);
+	if (location.search.length == 0) return;
 
-		createOrGetBookmark (folderId, title, function (node) {
-			if (typeof node == "undefined" || node == null)
-			{
-				chrome.bookmarks.create ({ parentId: folderId, title: title, url: url }, function (_) {
-					// TODO turn notification into a service
-					chrome.extension.getBackgroundPage ().displayNotification ("bookmark", "Bookmark created", title);
-				});
-			}
-			else
-			{
-				chrome.bookmarks.update (node.id, { url: url }, function (_) {
-					// TODO turn notification into a service
-					chrome.extension.getBackgroundPage ().displayNotification ("bookmark", "Bookmark updated", title);
-				});
-			}
-		});
+	chrome.tabs.getCurrent (function (tab) {
+		var criteria = jQuery.deparam (location.search.substr (1));
+		setForm (criteria);
+		chrome.extension.getBackgroundPage ().searchDaytonRapmls (criteria, tab);
 	});
 }
+*/
 
-function createOrGetBookmarkFolder (folderIdCallback)
-{
-	chrome.bookmarks.search ("Dayton MLS searches", function (nodes) {
-		if (typeof nodes == "undefined" || nodes.length == 0)
-		{
-			chrome.bookmarks.create ({ title: "Dayton MLS searches" }, function (node) {
-				folderIdCallback (node.id);
-			});
-			return;
-		}
-		folderIdCallback (nodes[0].id);
-	});
-}
+app.controller("SearchController",
+    function SearchController($scope, storageService, searchService, criteriaBookmarkService) {
+        // TODO detect URL params and immediately execute search
 
-function createOrGetBookmark (folderId, title, nodeCallback)
-{
-	chrome.bookmarks.getChildren (folderId, function (nodes) {
-		if (typeof nodes != "undefined" && nodes.length > 0)
-		{
-			for (var i = 0; i < nodes.length; i++)
-			{
-				console.log(nodes[i].title);
-				if (nodes[i].title == title)
-				{
-					nodeCallback (nodes[i]);
-					return;
-				}
-			}
-		}
-		
-		nodeCallback (null);
-	});
-}
+        $scope.criteria = {};
 
-function getBookmarkTitle (criteria)
-{
-	var title = "";
+        storageService.getLastCriteria().then (function (criteria) {
+            if (criteria != null) {
+                $scope.criteria = criteria;
+            }
+        });
 
-	// MLS supercedes all else
-	if (criteria.mls.length > 0)
-	{
-		title += "MLS: ";
-		for (var i = 0; i < criteria.mls.length; i++)
-		{
-			if (i != 0)
-				title += ", ";
-			title += criteria.mls[i];
-		}
-		return title;
-	}
-	
-	if (criteria.minPriceK.length != 0 && criteria.maxPriceK.length != 0)
-		title += "$"+criteria.minPriceK+"K < $"+criteria.maxPriceK+"K, ";
-	else if (criteria.minPriceK.length != 0)
-		title += ">$"+criteria.minPriceK+"K, ";
-	else if (criteria.maxPriceK.length != 0)
-		title += "<$"+criteria.maxPriceK+"K, ";
+        $scope.executeSearch = function (criteria) {
+            criteriaUtils.updateMls (criteria);
+            searchService.searchDaytonRapmls(criteria);
+        };
 
-	if (criteria.minBedrooms.length != 0 && criteria.minBedrooms > 0)
-		title += criteria.minBedrooms + "+ bed, ";
+        $scope.bookmarkSearch = function (criteria) {
+            criteriaUtils.updateMls(criteria);
+            criteriaBookmarkService.addOrUpdateBookmark(criteria);
+        };
 
-	if (criteria.zipCodes.length != 0)
-		title += "zips " + criteria.zipCodes + ", ";
-
-	// cleanup
-	if (title.substr (title.length - 2) == ", ")
-		title = title.substr (0, title.length - 2);
-
-	if (title.length == 0)
-		title = "Empty search";
-
-	return title;
-}
-
-function getBookmarkLink (criteria)
-{
-	var url = location.href;
-
-	if (criteria.minPriceK.length != 0
-		|| criteria.maxPriceK.length != 0
-		|| criteria.minBedrooms.length != 0
-		|| criteria.zipCodes.length != 0
-		|| criteria.mls.length != 0)
-	{
-		url += "?" + $.param (criteria);
-	}
-
-	return url;
-}
-
-// -- INITIALIZATION ------------------------------------------------------------------------------
-
-function getLastCriteria ()
-{
-	// TODO turn sync storage into a service
-	chrome.extension.getBackgroundPage ().getLastCriteria (function (items) {
-		var criteria = items["lastCriteria"];
-	});
-}
-
-chrome.extension.getBackgroundPage ().App.controller ("SearchController", function ($scope)
-{
-	// TODO detect URL params and immediately execute search
-
-	$scope.criteria = getLastCriteria ();
-
-	$scope.executeSearch = function (criteria) {
-		// TODO turn search execution into a service
-		chrome.extension.getBackgroundPage ().searchDaytonRapmls (criteria);
-	};
-
-	$scope.bookmarkSearch = function (criteria) {
-		addOrUpdateBookmark (criteria);
-	};
-
-});
+    });

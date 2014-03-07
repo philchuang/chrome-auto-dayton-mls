@@ -1,113 +1,133 @@
 <!doctype html>
 <html ng-csp ng-app="AutoDaytonMls">
-  <head>
-    <script type="text/javascript" src="../../lib/angular.min.js"></script>
+<head>
+  <title>Chrome Auto Dayton MLS</title>
 
-    <script type="text/javascript" src="../../lib/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript" src="../../lib/jquery.ba-bbq.min.js"></script>
-    <script type="text/javascript" src="../../lib/string.js"></script>
+  <script type="text/javascript" src="../../lib/jquery-2.1.0.min.js"></script>
+  <script type="text/javascript" src="../../lib/jquery.ba-bbq.min.js"></script>
+  <script type="text/javascript" src="../../lib/string.js"></script>
 
-    <link rel="stylesheet" href="../../lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
-    <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../../lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
+  <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="../css/search.css" />
-    <script type="text/javascript" src="../js/searchController.js"></script>
-  </head>
-  <body>
-    <div id="page">
-      <header class="container">
-        <h4>Dayton MLS search</h4>
-      </header>
-      <section id="body" class="container">
-        <section id="search" class="col-xs-12" ng-controller="SearchController">
-          <!-- TODO turn into a directive -->
-          <div class="row">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <label for="minPrice" class="control-label col-xs-4 smallPadAndAlignRight">Price min ($k)</label>
-                <div class="col-xs-8"><input name="minPrice" ng-model="criteria.minprice" type="text" size="4" class="form-control" placeholder="100" /></div>
-              </div>
-              <div class="form-group">
-                <label for="maxPrice" class="control-label col-xs-4 smallPadAndAlignRight">Price max ($k)</label>
-                <div class="col-xs-8"><input name="maxPrice" ng-model="criteria.maxprice" type="text" size="4" class="form-control" placeholder="200" /></div>
-              </div>
-              <div class="form-group">
-                <label for="minBedrooms" class="control-label col-xs-4 smallPadAndAlignRight">Bed</label>
-                <div class="col-xs-8">
-                  <!-- <div class="dropdown">
-                    <div class="btn-group">
-                      <button class="btn" id="minBedroomsDropdownBtn">Any</button>
-                      <button class="btn" data-toggle="dropdown"><span class="caret"></span></button>
-                      <ul class="dropdown-menu" id="minBedroomsDropdown">
-                        <li><a href="#" tabindex="-1"></a></li>
-                        <li><a href="#" tabindex="-1">1</a></li>
-                        <li><a href="#" tabindex="-1">2</a></li>
-                        <li><a href="#" tabindex="-1">3</a></li>
-                        <li><a href="#" tabindex="-1">4</a></li>
-                        <li><a href="#" tabindex="-1">5</a></li>
-                        <li><a href="#" tabindex="-1">6</a></li>
-                        <li><a href="#" tabindex="-1">7</a></li>
-                        <li><a href="#" tabindex="-1">8</a></li>
-                        <li><a href="#" tabindex="-1">9</a></li>
-                      </ul>
-                    </div>
-                  </div> -->
-                  <select name="minBedrooms" ng-model="criteria.minBedrooms" class="form-control">
-                    <option value="">any</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="zipCodes" class="control-label col-xs-4 smallPadAndAlignRight">Zip codes</label>
-                <div class="col-xs-8"><textarea name="zipCodes" ng-model="criteria.zipCodes" height="3" class="form-control" placeholder="45458, 45429"></textarea></div>
-              </div>
-              <hr/>
-              <div class="form-group">
-                <label for="mls" class="control-label col-xs-4 smallPadAndAlignRight">MLS #s</label>
-                <div class="col-xs-8"><textarea name="mls" ng-model="criteria.mls" height="3" class="form-control" placeholder="(up to 5)"></textarea></div>
-              </div>
-              <hr/>
-              <div class="form-group">
-                <div class="col-xs-4 smallPadAndAlignRight">
-                  <div class="pull-right">
-                    <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"/></button>
-                  </div>
-                </div>
-                <div class="col-xs-8">
-                  <div class="pull-right">
-                    <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"/></button>
-                  </div>
-                </div>
-              </div>
-              <!--hr/>
-              <textarea id="debug" style="width: 95%; height: 100px;"></textarea-->
-              </form>
-            </div>
-          </section>
-        </section>
-        <section id="footer" class="container">
-          <!-- dress it up like a form group to maintain consistent right margin -->
-          <div class="form-horizontal">
+  <script type="text/javascript" src="../../lib/underscore-min.js"></script>
+  <script type="text/javascript" src="../../lib/angular.min.js"></script>
+
+  <script type="text/javascript" src="../js/app.js"></script>
+  <script type="text/javascript" src="../js/StorageService.js"></script>
+  <script type="text/javascript" src="../js/NotificationService.js"></script>
+  <script type="text/javascript" src="../js/CriteriaBookmarkService.js"></script>
+  <script type="text/javascript" src="../js/RapmlsContentScriptMessageService.js"></script>
+  <script type="text/javascript" src="../js/SearchService.js"></script>
+
+  <link rel="stylesheet" href="../css/search.css" />
+  <script type="text/javascript" src="../js/SearchController.js"></script>
+
+</head>
+<body>
+
+  <div id="page">
+    <header class="container">
+      <h4>Dayton MLS search</h4>
+    </header>
+    <section id="body" class="container">
+      <section id="search" class="col-xs-12" ng-controller="SearchController">
+        <!-- TODO turn into a directive -->
+        <div class="row">
+          <form class="form-horizontal">
             <div class="form-group">
-              <div class="col-xs-12">
+              <label for="minPrice" class="control-label col-xs-4 smallPadAndAlignRight">Price min ($k)</label>
+              <div class="col-xs-8">
+                <input name="minPrice" ng-model="criteria.minPriceK" type="text" size="4" class="form-control" placeholder="100" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="maxPrice" class="control-label col-xs-4 smallPadAndAlignRight">Price max ($k)</label>
+              <div class="col-xs-8">
+                <input name="maxPrice" ng-model="criteria.maxPriceK" type="text" size="4" class="form-control" placeholder="200" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="minBedrooms" class="control-label col-xs-4 smallPadAndAlignRight">Bed</label>
+              <div class="col-xs-8">
+                <!-- <div class="dropdown">
+                         <div class="btn-group">
+                             <button class="btn" id="minBedroomsDropdownBtn">Any</button>
+                             <button class="btn" data-toggle="dropdown"><span class="caret"></span></button>
+                             <ul class="dropdown-menu" id="minBedroomsDropdown">
+                                 <li><a href="#" tabindex="-1"></a></li>
+                                 <li><a href="#" tabindex="-1">1</a></li>
+                                 <li><a href="#" tabindex="-1">2</a></li>
+                                 <li><a href="#" tabindex="-1">3</a></li>
+                                 <li><a href="#" tabindex="-1">4</a></li>
+                                 <li><a href="#" tabindex="-1">5</a></li>
+                                 <li><a href="#" tabindex="-1">6</a></li>
+                                 <li><a href="#" tabindex="-1">7</a></li>
+                                 <li><a href="#" tabindex="-1">8</a></li>
+                                 <li><a href="#" tabindex="-1">9</a></li>
+                             </ul>
+                         </div>
+                     </div> -->
+                <select name="minBedrooms" ng-model="criteria.minBedrooms" class="form-control">
+                  <option value="">any</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="zipCodes" class="control-label col-xs-4 smallPadAndAlignRight">Zip codes</label>
+              <div class="col-xs-8">
+                <textarea name="zipCodes" ng-model="criteria.zipCodes" height="3" class="form-control" placeholder="45458, 45429"></textarea>
+              </div>
+            </div>
+            <hr />
+            <div class="form-group">
+              <label for="mls" class="control-label col-xs-4 smallPadAndAlignRight">MLS #s</label>
+              <div class="col-xs-8">
+                <textarea name="mls" ng-model="criteria.mlsStr" height="3" class="form-control" placeholder="(up to 5)"></textarea>
+              </div>
+            </div>
+            <hr />
+            <div class="form-group">
+              <div class="col-xs-4 smallPadAndAlignRight">
                 <div class="pull-right">
-                  <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
+                  <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search" /></button>
                 </div>
               </div>
+              <div class="col-xs-8">
+                <div class="pull-right">
+                  <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark" /></button>
+                </div>
+              </div>
+            </div>
+            <!--hr/>
+                <textarea id="debug" style="width: 95%; height: 100px;"></textarea-->
+          </form>
+        </div>
+      </section>
+    </section>
+    <section id="footer" class="container">
+      <!-- dress it up like a form group to maintain consistent right margin -->
+      <div class="form-horizontal">
+        <div class="form-group">
+          <div class="col-xs-12">
+            <div class="pull-right">
+              <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
             </div>
           </div>
-        </section>
-      </section>
-    </div>
-  </body>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
 </html>
