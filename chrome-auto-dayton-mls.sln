@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeAutoDaytonMls", "src\ChromeAutoDaytonMls.csproj", "{67785C71-F8F6-4B03-98E1-3F3E876CF559}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0113D2E-5A17-4523-941F-7CB4E7DB39F9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67785C71-F8F6-4B03-98E1-3F3E876CF559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67785C71-F8F6-4B03-98E1-3F3E876CF559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67785C71-F8F6-4B03-98E1-3F3E876CF559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67785C71-F8F6-4B03-98E1-3F3E876CF559}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
