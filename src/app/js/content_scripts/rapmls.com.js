@@ -1,5 +1,5 @@
 /*
- * Content script for http://dayton.rapmls.com
+ * Content script for http://dayton.rapmls.com search page
  */
 
 function setCriteriaAndExecute (criteria)
@@ -67,7 +67,11 @@ function setCriteriaAndExecute (criteria)
 
 $(document).ready (function ()
 {
-	chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    if ($("#InputForm").length == 0)
+        return; // not on the search page
+
+	chrome.runtime.onMessage.addListener (function (request, sender, sendResponse)
+    {
 		if (request.action == "setCriteriaAndExecute")
 		{
 			setCriteriaAndExecute (request.criteria);
@@ -80,7 +84,8 @@ $(document).ready (function ()
 	});
 
 	chrome.runtime.sendMessage ({ "action": "consumeCriteria" }, function (response) {
-		if (response != null)
-			setCriteriaAndExecute(response);
+	    if (response != null) {
+	        setCriteriaAndExecute (response);
+	    }
 	});
 });

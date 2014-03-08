@@ -6,37 +6,31 @@ var criteriaUtils = criteriaUtils || {
             criteria.mls = [];
             return;
         }
-        criteria.mls = criteria.mlsStr.split(",");
-        if (criteria.mls.length == 1 && S(criteria.mls[0]).trim().s == "")
-        {
+        criteria.mls = criteria.mlsStr.split (",");
+        if (criteria.mls.length == 1 && S (criteria.mls[0]).trim ().s == "") {
             criteria.mls = [];
-        }
-        else
-        {
-            for (var i = 0; i < criteria.mls.length; i++)
-            {
-                criteria.mls[i] = S(criteria.mls[i]).trim().s;
+        } else {
+            for (var i = 0; i < criteria.mls.length; i++) {
+                criteria.mls[i] = S (criteria.mls[i]).trim ().s;
             }
         }
     }
-}
-
-/*
-function getUrlCriteriaAndExecute ()
-{
-	if (location.search.length == 0) return;
-
-	chrome.tabs.getCurrent (function (tab) {
-		var criteria = jQuery.deparam (location.search.substr (1));
-		setForm (criteria);
-		chrome.extension.getBackgroundPage ().searchDaytonRapmls (criteria, tab);
-	});
-}
-*/
+};
 
 app.controller("SearchController",
-    function SearchController($scope, storageService, searchService, criteriaBookmarkService) {
+    function ($scope, $window, storageService, searchService, criteriaBookmarkService) {
         // TODO detect URL params and immediately execute search
+
+        // $location.search() isn't working right, so use $window.location.search
+        if ($window.location.search.length != 0)
+        {
+            chrome.tabs.getCurrent (function (tab) {
+                var criteria = jQuery.deparam ($window.location.search.substr (1));
+                criteriaUtils.updateMls (criteria);
+                $scope.criteria = criteria;
+                searchService.searchDaytonRapmls (criteria, tab);
+            });
+        }
 
         $scope.criteria = {};
 
