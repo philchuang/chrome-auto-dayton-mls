@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿"use strict";
 
 var searchServiceBase = searchServiceBase || {
     DAYTON_RAPMLS_PARTIAL_URL: "http://dayton.rapmls.com/scripts/mgrqispi.dll?APPNAME=Dayton",

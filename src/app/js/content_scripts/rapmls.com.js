@@ -2,6 +2,8 @@
  * Content script for http://dayton.rapmls.com search page
  */
 
+"use strict";
+
 function setCriteriaAndExecute (criteria)
 {
 	if (criteria.mls && criteria.mls.length > 0)

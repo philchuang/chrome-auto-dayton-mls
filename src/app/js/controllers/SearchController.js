@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var criteriaUtils = criteriaUtils || {
     updateMls: function (criteria) {
