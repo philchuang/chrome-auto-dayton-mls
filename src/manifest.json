@@ -1,33 +1,46 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2, 
 
-  "name": "Auto Dayton MLS",
-  "description": "This extension automates a Dayton, OH MLS search.",
-  "version": "1.2",
+    "name": "Auto Dayton MLS", 
+    "description": "This extension automates a Dayton, OH MLS search.", 
+    "version": "1.2", 
 
-  "icons": {
-    "128": "/app/resources/icons/icon128.png", 
-    "48": "/app/resources/icons/icon48.png", 
-    "16": "/app/resources/icons/icon16.png"
-  },
+    "icons": {
+        "128": "/app/resources/icons/icon128.png", 
+        "48": "/app/resources/icons/icon48.png", 
+        "16": "/app/resources/icons/icon16.png"
+    }, 
 
-  "permissions": [
-    "tabs", "notifications", "storage", "bookmarks"
-  ],
+    "permissions": [
+        "tabs", 
+        "notifications", 
+        "storage", 
+        "bookmarks"
+    ],
 
-  "background": {
-    "persistent": false,
-    "scripts": ["/lib/angular.min.js", "/app/js/app.js", "/app/js/storageService.js", "/app/js/background.js"]
-    },
+    "background": {
+        "persistent": false, 
+        "scripts": [
+            "/lib/angular.min.js", 
+            "/app/js/app.js", 
+            "/app/js/services/StorageService.js", 
+            "/app/js/eventPage.js"
+        ]
+    }, 
 
-  "browser_action": {
-    "default_icon": "/app/resources/icons/icon19.png",
-    "default_title": "Auto DAY-MLS",
-    "default_popup": "/app/templates/search.html"
-  },
+    "browser_action": {
+        "default_popup": "/app/templates/search.html", 
+        "default_icon": "/app/resources/icons/icon19.png", 
+        "default_title": "Auto DAY-MLS"
+    }, 
 
-  "content_scripts": [{
-    "matches": ["http://dayton.rapmls.com/*"],
-    "js": ["/lib/jquery-2.1.0.min.js", "/app/js/rapmls.com.js"]
-  }]
+    "content_scripts": [
+        {
+            "matches": ["http://dayton.rapmls.com/*"], 
+            "js": [
+                "/lib/jquery-2.1.0.min.js", 
+                "/app/js/content_scripts/rapmls.com.js"
+            ]
+        }
+    ]
 }

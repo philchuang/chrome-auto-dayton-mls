@@ -80,8 +80,9 @@ var criteriaCookmarkServiceBase = criteriaCookmarkServiceBase || {
             || criteria.maxPriceK.length != 0
             || criteria.minBedrooms.length != 0
             || criteria.zipCodes.length != 0
-            || criteria.mls.length != 0)
+            || criteria.mlsStr.length != 0)
         {
+            delete criteria.mls;
             url += "?" + $.param(criteria);
         }
 
