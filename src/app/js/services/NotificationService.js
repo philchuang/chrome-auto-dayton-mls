@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿"use strict";
 
 app.factory ("notificationService", function () {
     return {

@@ -1,5 +1,6 @@
-'use strict';
+"use strict";
 
+// TODO rewrite so that angular can inject storageService - angular bootstrap tie-in?
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
     var storageService = injector.get ("storageService");

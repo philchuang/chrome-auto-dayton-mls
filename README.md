@@ -23,16 +23,14 @@ How do I get it?
 Status
 ------
 
-Current Version: **v1.1**
+Current Version: **v1.2**
 
 Latest features
 
-* Rewrote search form to use bootstrap
-* Now supports multiple concurrent searches
+* Rewrote using AngularJS
 
 To Dos
 
-* Rewrite javascript and use angular
 * Add a few more search fields (perhaps make that configurable)
 
 License

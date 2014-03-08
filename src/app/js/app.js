@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-var app = angular.module("AutoDaytonMls", []);
+var app = angular.module ("AutoDaytonMls", []);
