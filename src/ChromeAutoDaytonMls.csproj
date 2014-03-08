@@ -58,15 +58,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\css\search.css" />
-    <Content Include="app\js\background.js" />
+    <Content Include="app\js\eventPage.js" />
     <Content Include="app\js\app.js" />
-    <Content Include="app\js\NotificationService.js" />
-    <Content Include="app\js\CriteriaBookmarkService.js" />
-    <Content Include="app\js\rapmls.com.js" />
-    <Content Include="app\js\RapmlsContentScriptMessageService.js" />
-    <Content Include="app\js\SearchController.js" />
-    <Content Include="app\js\SearchService.js" />
-    <Content Include="app\js\StorageService.js" />
+    <Content Include="app\js\services\NotificationService.js" />
+    <Content Include="app\js\services\CriteriaBookmarkService.js" />
+    <Content Include="app\js\content_scripts\rapmls.com.js" />
+    <Content Include="app\js\services\RapmlsContentScriptMessageService.js" />
+    <Content Include="app\js\controllers\SearchController.js" />
+    <Content Include="app\js\services\SearchService.js" />
+    <Content Include="app\js\services\StorageService.js" />
     <Content Include="app\resources\icons\icon128.png" />
     <Content Include="app\resources\icons\icon16.png" />
     <Content Include="app\resources\icons\icon19.png" />
