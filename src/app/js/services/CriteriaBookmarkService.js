@@ -90,8 +90,9 @@ var criteriaCookmarkServiceBase = criteriaCookmarkServiceBase || {
     }
 };
 
-app.factory("criteriaBookmarkService", function (notificationService) {
+app.service("criteriaBookmarkService", function (notificationService) {
     return {
+
         addOrUpdateBookmark: function (criteria) {
 
             criteriaCookmarkServiceBase.createOrGetBookmarkFolder(function (folderId) {

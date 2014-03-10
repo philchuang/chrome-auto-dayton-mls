@@ -6,18 +6,22 @@ var storageServiceBase = storageServiceBase || {
 
     getCriteriaKey: function (tabId) {
         return "criteria_" + tabId;
+    },
+
+    getListingKey: function (tabId) {
+        return "listing_" + tabId;
     }
 
 };
 
-app.factory ('storageService', function ($q) {
+app.service ('storageService', function ($q) {
 
     // define this outside the service object b/c it's referenced internally
     var saveLastCriteria = function (criteria) {
-        var val = {};
-        val[storageServiceBase.LAST_CRITERIA] = criteria;
+        var items = {};
+        items[storageServiceBase.LAST_CRITERIA] = criteria;
 
-        chrome.storage.sync.set (val);
+        chrome.storage.sync.set(items);
     };
 
     return {
@@ -38,9 +42,9 @@ app.factory ('storageService', function ($q) {
         saveLastCriteria: saveLastCriteria,
 
         publishCriteria: function (criteria, tabId) {
-            var criteriaKey = storageServiceBase.getCriteriaKey (tabId);
-            var val = {};
-            val[criteriaKey] = criteria;
+            var key = storageServiceBase.getCriteriaKey (tabId);
+            var items = {};
+            items[key] = criteria;
 
             chrome.storage.local.set (val);
 
@@ -57,15 +61,39 @@ app.factory ('storageService', function ($q) {
                 return deferred.promise;
             }
 
-            var criteriaKey = storageServiceBase.getCriteriaKey (tabId);
+            var key = storageServiceBase.getCriteriaKey (tabId);
 
-            chrome.storage.local.get (criteriaKey, function (items) {
-                var criteria = items[criteriaKey];
-                deferred.resolve(criteria);
-                chrome.storage.local.remove (criteriaKey);
+            chrome.storage.local.get(key, function (items) {
+                var data = items[key];
+                deferred.resolve(data);
+                chrome.storage.local.remove (key);
             });
 
             return deferred.promise;
+        },
+
+        getListing: function (id) {
+            var deferred = $q.defer ();
+
+            if (typeof id == "undefined") {
+                deferred.resolve (null);
+                return deferred.promise;
+            }
+
+            var key = storageServiceBase.getListingKey (id);
+
+            chrome.storage.sync.get (key, function (items) {
+                var data = items[key];
+                deferred.resolve (data);
+            });
+        },
+
+        saveListing: function (listing) {
+            var key = storageServiceBase.getListingKey(id);
+            var items = {};
+            items[key] = listing;
+
+            chrome.storage.sync.set(items);
         }
     };
 });

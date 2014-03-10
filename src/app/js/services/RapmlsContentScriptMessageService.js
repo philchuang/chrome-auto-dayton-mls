@@ -1,4 +1,6 @@
-﻿app.factory('rapmlsContentScriptMessageService', function () {
+﻿"use strict";
+
+app.service('rapmlsContentScriptMessageService', function () {
     return {
 
         sendCriteriaToTab: function (tabId, criteria, response) {

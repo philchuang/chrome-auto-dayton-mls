@@ -6,7 +6,7 @@ var searchServiceBase = searchServiceBase || {
 
 };
 
-app.factory('searchService', function (storageService, rapmlsContentScriptMessageService) {
+app.service('searchService', function (storageService, rapmlsContentScriptMessageService) {
     return {
 
         searchDaytonRapmls: function (criteria, tab) {

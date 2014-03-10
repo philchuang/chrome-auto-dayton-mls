@@ -1,7 +1,8 @@
 ﻿"use strict";
 
-app.factory ("notificationService", function () {
+app.service ("notificationService", function () {
     return {
+
         displayDebugNotification: function (message) {
             chrome.notifications.create ("", { type: "basic", title: "DEBUG", message: message, iconUrl: "/app/resources/icons/icon80.png" }, function (id) {});
         },

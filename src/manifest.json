@@ -39,7 +39,8 @@
             "matches": ["http://dayton.rapmls.com/*"], 
             "js": [
                 "/lib/jquery-2.1.0.min.js", 
-                "/app/js/content_scripts/rapmls.com.js"
+                "/app/js/content_scripts/search.rapmls.js",
+                "/app/js/content_scripts/scrape.rapmls.js"
             ]
         }
     ]
