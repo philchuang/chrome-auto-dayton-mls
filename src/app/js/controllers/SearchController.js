@@ -2,7 +2,7 @@
 
 var criteriaUtils = criteriaUtils || {
     updateMls: function (criteria) {
-        if (typeof criteria.mlsStr == "undefined" || criteria.mlsStr == null) {
+        if (typeof criteria.mlsStr === "undefined" || criteria.mlsStr === null) {
             criteria.mls = [];
             return;
         }
@@ -22,7 +22,7 @@ app.controller("SearchController",
         // TODO detect URL params and immediately execute search
 
         // $location.search() isn't working right, so use $window.location.search
-        if ($window.location.search.length != 0)
+        if ($window.location.search.length !== 0)
         {
             chrome.tabs.getCurrent (function (tab) {
                 var criteria = jQuery.deparam ($window.location.search.substr (1));
@@ -32,7 +32,9 @@ app.controller("SearchController",
             });
         }
 
-        $scope.criteria = {};
+        $scope.criteria = {
+            scrapeResults: false
+        };
 
         storageService.getLastCriteria().then (function (criteria) {
             if (criteria != null) {
@@ -40,14 +42,18 @@ app.controller("SearchController",
             }
         });
 
+        $scope.toggleScrapeResults = function () {
+            $scope.criteria.scrapeResults = !$scope.criteria.scrapeResults;
+        };
+
         $scope.executeSearch = function (criteria) {
             criteriaUtils.updateMls (criteria);
-            searchService.searchDaytonRapmls(criteria);
+            searchService.searchDaytonRapmls (criteria);
         };
 
         $scope.bookmarkSearch = function (criteria) {
-            criteriaUtils.updateMls(criteria);
-            criteriaBookmarkService.addOrUpdateBookmark(criteria);
+            criteriaUtils.updateMls (criteria);
+            criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 
     });

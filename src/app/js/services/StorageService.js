@@ -8,6 +8,10 @@ var storageServiceBase = storageServiceBase || {
         return "criteria_" + tabId;
     },
 
+    getScrapeTokenKey: function (tabId) {
+        return "scrape_" + tabId;
+    },
+
     getListingKey: function (tabId) {
         return "listing_" + tabId;
     }
@@ -31,7 +35,7 @@ app.service ('storageService', function ($q) {
 
             chrome.storage.sync.get (storageServiceBase.LAST_CRITERIA, function (items) {
                 var criteria = items[storageServiceBase.LAST_CRITERIA];
-                if (typeof criteria == "undefined")
+                if (typeof criteria === "undefined")
                     criteria = null;
                 deferred.resolve (criteria);
             });
@@ -46,7 +50,7 @@ app.service ('storageService', function ($q) {
             var items = {};
             items[key] = criteria;
 
-            chrome.storage.local.set (val);
+            chrome.storage.local.set (items);
 
             if (criteria != null)
                 saveLastCriteria (criteria);
@@ -55,7 +59,7 @@ app.service ('storageService', function ($q) {
         consumeCriteria: function (tabId) {
             var deferred = $q.defer ();
 
-            if (typeof tabId == "undefined")
+            if (typeof tabId === "undefined")
             {
                 deferred.resolve (null);
                 return deferred.promise;
@@ -72,10 +76,38 @@ app.service ('storageService', function ($q) {
             return deferred.promise;
         },
 
+        publishScrapeToken: function (tabId) {
+            var key = storageServiceBase.getScrapeTokenKey (tabId);
+            var items = {};
+            items[key] = true;
+
+            chrome.storage.local.set (items);
+        },
+
+        consumeScrapeToken: function (tabId) {
+            var deferred = $q.defer ();
+
+            if (typeof tabId === "undefined")
+            {
+                deferred.resolve (null);
+                return deferred.promise;
+            }
+
+            var key = storageServiceBase.getScrapeTokenKey (tabId);
+
+            chrome.storage.local.get (key, function (items) {
+                var data = items[key];
+                deferred.resolve (data);
+                chrome.storage.local.remove (key);
+            });
+
+            return deferred.promise;
+        },
+
         getListing: function (id) {
             var deferred = $q.defer ();
 
-            if (typeof id == "undefined") {
+            if (typeof id === "undefined") {
                 deferred.resolve (null);
                 return deferred.promise;
             }
@@ -86,6 +118,8 @@ app.service ('storageService', function ($q) {
                 var data = items[key];
                 deferred.resolve (data);
             });
+
+            return deferred.promise;
         },
 
         saveListing: function (listing) {

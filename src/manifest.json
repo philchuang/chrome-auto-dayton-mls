@@ -24,6 +24,7 @@
             "/lib/angular.min.js", 
             "/app/js/app.js", 
             "/app/js/services/StorageService.js", 
+            "/app/js/services/ScrapeService.js", 
             "/app/js/eventPage.js"
         ]
     }, 
@@ -39,6 +40,7 @@
             "matches": ["http://dayton.rapmls.com/*"], 
             "js": [
                 "/lib/jquery-2.1.0.min.js", 
+                "/lib/string.js", 
                 "/app/js/content_scripts/search.rapmls.js",
                 "/app/js/content_scripts/scrape.rapmls.js"
             ]

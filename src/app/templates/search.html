@@ -104,7 +104,16 @@
                   <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search" /></button>
                 </div>
               </div>
-              <div class="col-xs-8">
+              <div class="col-xs-6">
+                <button id="scrapeButton"
+                        title="and scrape results"
+                        class="btn center-block"
+                        ng-click="toggleScrapeResults()"
+                        ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'">
+                  <span class="glyphicon glyphicon-import" />
+                </button>
+              </div>
+              <div class="col-xs-2">
                 <div class="pull-right">
                   <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark" /></button>
                 </div>

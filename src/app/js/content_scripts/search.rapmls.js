@@ -17,13 +17,13 @@ function setCriteriaAndExecute (criteria)
 
 		// clear residential
 		var residentialCheckbox = $("input[type='checkbox'][name='Prop_Type_RESI']");
-		if (typeof residentialCheckbox.prop ("checked") != "undefined" && residentialCheckbox.prop ("checked"))
+		if (typeof residentialCheckbox.prop ("checked") !== "undefined" && residentialCheckbox.prop ("checked"))
 			residentialCheckbox.trigger ("click");
 		//SetAdditionalCriteraButton(); // this is what the residential checkbox is supposed to call, but is unnecessary
 		
 		// clear single family
 		var singleFamilyCheckbox = $("input[type='checkbox'][name='Prop_Subtype_RESI_0001']");
-		if (typeof singleFamilyCheckbox.prop ("checked") != "undefined" && singleFamilyCheckbox.prop ("checked"))
+		if (typeof singleFamilyCheckbox.prop ("checked") !== "undefined" && singleFamilyCheckbox.prop ("checked"))
 			singleFamilyCheckbox.trigger ("click");
 
 		// clear price min * $1k
@@ -41,13 +41,13 @@ function setCriteriaAndExecute (criteria)
 	{	
 		// check residential
 		var residentialCheckbox = $("input[type='checkbox'][name='Prop_Type_RESI']");
-		if (typeof residentialCheckbox.prop ("checked") == "undefined" || !residentialCheckbox.prop ("checked"))
+		if (typeof residentialCheckbox.prop ("checked") === "undefined" || !residentialCheckbox.prop ("checked"))
 			residentialCheckbox.trigger ("click");
 		//SetAdditionalCriteraButton(); // this is what the residential checkbox is supposed to call, but is unnecessary
 		
 		// check single family
 		var singleFamilyCheckbox = $("input[type='checkbox'][name='Prop_Subtype_RESI_0001']");
-		if (typeof singleFamilyCheckbox.prop ("checked") == "undefined" || !singleFamilyCheckbox.prop ("checked"))
+		if (typeof singleFamilyCheckbox.prop ("checked") === "undefined" || !singleFamilyCheckbox.prop ("checked"))
 			singleFamilyCheckbox.trigger ("click");
 
 		// set price min * $1k
@@ -69,12 +69,12 @@ function setCriteriaAndExecute (criteria)
 
 $(document).ready (function ()
 {
-    if ($("#InputForm").length == 0)
+    if ($("#InputForm").length === 0)
         return; // not on the search page
 
 	chrome.runtime.onMessage.addListener (function (request, sender, sendResponse)
     {
-		if (request.action == "setCriteriaAndExecute")
+		if (request.action === "setCriteriaAndExecute")
 		{
 			setCriteriaAndExecute (request.criteria);
 			sendResponse (true);
@@ -86,7 +86,7 @@ $(document).ready (function ()
 	});
 
 	chrome.runtime.sendMessage ({ "action": "consumeCriteria" }, function (response) {
-	    if (response != null) {
+	    if (response !== null) {
 	        setCriteriaAndExecute (response);
 	    }
 	});
