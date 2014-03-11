@@ -17,9 +17,8 @@ var criteriaUtils = criteriaUtils || {
     }
 };
 
-app.controller("SearchController",
+app.controller ("SearchController",
     function ($scope, $window, storageService, searchService, criteriaBookmarkService) {
-        // TODO detect URL params and immediately execute search
 
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)

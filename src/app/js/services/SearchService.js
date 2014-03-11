@@ -7,9 +7,11 @@ var searchServiceBase = searchServiceBase || {
 };
 
 app.service('searchService', function (storageService, rapmlsContentScriptMessageService) {
+    
     return {
 
         searchDaytonRapmls: function (criteria, tab) {
+
             if (typeof tab !== "undefined")
             {
                 // re-use the given tab

@@ -21,8 +21,10 @@
     "background": {
         "persistent": false, 
         "scripts": [
+            "/lib/string.js", 
             "/lib/angular.min.js", 
             "/app/js/app.js", 
+            "/app/js/services/NotificationService.js", 
             "/app/js/services/StorageService.js", 
             "/app/js/services/ScrapeService.js", 
             "/app/js/eventPage.js"

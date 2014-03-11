@@ -1,0 +1,9 @@
+WHAT WAS JUST ACCOMPLISHED
+* automatic scrape on search now works
+* scraped listings saved to sync storage
+
+WHERE TO START NOW
+* a saved listings page that displays a sotrable listings table, each with history, and link to search & scrape for it
+
+STUFF TO DO LATER
+* PageAction to trigger scrape

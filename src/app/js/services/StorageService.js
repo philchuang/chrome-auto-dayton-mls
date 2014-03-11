@@ -103,6 +103,37 @@ app.service ('storageService', function ($q) {
 
             return deferred.promise;
         },
+        
+        getAllListings: function () {
+            var deferred = $q.defer();
+
+            var keyPrefix = storageServiceBase.getListingKey ("");
+
+            chrome.storage.sync.get (null, function (items) {
+                var listings = [];
+                for (var propertyName in items) {
+                    if (!S(propertyName).startsWith (keyPrefix)) continue;
+                    listings.push (items[propertyName]);
+                }
+                deferred.resolve (listings);
+            });
+
+            return deferred.promise;
+        },
+        
+        clearAllListings: function () {
+            var keyPrefix = storageServiceBase.getListingKey ("");
+
+            chrome.storage.sync.get (null, function (items) {
+                var listingKeys = [];
+                for (var propertyName in items) {
+                    if (!S(propertyName).startsWith (keyPrefix)) continue;
+                    listingKeys.push (propertyName);
+                }
+
+                chrome.storage.sync.remove (listingKeys);
+            });
+        },
 
         getListing: function (id) {
             var deferred = $q.defer ();
@@ -123,11 +154,11 @@ app.service ('storageService', function ($q) {
         },
 
         saveListing: function (listing) {
-            var key = storageServiceBase.getListingKey(id);
+            var key = storageServiceBase.getListingKey (listing.id);
             var items = {};
             items[key] = listing;
 
-            chrome.storage.sync.set(items);
+            chrome.storage.sync.set (items);
         }
     };
 });

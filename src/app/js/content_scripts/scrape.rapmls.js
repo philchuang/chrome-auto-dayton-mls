@@ -5,6 +5,12 @@
 "use strict";
 
 function processRows (resultRows) {
+
+    var numProcessed = 0;
+    var numNew = 0;
+    var numNoChange = 0;
+    var numUpdated = 0;
+    
     var currentListing = {};
 
     for (var i = 0; i < resultRows.length; i++) {
@@ -12,7 +18,7 @@ function processRows (resultRows) {
         if (i % 4 === 0) {
             var cells = $(resultRows[i]).children ("td");
             currentListing = {};
-            currentListing.timestamp = new Date ();
+            currentListing.timestamp = new Date ().toJSON ();
             currentListing.listPrice = parseInt (S($(cells[cellIdx++]).text ()).replaceAll ("$", "").replaceAll (",", ""));
             currentListing.bedrooms = parseInt ($(cells[cellIdx++]).text ());
             currentListing.bathrooms = $(cells[cellIdx++]).text ();
@@ -44,8 +50,31 @@ function processRows (resultRows) {
         }
 
         if (i % 4 === 3) {
-            // save listing
-            chrome.runtime.sendMessage({ action: "processListing", listing: currentListing }, function (_) { });
+            // process listing
+            numProcessed++;
+            
+            chrome.runtime.sendMessage({ action: "processListing", listing: currentListing }, function (result) {
+                if (result === -1)
+                    numNew++;
+                else if (result === 0)
+                    numNoChange++;
+                else if (result === 1)
+                    numUpdated++;
+                
+                if (numProcessed === numNew + numNoChange + numUpdated) {
+                    var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
+                    //console.log (message);
+
+                    chrome.runtime.sendMessage ({ action: "updateListingStaleness" });
+
+                    chrome.runtime.sendMessage ({
+                        action: "displayNotification",
+                        id: "",
+                        title: "Scrape Results",
+                        message: message
+                    });
+                }
+            });
             continue;
         }
     }
@@ -56,6 +85,14 @@ function getResultRows ()
     return $($($("#WorkspaceBGSH > table:nth-child(1) > tbody > tr > td > table")[1]).children ("tbody")).children ("tr[class!=HeaderRow]");
 }
 
+var allListings = [];
+
+function DEBUG_loadAllListings () {
+    chrome.runtime.sendMessage ({ action: "getAllListings" }, function (listings) {
+        allListings = listings;
+    });
+}
+
 $(document).ready (function ()
 {
     if ($("#WorkspaceBGSH").length === 0)
@@ -64,7 +101,7 @@ $(document).ready (function ()
     chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         if (request.action == "scrapeResults")
         {
-            processRows (getResultRows ());
+            processRows (getResultRows());
             sendResponse (true);
         }
         else

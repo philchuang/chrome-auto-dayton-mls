@@ -23,11 +23,11 @@ How do I get it?
 Status
 ------
 
-Current Version: **v1.2**
+Current Version: **v1.3**
 
 Latest features
 
-* Rewrote using AngularJS
+* Ability to scrape listings and save them, display changes over time
 
 To Dos
 
