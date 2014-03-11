@@ -55,4 +55,18 @@ app.controller ("SearchController",
             criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 
+        $scope.viewListings = function () {
+            var listingsUrl = chrome.runtime.getURL("/app/templates/listings.html");
+
+            // if active tab is the DAYTON MLS search page, use that - else, create a new tab
+            chrome.tabs.query ({ url: listingsUrl }, function (tabs) {
+                if (tabs.length === 0) {
+                    chrome.tabs.create ({ url: listingsUrl }, function (_) {});
+                }
+                else {
+                    chrome.tabs.update (tabs[0].id, { url: listingsUrl, active: true });
+                }
+            });
+        };
+
     });

@@ -55,7 +55,7 @@ ListingUtils.processChanges = function (previous, latest) {
     latest.history = previous.history;
     var changes = ListingUtils.getChanges (previous, latest);
     if (changes !== null) {
-        latest.history.push (changes);
+        latest.history.push ({ action: changes, timestamp: latest.timestamp });
         return ListingUtils.UPDATED_LISTING;
     }
 

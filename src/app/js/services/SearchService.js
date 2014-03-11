@@ -12,6 +12,9 @@ app.service('searchService', function (storageService, rapmlsContentScriptMessag
 
         searchDaytonRapmls: function (criteria, tab) {
 
+            // uncomment this line to freshen up the listing data
+            //storageService.clearAllListings();
+
             if (typeof tab !== "undefined")
             {
                 // re-use the given tab

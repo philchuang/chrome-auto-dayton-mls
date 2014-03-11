@@ -1,0 +1,14 @@
+#page {
+	width: 320px;
+	padding-top: 10px;
+}
+
+.container {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.smallPadAndAlignRight {
+	text-align: right;
+	padding-right: 0px;
+}

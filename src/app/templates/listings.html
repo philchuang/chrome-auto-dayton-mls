@@ -1,0 +1,99 @@
+<!doctype html>
+<html ng-csp ng-app="AutoDaytonMls">
+<head>
+  <title>Chrome Auto Dayton MLS saved listings</title>
+
+  <script type="text/javascript" src="../../lib/jquery-2.1.0.min.js"></script>
+  <script type="text/javascript" src="../../lib/jquery.ba-bbq.min.js"></script>
+  <script type="text/javascript" src="../../lib/string.js"></script>
+
+  <link rel="stylesheet" href="../../lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
+    <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="../../lib/prettyPhoto/prettyPhoto.css" />
+  <script type="text/javascript" src="../../lib/prettyPhoto/jquery.prettyPhoto.js"></script>
+
+  <script type="text/javascript" src="../../lib/underscore-min.js"></script>
+  <script type="text/javascript" src="../../lib/angular.min.js"></script>
+
+  <script type="text/javascript" src="../js/app.js"></script>
+  <script type="text/javascript" src="../js/services/StorageService.js"></script>
+
+  <link rel="stylesheet" href="../css/listings.css" />
+  <script type="text/javascript" src="../js/controllers/ListingsController.js"></script>
+
+</head>
+<body>
+
+  <div id="page">
+    <header class="container">
+      <h4>Dayton MLS saved listings</h4>
+    </header>
+    <section id="body" class="container">
+      <section id="listings" class="col-xs-12" ng-controller="ListingsController">
+        <!-- TODO turn into a directive -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>MLS</th>
+                                <th>Price</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>Zip</th>
+                                <th>Refreshed</th>
+                                <th>Bed</th>
+                                <th>Bath</th>
+                                <th>SqFt</th>
+                                <th>Built</th>
+                                <th>Description</th>
+                                <th>History</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="listing in listings" my-repeat-finished="initPrettyPhoto">
+                            <td>
+                                <a href="{{listing.mainImageUrl}}" rel="prettyPhoto">
+                                    <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.mls}}" />
+                                </a>
+                            </td>
+                            <td>#{{listing.mls}}</td>
+                            <td>${{listing.listPrice}}</td>
+                            <td>{{listing.streetNumber}} {{listing.streetName}}</td>
+                            <td>{{listing.city}}</td>
+                            <td>{{listing.zip}}</td>
+                            <td>{{listing.timestamp}}</td>
+                            <td>{{listing.bedrooms}}</td>
+                            <td>{{listing.bathrooms}}</td>
+                            <td>{{listing.sqft}}</td>
+                            <td>{{listing.yearBuilt}}</td>
+                            <td>{{listing.description}}</td>
+                            <td>
+                                <table class="table table-striped table-bordered table-hover table-condensed">
+                                    <tr ng-repeat="h in listing.history">
+                                        <td>{{h.timestamp}}</td>
+                                        <td>{{h.action}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </section>
+    </section>
+    <section id="footer" class="container">
+      <div class="col-xs-12">
+        <div class="pull-right">
+          <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>
