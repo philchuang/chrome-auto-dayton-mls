@@ -10,7 +10,7 @@ var ListingUtils = ListingUtils || {
     UPDATED_LISTING: 1,
 };
 
-ListingUtils.comparisonProperties = ["listPrice", "sqft", "remarks", "numPics"];
+ListingUtils.comparisonProperties = ["listPrice", "sqft", "status", "description", "numPics"];
 
 ListingUtils.getChanges = function (previous, latest) {
     if (typeof previous === "undefined"

@@ -77,7 +77,7 @@ app.service ('storageService', function ($q) {
         },
 
         publishScrapeToken: function (tabId) {
-            var key = storageServiceBase.getScrapeTokenKey (tabId);
+            var key = storageServiceBase.getScrapeTokenKey(tabId);
             var items = {};
             items[key] = true;
 

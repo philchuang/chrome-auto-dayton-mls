@@ -25,6 +25,7 @@ app.controller ("SearchController",
         {
             chrome.tabs.getCurrent (function (tab) {
                 var criteria = jQuery.deparam ($window.location.search.substr (1));
+                criteria.scrapeResults = criteria.scrapeResults === true || criteria.scrapeResults === "true";
                 criteriaUtils.updateMls (criteria);
                 $scope.criteria = criteria;
                 searchService.searchDaytonRapmls (criteria, tab);

@@ -3,7 +3,12 @@ WHAT WAS JUST ACCOMPLISHED
 * scraped listings saved to sync storage
 
 WHERE TO START NOW
-* a saved listings page that displays a sortable listings table, each with history, and link to search & scrape for it
+* listings page 
+	* sortable listings table
+	* status dropdown filter
+* search service
+	* when single MLS number is given, automatically go to view details for that page
+	* make that bookmarkable too
 
 STUFF TO DO LATER
 * PageAction to trigger scrape

@@ -12,6 +12,9 @@ function processRows (resultRows) {
     var numUpdated = 0;
     
     var currentListing = {};
+    
+    // TODO get all image URLs
+    // TODO get initial listing date
 
     for (var i = 0; i < resultRows.length; i++) {
         var cellIdx = 0;
@@ -30,6 +33,7 @@ function processRows (resultRows) {
         }
 
         if (i % 4 === 1) {
+            currentListing.status = S($(resultRows[i]).find ("font.mStatusTextB").text ()).trim ().s;
             var addressCells = $($(resultRows[i]).find ("table table")[1]).find ("td");
             currentListing.streetNumber = $(addressCells[1]).text ();
             currentListing.streetName = S($(addressCells[2]).text ()).trim ().s;
