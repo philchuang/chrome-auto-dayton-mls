@@ -17,4 +17,9 @@ app.controller ("ListingsController",
             $ ("a[rel^='prettyPhoto']").prettyPhoto ({ social_tools: null });
         };
 
+        $scope.deleteAllListings = function () {
+            $scope.listings = [];
+            storageService.clearAllListings();
+        };
+
     });

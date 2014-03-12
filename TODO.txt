@@ -3,7 +3,11 @@ WHAT WAS JUST ACCOMPLISHED
 * scraped listings saved to sync storage
 
 WHERE TO START NOW
+* search page
+	* move listings button to top right
+	* turn scrape button into a left/right toggle or something with a checkmark
 * listings page 
+	* min list price filter
 	* sortable listings table
 	* status dropdown filter
 * search service
