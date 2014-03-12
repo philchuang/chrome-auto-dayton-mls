@@ -14,6 +14,14 @@ var criteriaUtils = criteriaUtils || {
                 criteria.mls[i] = S (criteria.mls[i]).trim ().s;
             }
         }
+    },
+
+    getFromUrlSearch: function (search) {
+        if (search[0] === "?")
+            search = search.substr (1);
+        var criteria = jQuery.deparam (search);
+        criteria.scrapeResults = criteria.scrapeResults === true || criteria.scrapeResults === "true";
+        return criteria;
     }
 };
 
@@ -24,10 +32,10 @@ app.controller ("SearchController",
         if ($window.location.search.length !== 0)
         {
             chrome.tabs.getCurrent (function (tab) {
-                var criteria = jQuery.deparam ($window.location.search.substr (1));
-                criteria.scrapeResults = criteria.scrapeResults === true || criteria.scrapeResults === "true";
+                var criteria = criteriaUtils.getFromUrlSearch ($window.location.search);
                 criteriaUtils.updateMls (criteria);
                 $scope.criteria = criteria;
+                $scope.$apply();
                 searchService.searchDaytonRapmls (criteria, tab);
             });
         }
@@ -42,9 +50,10 @@ app.controller ("SearchController",
             }
         });
 
-        $scope.toggleScrapeResults = function () {
-            $scope.criteria.scrapeResults = !$scope.criteria.scrapeResults;
-        };
+        //$scope.toggleScrapeResults = function () {
+        //    $scope.criteria.scrapeResults = !$scope.criteria.scrapeResults;
+        //};
+        $(".bootstrapSwitch").bootstrapSwitch();
 
         $scope.executeSearch = function (criteria) {
             criteriaUtils.updateMls (criteria);

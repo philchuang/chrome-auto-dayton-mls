@@ -87,6 +87,8 @@
     <Content Include="app\templates\listings.html" />
     <Content Include="app\templates\search.html" />
     <Content Include="lib\angular.min.js" />
+    <Content Include="lib\bootstrap-switch\css\bootstrap-switch.min.css" />
+    <Content Include="lib\bootstrap-switch\js\bootstrap-switch.min.js" />
     <Content Include="lib\bootstrap\css\bootstrap-theme.css" />
     <Content Include="lib\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="lib\bootstrap\css\bootstrap.css" />

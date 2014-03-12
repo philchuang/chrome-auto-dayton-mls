@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
   <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
 
+  <link rel="stylesheet" href="../../lib/bootstrap-switch/css/bootstrap-switch.min.css" />
+  <script type="text/javascript" src="../../lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
   <script type="text/javascript" src="../../lib/underscore-min.js"></script>
   <script type="text/javascript" src="../../lib/angular.min.js"></script>
 
@@ -27,12 +30,21 @@
 </head>
 <body>
 
-  <div id="page">
+  <div id="page" ng-controller="SearchController">
     <header class="container">
-      <h4>Dayton MLS search</h4>
+      <div class="row panel-group">
+        <div class="col-xs-10">
+          <h4>Dayton MLS search</h4>
+        </div>
+        <div class="col-xs-2">
+          <div class="pull-right">
+            <button id="listingsButton" ng-click="viewListings()" class="btn btn-primary" title="view saved listings"><span class="glyphicon glyphicon-list-alt"></span></button>
+          </div>
+        </div>
+      </div>
     </header>
     <section id="body" class="container">
-      <section id="search" class="col-xs-12" ng-controller="SearchController">
+      <section id="search" class="col-xs-12">
         <!-- TODO turn into a directive -->
         <div class="row">
           <form class="form-horizontal">
@@ -99,20 +111,9 @@
             </div>
             <hr />
             <div class="form-group">
-              <div class="col-xs-3 col-xs-offset-6">
+              <div class="col-xs-3 col-xs-offset-9">
                 <div class="pull-right">
-                  <button id="scrapeButton"
-                          title="and scrape results"
-                          class="btn center-block"
-                          ng-click="toggleScrapeResults()"
-                          ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'">
-                    <span class="glyphicon glyphicon-import" />
-                  </button>
-                </div>
-              </div>
-              <div class="col-xs-3">
-                <div class="pull-right">
-                  <button id="listingsButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"></span></button>
+                  <input type="checkbox" name="scrapeResults" ng-model="criteria.scrapeResults" class="bootstrapSwitch" data-size="small" data-label-text="scrape" />
                 </div>
               </div>
             </div>
@@ -122,14 +123,23 @@
                   <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
                 </div>
               </div>
-              <div class="col-xs-8">
+              <!--<div class="col-xs-3 col-xs-offset-2">
                 <div class="pull-right">
-                  <button id="bookmarkButton" ng-click="viewListings()" class="btn btn-primary" title="view saved listings"><span class="glyphicon glyphicon-list-alt"></span></button>
+                  <button id="scrapeButton"
+                          title="and scrape results"
+                          class="btn center-block"
+                          ng-click="toggleScrapeResults()"
+                          ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'">
+                    <span class="glyphicon glyphicon-import" />
+                  </button>
+                </div>
+              </div>-->
+              <div class="col-xs-4 col-xs-offset-4">
+                <div class="pull-right">
+                  <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"></span></button>
                 </div>
               </div>
             </div>
-            <!--hr/>
-                <textarea id="debug" style="width: 95%; height: 100px;"></textarea-->
           </form>
         </div>
       </section>

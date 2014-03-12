@@ -4,19 +4,22 @@ WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
 * search page
-	* move listings button to top right
 	* turn scrape button into a left/right toggle or something with a checkmark
+		* fix - it's not binding
 * listings page 
 	* min list price filter
 	* sortable listings table
 	* status dropdown filter
+	* updated (hours) filter
 * search service
 	* when single MLS number is given, automatically go to view details for that page
 	* make that bookmarkable too
 
 STUFF TO DO LATER
-* PageAction to trigger scrape
+* PageAction to trigger scrape, open listings
 * scrape INTO listing details to find actual initial listing date
 * scrape picture url list
 * scrape compare picture urls
 * convert from event page back to background page for live updates to listings
+* listing sets
+	* favorites
