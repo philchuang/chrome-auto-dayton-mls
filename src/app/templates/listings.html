@@ -33,43 +33,67 @@
 </head>
 <body style="padding-top: 60px;">
 
-  <div id="page">
+  <div id="page" ng-controller="ListingsController">
     <header class="container">
-      <div class="page-header">
-        <h3>Dayton MLS saved listings</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="page-header">
+            <h3>Dayton MLS saved listings</h3>
+          </div>
+        </div>
+        <div class="col-md-2 col-md-offset-4">
+          <div class="row" style="margin-top: 42px;">
+            <div class="pull-right">
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-sm" ng-click="listingsSortAsc = !listingsSortAsc"><span class="glyphicon" ng-class="listingsSortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></button>
+              </div>
+            </div>
+            <div class="input-group input-group-sm">
+              <span class="input-group-addon">Sort</span>
+              <select name="sortOrder" class="form-control text-center" ng-model="listingsSortField">
+                <option value="mls">MLS</option>
+                <option value="listPrice">Price</option>
+                <option value="streetNameAndNumber">Street</option>
+                <option value="city">City</option>
+                <option value="zip">Zip</option>
+                <option value="sqft">SqFt</option>
+                <option value="lastUpdate">Updated</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
     <section id="body" class="container">
-      <section id="listings" ng-controller="ListingsController">
-
-        <nav class="navbar-fixed-top bg-primary">
+      <section id="listings">
+        <nav class="navbar-fixed-top bg-primary" style="padding-top: 15px;">
           <div class="container">
             <div class="row panel-group">
-              <div class="col-xs-2">
+              <div class="col-md-2">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon">$ (min)</span>
+                  <input type="text" class="form-control" ng-model="minSearch.listPrice" />
+                </div>
+              </div>
+              <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">MLS</span>
                   <input type="text" class="form-control" ng-model="search.mls" />
                 </span>
               </div>
-              <div class="col-xs-2">
-                <span class="input-group input-group-sm">
-                  <span class="input-group-addon">$ (max)</span>
-                  <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
-                </span>
-              </div>
-              <div class="col-xs-3">
+              <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Street</span>
                   <input type="text" class="form-control" ng-model="search.streetName" />
                 </span>
               </div>
-              <div class="col-xs-3">
+              <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">City</span>
                   <input type="text" class="form-control" ng-model="search.city" />
                 </span>
               </div>
-              <div class="col-xs-2">
+              <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Zip</span>
                   <input type="text" class="form-control" ng-model="search.zip" />
@@ -78,25 +102,31 @@
             </div>
 
             <div class="row panel-group">
-              <div class="col-xs-2">
+              <div class="col-md-2">
+                <span class="input-group input-group-sm">
+                  <span class="input-group-addon">$ (max)</span>
+                  <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
+                </span>
+              </div>
+              <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">SqFt (min)</span>
                   <input type="text" class="form-control" ng-model="minSearch.sqft" />
                 </span>
               </div>
-              <div class="col-xs-2">
+              <!--<div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Beds (min)</span>
                   <input type="text" class="form-control" ng-model="minSearch.bedrooms" />
                 </span>
-              </div>
-              <div class="col-xs-5">
+              </div>-->
+              <div class="col-md-5">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Desc</span>
                   <input type="text" class="form-control" ng-model="search.description" />
                 </span>
               </div>
-              <div class="col-xs-3">
+              <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Days listed (min)</span>
                   <input type="text" class="form-control" />
@@ -107,22 +137,22 @@
           </div>
         </nav>
         <!-- TODO turn into a directive -->
-        <div class="row" ng-repeat="listing in listings | filter:search | minimum:minSearch | maximum:maxSearch" repeat-finished="initPrettyPhoto">
+        <div class="row" ng-repeat="listing in listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc" repeat-finished="initPrettyPhoto">
 
-          <div class="col-xs-12">
+          <div class="col-md-12">
             <div class="panel panel-default">
               <div class="panel-heading">
                 <div class="row text-info">
-                  <div class="col-xs-2"><a ng-href="{{listing.mls | mlsSearchUrl}}" href="#" target="_blank">#{{listing.mls}}</a></div>
-                  <div class="col-xs-2">${{listing.listPrice | number:0}}</div>
-                  <div class="col-xs-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.streetNumber}} {{listing.streetName}}</a></strong></div>
-                  <div class="col-xs-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.city}} {{listing.zip}}</a></strong></div>
-                  <div class="col-xs-2 text-muted small">{{listing.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
+                  <div class="col-md-2"><a ng-href="{{listing.mls | mlsSearchUrl}}" href="#" target="_blank">#{{listing.mls}}</a></div>
+                  <div class="col-md-2">${{listing.listPrice | number:0}}</div>
+                  <div class="col-md-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.streetNumber}} {{listing.streetName}}</a></strong></div>
+                  <div class="col-md-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.city}} {{listing.zip}}</a></strong></div>
+                  <div class="col-md-2 text-muted small">{{listing.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
                 </div>
               </div>
               <div class="panel-body">
                 <div class="row">
-                  <div class="col-xs-2">
+                  <div class="col-md-2">
                     <div class="thumbnail">
                       <a href="{{listing.mainImageUrl}}" rel="prettyPhoto">
                         <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.streetNumber}} {{listing.streetName}}" />
@@ -132,7 +162,7 @@
                       <li class="list-group-item"><span class="text-info">{{listing.status}}</span></li>
                     </ul>
                   </div>
-                  <div class="col-xs-10">
+                  <div class="col-md-10">
                     <div class="row">
                       <ul class="list-group list-inline pull-left">
                         <li class="list-group-item">SqFt <span class="text-info">{{listing.sqft}}</span></li>
@@ -151,8 +181,8 @@
                 </div>
                 <div class="row" ng-repeat="h in listing.history">
                   <div class="panel">
-                    <div class="col-xs-2 small">{{h.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
-                    <div class="col-xs-10 small">{{h.action}}</div>
+                    <div class="col-md-2 small">{{h.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
+                    <div class="col-md-10 small">{{h.action}}</div>
                   </div>
                 </div>
               </div>
@@ -162,7 +192,7 @@
         </div>
 
         <div class="row panel-group">
-          <div class="col-xs-2 col-xs-offset-10">
+          <div class="col-md-2 col-md-offset-10">
             <div class="pull-right">
               <!-- TODO confirmation dialog -->
               <button class="btn btn-danger" ng-click="deleteAllListings()">Delete All <span class="glyphicon glyphicon-remove"></span></button>
@@ -173,7 +203,7 @@
       </section>
     </section>
     <section id="footer" class="container">
-      <div class="col-xs-12">
+      <div class="col-md-12">
         <div class="pull-right">
           <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
         </div>

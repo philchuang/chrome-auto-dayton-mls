@@ -1,6 +1,5 @@
 #page {
-	width: 320px;
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 .container {
@@ -11,4 +10,8 @@
 .smallPadAndAlignRight {
 	text-align: right;
 	padding-right: 0px;
+}
+
+nav > div > div.panel-group {
+    margin-bottom: 15px;
 }
