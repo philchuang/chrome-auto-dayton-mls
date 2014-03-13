@@ -103,13 +103,13 @@ app.service("criteriaBookmarkService", function (notificationService) {
                     if (typeof node == "undefined" || node == null)
                     {
                         chrome.bookmarks.create({ parentId: folderId, title: title, url: url }, function () {
-                            notificationService.displayNotification("bookmark", "Bookmark created", title);
+                            notificationService.displayNotification("", "Bookmark created", title);
                         });
                     }
                     else
                     {
                         chrome.bookmarks.update(node.id, { url: url }, function () {
-                            notificationService.displayNotification("bookmark", "Bookmark updated", title);
+                            notificationService.displayNotification("", "Bookmark updated", title);
                         });
                     }
                 });
