@@ -32,6 +32,11 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         scrapeService.updateListingStaleness ();
         return false;
     }
+    
+    if (request.action === "updateListing") {
+        scrapeService.updateListing (request.listing);
+        return false;
+    }
 
     if (request.action === "getAllListings") {
         storageService.getAllListings ().then (function (listings) {

@@ -5,6 +5,10 @@ var ListingsControllerBase = ListingsControllerBase || {};
 ListingsControllerBase.prepareListing = function (listing) {
     if (typeof listing === "undefined" || listing === null) return;
     listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
+    if (typeof listing.semiAnnualTaxes !== "undefined") {
+        if (typeof listing.hoaFee === "undefined") listing.hoaFee = 0;
+        listing.annualTaxes = parseInt (listing.semiAnnualTaxes) + parseInt (listing.hoaFee);
+    }
     listing.lastUpdate = Math.max.apply (Math, listing.history.map (function (h) { return h.timestamp; }));
 };
 

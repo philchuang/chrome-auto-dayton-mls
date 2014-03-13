@@ -100,6 +100,22 @@ app.service ("scrapeService", function ($q, storageService) {
                     storageService.saveListing (listings[i]);
                 }
             });
+        },
+        
+        updateListing: function (listing) {
+            if (typeof listing === "undefined" || listing === null
+                || typeof listing.id === "undefined" || listing.id === null || listing.id === "") return;
+
+            storageService.getListing (listing.id).then (function (existingListing) {
+                if (typeof existingListing === "undefined" || existingListing === null) return;
+                
+                for (var propertyName in listing) {
+                    if (propertyName === "id" || propertyName === "mls") continue;
+                    existingListing[propertyName] = listing[propertyName];
+                }
+
+                storageService.saveListing (existingListing);
+            });
         }
 
     };
