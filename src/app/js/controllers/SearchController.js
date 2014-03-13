@@ -31,11 +31,12 @@ app.controller ("SearchController",
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
         {
-            chrome.tabs.getCurrent (function (tab) {
-                var criteria = criteriaUtils.getFromUrlSearch ($window.location.search);
-                criteriaUtils.updateMls (criteria);
-                $scope.criteria = criteria;
-                $scope.$apply();
+            var criteria = criteriaUtils.getFromUrlSearch($window.location.search);
+            criteriaUtils.updateMls(criteria);
+            $scope.criteria = criteria;
+            $scope.$apply();
+
+            chrome.tabs.getCurrent(function (tab) {
                 searchService.searchDaytonRapmls (criteria, tab);
             });
         }
