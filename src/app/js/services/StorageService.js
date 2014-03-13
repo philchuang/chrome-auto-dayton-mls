@@ -14,6 +14,10 @@ var storageServiceBase = storageServiceBase || {
 
     getListingKey: function (tabId) {
         return "listing_" + tabId;
+    },
+    
+    getMlsDetailsFetchListKey: function (tabId) {
+        return "mlsFetchList_" + tabId;
     }
 
 };
@@ -26,6 +30,24 @@ app.service ('storageService', function ($q) {
         items[storageServiceBase.LAST_CRITERIA] = criteria;
 
         chrome.storage.sync.set(items);
+    };
+
+    var getListing = function (id) {
+        var deferred = $q.defer ();
+
+        if (typeof id === "undefined") {
+            deferred.resolve (null);
+            return deferred.promise;
+        }
+
+        var key = storageServiceBase.getListingKey (id);
+
+        chrome.storage.sync.get (key, function (items) {
+            var data = items[key];
+            deferred.resolve (data);
+        });
+
+        return deferred.promise;
     };
 
     return {
@@ -121,6 +143,30 @@ app.service ('storageService', function ($q) {
             return deferred.promise;
         },
         
+        getListings: function (mlsNums) {
+            var deferred = $q.defer();
+
+            if (typeof mlsNums === "undefined" || mlsNums == null || mlsNums.length === 0)
+            {
+                deferred.resolve([]);
+                return deferred.promise;
+            }
+
+            var listings = [];
+            
+            for (var i = 0; i < mlsNums.length; i++) {
+                getListing (mlsNums[i]).then (function (listing) {
+                    listings.push (listing);
+                    if (listings.length === mlsNums.length)
+                        deferred.resolve (listings);
+                });
+            }
+
+            return deferred.promise;
+        },
+        
+        getListing: getListing,
+
         clearAllListings: function () {
             var keyPrefix = storageServiceBase.getListingKey ("");
 
@@ -135,30 +181,46 @@ app.service ('storageService', function ($q) {
             });
         },
 
-        getListing: function (id) {
-            var deferred = $q.defer ();
-
-            if (typeof id === "undefined") {
-                deferred.resolve (null);
-                return deferred.promise;
-            }
-
-            var key = storageServiceBase.getListingKey (id);
-
-            chrome.storage.sync.get (key, function (items) {
-                var data = items[key];
-                deferred.resolve (data);
-            });
-
-            return deferred.promise;
-        },
-
         saveListing: function (listing) {
             var key = storageServiceBase.getListingKey (listing.id);
             var items = {};
             items[key] = listing;
 
             chrome.storage.sync.set (items);
+        },
+
+        saveMlsDetailsFetchList: function (tabId, mlsNums) {
+            var key = storageServiceBase.getMlsDetailsFetchListKey(tabId);
+            
+            if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0) {
+                chrome.storage.local.remove (key);
+                return;
+            }
+            
+            var items = {};
+            items[key] = mlsNums;
+
+            chrome.storage.local.set (items);
+        },
+
+        getMlsDetailsFetchList: function (tabId) {
+            var deferred = $q.defer ();
+
+            if (typeof tabId === "undefined")
+            {
+                deferred.resolve (null);
+                return deferred.promise;
+            }
+
+            var key = storageServiceBase.getMlsDetailsFetchListKey (tabId);
+
+            chrome.storage.local.get(key, function (items) {
+                var data = items[key];
+                deferred.resolve (data);
+            });
+
+            return deferred.promise;
         }
+
     };
 });

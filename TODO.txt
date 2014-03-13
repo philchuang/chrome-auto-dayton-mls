@@ -1,7 +1,9 @@
 WHAT WAS JUST ACCOMPLISHED
+* scrape listing details
 
 WHERE TO START NOW
-* search page
+* listings 
+	* figure out why some listings aren't getting their listingDate saved (it's saved but not there when retrieved)
 * listings page 
 	* status dropdown filter
 	* updated (hours) filter

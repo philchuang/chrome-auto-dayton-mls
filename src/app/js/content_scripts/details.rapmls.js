@@ -20,7 +20,7 @@ function updateMlsData () {
     listing.id = listing.mls;
 
     // listingDate
-    var listingDate = summaryTable.children ().first ().children ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().first ().text ();
+    var listingDate = summaryTable.children ().first ().children ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().last ().prev ().text ();
     if (listingDate.length > 2)
         listingDate = listingDate.substr (1, listingDate.length - 2);
     listing.listingDate = new Date(listingDate).toJSON();
@@ -37,6 +37,18 @@ function updateMlsData () {
     listing.hoaFee = parseInt (listing.hoaFee);
 
     chrome.runtime.sendMessage ({ action: "updateListing", listing: listing });
+
+    chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+        if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
+            return;
+
+        var idx = $.inArray (listing.mls, mlsNums);
+        if (~idx) {
+            mlsNums.splice (idx, 1);
+            chrome.runtime.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: mlsNums });
+            window.history.back ();
+        }
+    });
 }
 
 $(document).ready (function ()

@@ -40,19 +40,21 @@ ListingUtils.processChanges = function (previous, latest) {
     if (typeof latest === "undefined" || latest === null)
         return -2;
 
-    if (typeof latest.history === "undefined")
-        latest.history = [];
-
     if (typeof previous === "undefined" || previous === null)
     {
-        latest.history.push ({
+        latest.history = [];
+        latest.history.push({
             timestamp: latest.timestamp,
             action: "started tracking"
         });
         return ListingUtils.NEW_LISTING;
     }
 
-    latest.history = previous.history;
+    // copy over values which don't exist in the latest object
+    for (var propertyName in previous) {
+        if (typeof latest[propertyName] === "undefined")
+            latest[propertyName] = previous[propertyName];
+    }
     var changes = ListingUtils.getChanges (previous, latest);
     if (changes !== null) {
         latest.history.push ({ action: changes, timestamp: latest.timestamp });
@@ -116,7 +118,26 @@ app.service ("scrapeService", function ($q, storageService) {
 
                 storageService.saveListing (existingListing);
             });
-        }
+        },
+        
+        checkNeedsListingDetails: function (mlsNums) {
+            var deferred = $q.defer();
 
+            storageService.getListings (mlsNums).then (function (listings) {
+                var nums = [];
+                
+                if (typeof listings !== "undefined" && listings != null && listings.length > 0) {
+                    for (var i = 0; i < listings.length; i++) {
+                        if (typeof listings[i].listingDate === "undefined")
+                            nums.push (listings[i].mls);
+                    }
+                }
+
+                deferred.resolve (nums);
+            });
+
+            return deferred.promise;
+        }
+        
     };
 });

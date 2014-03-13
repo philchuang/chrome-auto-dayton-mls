@@ -16,6 +16,8 @@ function processRows (resultRows, finishedCallback) {
     // TODO get all image URLs
     // TODO get initial listing date
 
+    var scrapedMlsNums = [];
+
     for (var i = 0; i < resultRows.length; i++) {
         var cellIdx = 0;
         if (i % 4 === 0) {
@@ -49,6 +51,7 @@ function processRows (resultRows, finishedCallback) {
         if (i % 4 === 2) {
             var mlsStr = $($(resultRows[i]).find ("td")[1]).text ();
             currentListing.mls = $(mlsStr.split ("#")).last ()[0];
+            scrapedMlsNums.push (currentListing.mls);
             currentListing.id = currentListing.mls;
             continue;
         }
@@ -80,6 +83,11 @@ function processRows (resultRows, finishedCallback) {
 
                     if (typeof finishedCallback !== "undefined" && finishedCallback != null)
                         finishedCallback (resultRows);
+
+                    chrome.runtime.sendMessage ({ action: "checkNeedsListingDetails", mlsNums: scrapedMlsNums },
+                        function (mlsNums) {
+                            processMlsNumsThatNeedDetails (mlsNums);
+                        });
                 }
             });
             continue;
@@ -104,6 +112,40 @@ function openFirstResultDetailsPage (resultRows) {
     var row3 = resultRows[2];
     var link = $(row3).find("a:contains('View Details')")[0];
     link.click ();
+}
+
+function processMlsNumsThatNeedDetails (mlsNums)
+{
+    if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length == 0) return;
+
+    var foundLink = null;
+    for (var i = 0; i < mlsNums.length; i++) {
+        var link = getDetailsPageLinkFor(mlsNums[i]);
+        if (link != null) {
+            foundLink = link;
+            break;
+        }
+    }
+    
+    if (foundLink == null) {
+        chrome.runtime.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: [] });
+    } else {
+        foundLink.click ();
+    }
+}
+
+function getDetailsPageLinkFor (mls) {
+    var links = $($("td:contains('#" + mls + "')").last ().siblings ()[1]).find ("a");
+    if (links.length > 0) {
+        return links[0];
+    }
+    return null;
+}
+
+function openDetailsPageFor (mls) {
+    var link = getDetailsPageLinkFor (mls);
+    if (link != null)
+        link.click ();
 }
 
 function handleScrapeOptions (options) {
@@ -135,6 +177,12 @@ $(document).ready (function ()
     //});
 
     chrome.runtime.sendMessage ({ action: "consumeScrapeOptions" }, function (options) {
-        handleScrapeOptions (options);
+        if (options)
+            handleScrapeOptions (options);
+        else
+            chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+                processMlsNumsThatNeedDetails (mlsNums);
+            });
     });
+
 });

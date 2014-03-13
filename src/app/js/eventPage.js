@@ -38,13 +38,37 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         return false;
     }
 
+    if (request.action === "checkNeedsListingDetails") {
+        scrapeService.checkNeedsListingDetails (request.mlsNums).then (function (mlsNums) {
+            if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length == 0) {
+                sendResponse(null);
+                return;
+            }
+            storageService.saveMlsDetailsFetchList (sender.tab.id, mlsNums);
+            sendResponse (mlsNums);
+        });
+        return true; // this keeps the message channel open for asynchronous response
+    }
+
+    if (request.action === "saveMlsDetailsFetchList") {
+        storageService.saveMlsDetailsFetchList (sender.tab.id, request.mlsNums);
+        return false;
+    }
+
+    if (request.action === "getMlsDetailsFetchList") {
+        storageService.getMlsDetailsFetchList (sender.tab.id).then (function (mlsNums) {
+            sendResponse (mlsNums);
+        });
+        return true; // this keeps the message channel open for asynchronous response
+    }
+
     if (request.action === "getAllListings") {
         storageService.getAllListings ().then (function (listings) {
             sendResponse (listings);
         });
         return true; // this keeps the message channel open for asynchronous response
     }
-    
+
     if (request.action === "displayNotification") {
         notificationService.displayNotification (request.id, request.title, request.message);
         return false;
