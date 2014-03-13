@@ -1,5 +1,5 @@
 #page {
-	width: 320px;
+	width: 280px;
 	padding-top: 10px;
 }
 
@@ -11,4 +11,8 @@
 .smallPadAndAlignRight {
 	text-align: right;
 	padding-right: 0px;
+}
+
+.textarea-lg {
+    height: 54px !important;
 }
