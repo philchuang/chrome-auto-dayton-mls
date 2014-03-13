@@ -4,6 +4,26 @@
 
 "use strict";
 
+function parseDollarAmount (str, listing, propertyName) {
+    if (typeof str === "undefined" || str === null) {
+        str = "";
+    }
+
+    str = S (str).trim().s;
+
+    if (str.length > 0 && str[0] === "$")
+        str = str.substr (1);
+
+    var val = parseFloat (str);
+
+    if (isNaN (val)) {
+        delete listing[propertyName];
+        return;
+    }
+
+    listing[propertyName] = val;
+}
+
 function updateMlsData () {
 
     var listing = {
@@ -26,15 +46,8 @@ function updateMlsData () {
     listing.listingDate = new Date(listingDate).toJSON();
     
     // taxes/hoa
-    listing.semiAnnualTaxes = $("a:contains('Semi Annual Taxes')").parent ().siblings ().first ().text ();
-    if (listing.semiAnnualTaxes.length > 0 && listing.semiAnnualTaxes[0] === "$")
-        listing.semiAnnualTaxes = listing.semiAnnualTaxes.substr(1);
-    listing.semiAnnualTaxes = parseInt (listing.semiAnnualTaxes);
-    
-    listing.hoaFee = $("a:contains('HOA/Condo Fee')").parent ().siblings ().first ().text ();
-    if (listing.hoaFee.length > 0 && listing.hoaFee[0] === "$")
-        listing.hoaFee = listing.hoaFee.substr (1);
-    listing.hoaFee = parseInt (listing.hoaFee);
+    parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent().siblings().first().text(), listing, "semiAnnualTaxes");
+    parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent().siblings().first().text(), listing, "hoaFee");
 
     chrome.runtime.sendMessage ({ action: "updateListing", listing: listing });
 

@@ -7,12 +7,18 @@ ListingsControllerBase.prepareListing = function (listing) {
 
     listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
     listing.streetNumberAndName = listing.streetNumber + " " + listing.streetName;
-    
-    if (typeof listing.semiAnnualTaxes !== "undefined") {
-        if (typeof listing.hoaFee === "undefined") listing.hoaFee = 0;
-        listing.annualTaxes = parseInt (listing.semiAnnualTaxes) + parseInt (listing.hoaFee);
+
+    var semiAnnualTaxes = typeof listing.semiAnnualTaxes !== "undefined" ? parseFloat (listing.semiAnnualTaxes) : 0;
+    var hoaFee = typeof listing.hoaFee !== "undefined" ? parseFloat (listing.hoaFee) : 0;
+
+    if (!isNaN (semiAnnualTaxes) || !isNaN (hoaFee))
+        listing.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0);
+
+    listing.lastUpdate = Date.parse (Math.max.apply (Math, listing.history.map (function (h) { return new Date (h.timestamp); })));
+    if (typeof listing.listingDate !== "undefined" && listing.listingDate !== null
+        && (listing.history.length == 1 || isNaN (listing.lastUpdate) || isNaN (listing.lastUpdate.getTime()))) {
+        listing.lastUpdate = Date.parse (listing.listingDate);
     }
-    listing.lastUpdate = Math.max.apply (Math, listing.history.map (function (h) { return h.timestamp; }));
 };
 
 ListingsControllerBase.prepareListings = function (listings) {

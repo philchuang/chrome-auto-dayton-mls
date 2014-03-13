@@ -2,15 +2,16 @@ WHAT WAS JUST ACCOMPLISHED
 * scrape listing details
 
 WHERE TO START NOW
-* listings 
-	* figure out why some listings aren't getting their listingDate saved (it's saved but not there when retrieved)
+* scrape page
+	* scrape picture url list
 * listings page 
+	* save filter/sort between page reloads
 	* status dropdown filter
 	* updated (hours) filter
+	* personal listing notes
 
 STUFF TO DO LATER
 * PageAction to trigger scrape, open listings
-* scrape picture url list
 * scrape compare picture urls
 * convert from event page back to background page for live updates to listings
 	* OR have an event listener for sync save, replace listings live!
