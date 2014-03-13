@@ -11,9 +11,6 @@
   <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
   <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="../../lib/bootstrap-switch/css/bootstrap-switch.min.css" />
-  <script type="text/javascript" src="../../lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-
   <script type="text/javascript" src="../../lib/underscore-min.js"></script>
   <script type="text/javascript" src="../../lib/angular.min.js"></script>
 
@@ -111,9 +108,17 @@
             </div>
             <hr />
             <div class="form-group">
-              <div class="col-xs-3 col-xs-offset-9">
+              <div class="col-xs-5 col-xs-offset-7">
                 <div class="pull-right">
-                  <input type="checkbox" name="scrapeResults" ng-model="criteria.scrapeResults" class="bootstrapSwitch" data-size="small" data-label-text="scrape" />
+                  <div class="btn-group btn-group-sm">
+                    <button id="scrapeButton"
+                            title="and scrape results"
+                            class="btn btn-toolbar"
+                            ng-click="toggleScrapeResults()">
+                      scrape
+                    </button>
+                    <button class="btn btn-toolbar" ng-click="toggleScrapeResults()" ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'"><span class="glyphicon" ng-class="criteria.scrapeResults ? 'glyphicon-ok' : 'glyphicon-remove'"></span></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -123,17 +128,6 @@
                   <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
                 </div>
               </div>
-              <!--<div class="col-xs-3 col-xs-offset-2">
-                <div class="pull-right">
-                  <button id="scrapeButton"
-                          title="and scrape results"
-                          class="btn center-block"
-                          ng-click="toggleScrapeResults()"
-                          ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'">
-                    <span class="glyphicon glyphicon-import" />
-                  </button>
-                </div>
-              </div>-->
               <div class="col-xs-4 col-xs-offset-4">
                 <div class="pull-right">
                   <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"></span></button>

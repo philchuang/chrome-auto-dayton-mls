@@ -50,10 +50,9 @@ app.controller ("SearchController",
             }
         });
 
-        //$scope.toggleScrapeResults = function () {
-        //    $scope.criteria.scrapeResults = !$scope.criteria.scrapeResults;
-        //};
-        $(".bootstrapSwitch").bootstrapSwitch();
+        $scope.toggleScrapeResults = function () {
+            $scope.criteria.scrapeResults = !$scope.criteria.scrapeResults;
+        };
 
         $scope.executeSearch = function (criteria) {
             criteriaUtils.updateMls (criteria);
