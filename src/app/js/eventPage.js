@@ -14,9 +14,9 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         return true; // this keeps the message channel open for asynchronous response
     }
 
-    if (request.action === "consumeScrapeToken") {
-        storageService.consumeScrapeToken (sender.tab.id).then (function (scrape) {
-            sendResponse (scrape === true);
+    if (request.action === "consumeScrapeOptions") {
+        storageService.consumeScrapeOptions (sender.tab.id).then (function (options) {
+            sendResponse (options);
         });
         return true; // this keeps the message channel open for asynchronous response
     }

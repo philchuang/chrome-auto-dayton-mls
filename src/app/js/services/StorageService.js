@@ -76,15 +76,15 @@ app.service ('storageService', function ($q) {
             return deferred.promise;
         },
 
-        publishScrapeToken: function (tabId) {
+        publishScrapeOptions: function (tabId, options) {
             var key = storageServiceBase.getScrapeTokenKey(tabId);
             var items = {};
-            items[key] = true;
+            items[key] = options;
 
             chrome.storage.local.set (items);
         },
 
-        consumeScrapeToken: function (tabId) {
+        consumeScrapeOptions: function (tabId) {
             var deferred = $q.defer ();
 
             if (typeof tabId === "undefined")

@@ -21,6 +21,8 @@ var criteriaUtils = criteriaUtils || {
             search = search.substr (1);
         var criteria = jQuery.deparam (search);
         criteria.scrapeResults = criteria.scrapeResults === true || criteria.scrapeResults === "true";
+        criteriaUtils.updateMls(criteria);
+        criteria.viewDetailsFirstResult = criteria.mls.length == 1;
         return criteria;
     }
 };
@@ -32,7 +34,6 @@ app.controller ("SearchController",
         if ($window.location.search.length !== 0)
         {
             var criteria = criteriaUtils.getFromUrlSearch($window.location.search);
-            criteriaUtils.updateMls(criteria);
             $scope.criteria = criteria;
             $scope.$apply();
 

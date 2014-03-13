@@ -7,9 +7,6 @@ WHERE TO START NOW
 * listings page 
 	* status dropdown filter
 	* updated (hours) filter
-* search service
-	* when single MLS number is given, automatically go to view details for that page
-	* make that bookmarkable too
 
 STUFF TO DO LATER
 * PageAction to trigger scrape, open listings

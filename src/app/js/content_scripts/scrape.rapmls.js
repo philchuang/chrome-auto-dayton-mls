@@ -4,7 +4,7 @@
 
 "use strict";
 
-function processRows (resultRows) {
+function processRows (resultRows, finishedCallback) {
 
     var numProcessed = 0;
     var numNew = 0;
@@ -77,6 +77,9 @@ function processRows (resultRows) {
                         title: "Scrape Results",
                         message: message
                     });
+
+                    if (typeof finishedCallback !== "undefined" && finishedCallback != null)
+                        finishedCallback (resultRows);
                 }
             });
             continue;
@@ -89,12 +92,29 @@ function getResultRows ()
     return $($($("#WorkspaceBGSH > table:nth-child(1) > tbody > tr > td > table")[1]).children ("tbody")).children ("tr[class!=HeaderRow]");
 }
 
-var allListings = [];
+var DEBUG_allListings = [];
 
 function DEBUG_loadAllListings () {
     chrome.runtime.sendMessage ({ action: "getAllListings" }, function (listings) {
-        allListings = listings;
+        DEBUG_allListings = listings;
     });
+}
+
+function openFirstResultDetailsPage (resultRows) {
+    var row3 = resultRows[2];
+    var link = $(row3).find("a:contains('View Details')")[0];
+    link.click ();
+}
+
+function handleScrapeOptions (options) {
+    if (typeof options === "undefined" || options == null) return;
+
+    if (options.scrapeResults) {
+        processRows (getResultRows (), function (resultRows) {
+            if (options.viewDetailsFirstResult)
+                openFirstResultDetailsPage (resultRows);
+        });
+    }
 }
 
 $(document).ready (function ()
@@ -102,22 +122,19 @@ $(document).ready (function ()
     if ($("#WorkspaceBGSH").length === 0)
         return; // not on the results page
 
-    chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
-        if (request.action == "scrapeResults")
-        {
-            processRows (getResultRows());
-            sendResponse (true);
-        }
-        else
-        {
-            console.log ("Don't know how to to handle request: " + request);
-        }
-    });
+    // currently not used
+    //chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    //    if (request.action == "scrape") {
+    //        handleScrapeOptions (request.options);
+    //        sendResponse (true);
+    //    }
+    //    else
+    //    {
+    //        console.log ("Don't know how to to handle request: " + request);
+    //    }
+    //});
 
-    chrome.runtime.sendMessage ({ action: "consumeScrapeToken" }, function (response) {
-        if (response === true)
-        {
-            processRows (getResultRows ());
-        }
+    chrome.runtime.sendMessage ({ action: "consumeScrapeOptions" }, function (options) {
+        handleScrapeOptions (options);
     });
 });
