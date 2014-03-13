@@ -49,7 +49,23 @@ function updateMlsData () {
     parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent().siblings().first().text(), listing, "semiAnnualTaxes");
     parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent().siblings().first().text(), listing, "hoaFee");
 
-    chrome.runtime.sendMessage ({ action: "updateListing", listing: listing });
+    // images
+    var scriptText = $("form[name='InputForm']").children("table").first().find("table").first().find("script").first().text();
+    var picUrlRegex = new RegExp ("Pic\\[[0-9]+\\] = \"(http://mediall.rapmls.com/dayton/listingpics/bigphoto/[^\"]+)\"", "gim");
+    var picDescRegex = new RegExp ("PicDescription\\[[0-9]+\\] = \"(.+?)\";", "gim");
+    var picUrlCodes = scriptText.match (picUrlRegex);
+    var picDescCodes = scriptText.match (picDescRegex);
+
+    // TODO further massage w/ regex
+
+    //for (var i = 0; i < imageTables.length; i++) {
+    //    var pic = {};
+    //    pic.url = $(imageTables[i]).find("img")[0].src;
+    //    pic.desc = $((imageTables[i]).first().find("td")[1]).text();
+    //    listing.pictures.push(pic);
+    //}
+
+    chrome.runtime.sendMessage({ action: "processListing", listing: listing }, function (_) {});
 
     chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)

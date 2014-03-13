@@ -74,5 +74,7 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         return false;
     }
 
+    console.log ("Unable to handle action: " + request.action);
+
     return false;
 });

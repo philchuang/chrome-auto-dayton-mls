@@ -14,7 +14,6 @@ function processRows (resultRows, finishedCallback) {
     var currentListing = {};
     
     // TODO get all image URLs
-    // TODO get initial listing date
 
     var scrapedMlsNums = [];
 

@@ -2,27 +2,23 @@ WHAT WAS JUST ACCOMPLISHED
 * scrape listing details
 
 WHERE TO START NOW
-* scrape page
-	* scrape picture url list
-		* find picture popup link - "javascript:ViewAllPictures([MLS],'PB','DTON')"" "See Addl Pics"
-		* have to be able to use jquery into iframe - $("iframe[id!='CalFrame']")
-		* open print view - $($("iframe[id!='CalFrame']").contents()).find("div.gallery-print-button").click()
-		* close popup - $("input[value='Close'].CloseButton")
-* print pictures page
-	* get all urls
-	* update listing (use processListing to capture changes)
-	* if scraping, close window when done
-		
+* scrape pictures from details page
+* test change comparators
 * listings page 
 	* save filter/sort between page reloads
 	* status dropdown filter
 	* updated (hours) filter
 	* personal listing notes
+	* delete button
 
 STUFF TO DO LATER
+* on extension initialize/1st run, clear all temp data
 * PageAction to trigger scrape, open listings
 * scrape compare picture urls
 * convert from event page back to background page for live updates to listings
 	* OR have an event listener for sync save, replace listings live!
 * listing sets
 	* favorites (within set)
+* listings page
+	* reverse-sorted history
+	* collapsible history

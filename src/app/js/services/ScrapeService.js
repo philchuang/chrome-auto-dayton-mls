@@ -10,7 +10,52 @@ var ListingUtils = ListingUtils || {
     UPDATED_LISTING: 1,
 };
 
-ListingUtils.comparisonProperties = ["listPrice", "sqft", "status", "description", "numPics"];
+var simpleComparatorProvider = function (propertyName) {
+    return {
+        propertyName: propertyName,
+        getChanges: function (previous, latest) {
+            var previousVal = previous[propertyName];
+            var latestVal = latest[propertyName];
+            if (previousVal != latestVal)
+                return propertyName + ": " + previousVal + " &rarr; " + latestVal;
+            return null;
+        }
+    };
+};
+
+var picturesComparatorProvider = function () {
+    var propertyName = "pictures";
+    return {
+        propertyName: propertyName,
+        getChanges: function (previous, latest) {
+            var previousVal = previous[propertyName];
+            var latestVal = latest[propertyName];
+
+            // nonexistent, empty, null comparison
+            if (typeof previousVal === "undefined" || previousVal === null) { // previous is nonexistent or null
+                if (typeof latestVal !== "undefined" && latestVal != null && latestVal.length != 0) // latest exists, not null, not empty
+                    return propertyName + ": [empty] &rarr; [" + latestVal.length +"]";
+                return null;
+            }
+
+            // size comparison
+            if (previousVal.length != latestVal.length)
+                return propertyName + ": [" + previousVal.length + "] &rarr; [" + latestVal.length + "]";
+
+            // data comparison
+            // bah, don't care about data comparison right now
+            return null;
+        }
+    };
+};
+
+ListingUtils.comparators = [
+    simpleComparatorProvider ("listPrice"),
+    simpleComparatorProvider ("sqft"),
+    simpleComparatorProvider ("status"),
+    simpleComparatorProvider("description"),
+    picturesComparatorProvider ()
+];
 
 ListingUtils.getChanges = function (previous, latest) {
     if (typeof previous === "undefined"
@@ -21,17 +66,17 @@ ListingUtils.getChanges = function (previous, latest) {
 
     var result = "";
 
-    for (var i = 0; i < ListingUtils.comparisonProperties.length; i++) {
-        var property = ListingUtils.comparisonProperties[i];
-        var previousVal = previous[property];
-        var latestVal = latest[property];
-        if (previousVal != latestVal)
-            result += ", " + property + ": " + previousVal + " -> " + latestVal;
+    for (var i = 0; i < ListingUtils.comparators.length; i++) {
+        var comparator = ListingUtils.comparators[i];
+        var changes = comparator.getChanges (previous, latest);
+        if (changes !== null)
+            result += ", " + changes;
     }
 
     if (result.length === 0)
         return null;
 
+    // removes initial ", "
     return result.substr (2);
 };
 
@@ -51,10 +96,10 @@ ListingUtils.processChanges = function (previous, latest) {
     }
 
     // copy over values which don't exist in the latest object
-    for (var propertyName in previous) {
+    for (var propertyName in previous)
         if (typeof latest[propertyName] === "undefined")
             latest[propertyName] = previous[propertyName];
-    }
+
     var changes = ListingUtils.getChanges (previous, latest);
     if (changes !== null) {
         latest.history.push ({ action: changes, timestamp: latest.timestamp });
@@ -128,7 +173,11 @@ app.service ("scrapeService", function ($q, storageService) {
                 
                 if (typeof listings !== "undefined" && listings != null && listings.length > 0) {
                     for (var i = 0; i < listings.length; i++) {
-                        if (typeof listings[i].listingDate === "undefined")
+                        if (typeof listings[i].listingDate === "undefined"
+                            || listings[i].listingDate === null
+                            || typeof listings[i].pictures === "undefined"
+                            || listings[i].pictures === null
+                            || listings[i].pictures.length === 0)
                             nums.push (listings[i].mls);
                     }
                 }

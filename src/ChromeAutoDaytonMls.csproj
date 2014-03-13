@@ -60,6 +60,7 @@
     <Content Include="app\css\listings.css" />
     <Content Include="app\css\search.css" />
     <Content Include="app\js\app.eventPage.js" />
+    <Content Include="app\js\content_scripts\details.rapmls.js" />
     <Content Include="app\js\content_scripts\scrape.rapmls.js" />
     <Content Include="app\js\controllers\ListingsController.js" />
     <Content Include="app\js\directives\RepeatFinishedDirective.js" />
@@ -86,6 +87,7 @@
     <Content Include="app\templates\eventPage.html" />
     <Content Include="app\templates\listings.html" />
     <Content Include="app\templates\search.html" />
+    <Content Include="lib\angular-csp.css" />
     <Content Include="lib\angular.min.js" />
     <Content Include="lib\bootstrap\css\bootstrap-theme.css" />
     <Content Include="lib\bootstrap\css\bootstrap-theme.min.css" />
