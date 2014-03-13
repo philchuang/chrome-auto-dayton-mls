@@ -4,6 +4,15 @@ WHAT WAS JUST ACCOMPLISHED
 WHERE TO START NOW
 * scrape page
 	* scrape picture url list
+		* find picture popup link - "javascript:ViewAllPictures([MLS],'PB','DTON')"" "See Addl Pics"
+		* have to be able to use jquery into iframe - $("iframe[id!='CalFrame']")
+		* open print view - $($("iframe[id!='CalFrame']").contents()).find("div.gallery-print-button").click()
+		* close popup - $("input[value='Close'].CloseButton")
+* print pictures page
+	* get all urls
+	* update listing (use processListing to capture changes)
+	* if scraping, close window when done
+		
 * listings page 
 	* save filter/sort between page reloads
 	* status dropdown filter
