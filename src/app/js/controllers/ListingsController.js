@@ -47,8 +47,9 @@ app.controller ("ListingsController",
         $scope.refresh = refresh;
 
         $scope.deleteAllListings = function () {
-            $scope.listings = [];
-            storageService.clearAllListings();
+            alert('TODO: deleteAllListings');
+            //$scope.listings = [];
+            //storageService.clearAllListings();
         };
 
         $scope.delete = function (listing) {
@@ -60,5 +61,8 @@ app.controller ("ListingsController",
 
             storageService.saveListing (listing);
         };
+
+        $scope.historySortProperty = "timestamp";
+        $scope.historySortDescending = true;
 
     });

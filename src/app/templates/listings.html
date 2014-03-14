@@ -125,11 +125,11 @@
           <input type="text" class="form-control" ng-model="search.description" />
           <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="input-group input-group-sm">
+        <!--<div class="input-group input-group-sm">
           <span class="input-group-addon">Days listed (min)</span>
           <input type="text" class="form-control" />
           <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
+        </div>-->
       </div>
     </div>
 
@@ -189,7 +189,7 @@
                     <div class="row"><div class="text-primary">{{listing.description}}</div></div>
                   </div>
                 </div>
-                <div class="row" ng-repeat="h in listing.history">
+                <div class="row" ng-repeat="h in listing.history | orderBy:historySortProperty:historySortDescending">
                   <div class="panel">
                     <div class="col-md-2 small">{{h.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
                     <div class="col-md-10 small">{{h.action}}</div>

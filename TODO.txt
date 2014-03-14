@@ -7,17 +7,14 @@ WHAT WAS JUST ACCOMPLISHED
 WHERE TO START NOW
 * listings page 
 	* use ngcloak
+	* delete functionality w/ confirm dialog
 	* filters/sort
 		* save filter/sort between page reloads
 		* status dropdown filter
-		* updated (hours) filter
-		* days listed filter
+		* ranking filter
 	* each listing
-		* render picture list dynamically only when thumbnail clicked
-		* reverse-sorted history
 		* collapsible history
 		* personal notes
-		* delete button
 		* save button
 		* ranking field
 
@@ -25,10 +22,12 @@ STUFF TO DO LATER
 * data export
 * PageAction to trigger scrape, open listings
 * convert from event page back to background page for live updates to listings
-	* OR have an event listener for sync save, replace listings live!
+	* OR have an event listener for local save, replace listings live!
 * listing sets
 	* favorites (within set)
 * listings page
 	* do floating left filter bar the right way
 	* fix filter field clear controls binding
 	* results paging, beginning to be a memory/cpu hog
+	* each listing
+		* render picture list dynamically only when thumbnail clicked
