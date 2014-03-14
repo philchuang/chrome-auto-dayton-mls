@@ -17,7 +17,7 @@ var simpleComparatorProvider = function (propertyName) {
             var previousVal = previous[propertyName];
             var latestVal = latest[propertyName];
             if (previousVal != latestVal)
-                return propertyName + ": " + previousVal + " &rarr; " + latestVal;
+                return propertyName + ": " + previousVal + " -> " + latestVal;
             return null;
         }
     };
@@ -32,15 +32,15 @@ var picturesComparatorProvider = function () {
             var latestVal = latest[propertyName];
 
             // nonexistent, empty, null comparison
-            if (typeof previousVal === "undefined" || previousVal === null) { // previous is nonexistent or null
-                if (typeof latestVal !== "undefined" && latestVal != null && latestVal.length != 0) // latest exists, not null, not empty
-                    return propertyName + ": [empty] &rarr; [" + latestVal.length +"]";
+            if (typeof previousVal === "undefined" || previousVal === null) { 
+                // previous is nonexistent or null
+                // just means that we're populating this data for the first time
                 return null;
             }
 
             // size comparison
             if (previousVal.length != latestVal.length)
-                return propertyName + ": [" + previousVal.length + "] &rarr; [" + latestVal.length + "]";
+                return propertyName + ": [" + previousVal.length + "] -> [" + latestVal.length + "]";
 
             // data comparison
             // bah, don't care about data comparison right now

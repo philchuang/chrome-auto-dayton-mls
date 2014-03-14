@@ -14,10 +14,10 @@ ListingsControllerBase.prepareListing = function (listing) {
     if (!isNaN (semiAnnualTaxes) || !isNaN (hoaFee))
         listing.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0);
 
-    listing.lastUpdate = Date.parse (Math.max.apply (Math, listing.history.map (function (h) { return new Date (h.timestamp); })));
+    listing.lastUpdate = new Date (Math.max.apply (Math, listing.history.map (function (h) { return Date.parse (h.timestamp); })));
     if (typeof listing.listingDate !== "undefined" && listing.listingDate !== null
         && (listing.history.length == 1 || isNaN (listing.lastUpdate) || isNaN (listing.lastUpdate.getTime()))) {
-        listing.lastUpdate = Date.parse (listing.listingDate);
+        listing.lastUpdate = new Date (Date.parse (listing.listingDate));
     }
 };
 

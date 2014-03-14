@@ -9,7 +9,7 @@ function parseDollarAmount (str, listing, propertyName) {
         str = "";
     }
 
-    str = S (str).trim().s;
+    str = S(str).trim().s;
 
     if (str.length > 0 && str[0] === "$")
         str = str.substr (1);
@@ -30,13 +30,11 @@ function updateMlsData () {
         timestamp: new Date ().toJSON ()
     };
     
-    // #tdListingSummary > div > div:nth-child(2) > a
-    // #Workspace > table > tbody > tr > td > form > table:nth-child(34) > tbody > tr > td > table > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(2) > td > div > table > tbody > tr:nth-child(1)
-    var summaryTable = $ ("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
+    var summaryTable = $("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
     
     // mls
     var mlsStr = summaryTable.children ().first ().children ().first ().children ().first ().children ().first ().text ();
-    listing.mls = S ($ (mlsStr.split ("#")).last ()[0]).trim ().s;
+    listing.mls = S($(mlsStr.split ("#")).last ()[0]).trim ().s;
     listing.id = listing.mls;
 
     // listingDate
@@ -51,20 +49,35 @@ function updateMlsData () {
 
     // images
     var scriptText = $("form[name='InputForm']").children("table").first().find("table").first().find("script").first().text();
-    var picUrlRegex = new RegExp ("Pic\\[[0-9]+\\] = \"(http://mediall.rapmls.com/dayton/listingpics/bigphoto/[^\"]+)\"", "gim");
-    var picDescRegex = new RegExp ("PicDescription\\[[0-9]+\\] = \"(.+?)\";", "gim");
+    var picUrlRegex = new RegExp ("Pic\\[[0-9]+\\] = \"(http.+?)\";", "gim");
+    var picDescRegex = new RegExp ("PicDescription\\[[0-9]+\\] = \"(.*?)\";", "gim");
     var picUrlCodes = scriptText.match (picUrlRegex);
     var picDescCodes = scriptText.match (picDescRegex);
 
-    // TODO further massage w/ regex
+    if (picUrlCodes === null || picDescCodes === null)
+    {
+        console.log ("No pictures found");
+    }
+    else
+    {
+        if (picUrlCodes.length != picDescCodes.length)
+            console.log ("Warning: found "+picUrlCodes.length+" pictures and "+picDescCodes.length+" descriptions.");
 
-    //for (var i = 0; i < imageTables.length; i++) {
-    //    var pic = {};
-    //    pic.url = $(imageTables[i]).find("img")[0].src;
-    //    pic.desc = $((imageTables[i]).first().find("td")[1]).text();
-    //    listing.pictures.push(pic);
-    //}
+        var codeRegex = new RegExp (" = \"(.*)\";", "gim");
 
+        listing.pictures = [];
+        var length = Math.min (picUrlCodes.length, picDescCodes.length);
+        for (var i = 0; i < length; i++)
+        {
+            var pic = {};
+            pic.url = codeRegex.exec (picUrlCodes[i])[1];
+            codeRegex.lastIndex = 0; // reset codeRegex
+            pic.description = codeRegex.exec (picDescCodes[i])[1];
+            codeRegex.lastIndex = 0; // reset codeRegex
+            listing.pictures.push (pic);
+        }
+    }
+    
     chrome.runtime.sendMessage({ action: "processListing", listing: listing }, function (_) {});
 
     chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
@@ -82,7 +95,7 @@ function updateMlsData () {
 
 $(document).ready (function ()
 {
-    if ($("#Workspace").length === 0)
+    if ($("#tdListingSummary").length === 0)
         return; // not on the details page
 
     // currently not used
