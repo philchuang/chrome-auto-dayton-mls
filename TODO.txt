@@ -10,6 +10,7 @@ WHERE TO START NOW
 		* save filter/sort between page reloads
 		* status dropdown filter
 		* updated (hours) filter
+		* days listed filter
 		* (x) on the right of each field to clear it
 		* results paging, beginning to be a memory/cpu hog
 	* each listing

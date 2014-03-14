@@ -27,6 +27,7 @@
   <script type="text/javascript" src="../js/services/NotificationService.js"></script>
   <script type="text/javascript" src="../js/services/StorageService.js"></script>
   <script type="text/javascript" src="../js/directives/RepeatFinishedDirective.js"></script>
+  <script type="text/javascript" src="../js/directives/InitClearControls.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
   <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MlsSearchUrlFilter.js"></script>
@@ -39,7 +40,7 @@
 </head>
 <body style="padding-top: 60px;">
 
-  <div id="page" ng-controller="ListingsController">
+  <div id="page" ng-controller="ListingsController" init-clear-controls="clear-control">
     <header class="container">
       <div class="row">
         <div class="col-md-6">
@@ -81,30 +82,35 @@
                 <div class="input-group input-group-sm">
                   <span class="input-group-addon">$ (min)</span>
                   <input type="text" class="form-control" ng-model="minSearch.listPrice" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </div>
               </div>
               <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">MLS</span>
                   <input type="text" class="form-control" ng-model="search.mls" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Street</span>
                   <input type="text" class="form-control" ng-model="search.streetNumberAndName" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">City</span>
                   <input type="text" class="form-control" ng-model="search.city" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Zip</span>
                   <input type="text" class="form-control" ng-model="search.zip" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
             </div>
@@ -114,31 +120,35 @@
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">$ (max)</span>
                   <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">SqFt (min)</span>
                   <input type="text" class="form-control" ng-model="minSearch.sqft" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <!--<div class="col-md-2">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Beds (min)</span>
                   <input type="text" class="form-control" ng-model="minSearch.bedrooms" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>-->
               <div class="col-md-5">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Desc</span>
                   <input type="text" class="form-control" ng-model="search.description" />
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
               <div class="col-md-3">
                 <span class="input-group input-group-sm">
                   <span class="input-group-addon">Days listed (min)</span>
                   <input type="text" class="form-control" />
-                  <!-- TODO implement by adding daysListed to listing -->
+                  <a class="input-group-addon clear-control"><span class="glyphicon glyphicon-remove"></span></a>
                 </span>
               </div>
             </div>

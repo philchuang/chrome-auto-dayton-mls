@@ -29,7 +29,7 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, storageService) {
+    function ($scope, $timeout, storageService) {
 
         var refresh = function () {
             storageService.getAllListings().then(function (listings) {
@@ -53,11 +53,28 @@ app.controller ("ListingsController",
         };
 
         $scope.initLazyLoad = function () {
-            setTimeout (function () {
-                $ ("img.lazy").lazyload ({
-                    effect: "fadeIn"
-                });
-            }, 100);
+            if (~$scope.initLazyLoadExecuted)
+                $timeout (function () {
+                    $("img.lazy").lazyload ({
+                        effect: "fadeIn"
+                    });
+                    $scope.initLazyLoadExecuted = true;
+                }, 100);
         };
         
+        //var initClearControls = function () {
+        //    $.each ($(".clear-control"), function (idx, control) {
+        //        var cc = $(control);
+        //        if (control.tagName === "a")
+        //            control.href = "javascript:return false;";
+        //        var input = cc.prev ().first ();
+        //        cc.click (function (e) {
+        //            e.preventDefault = true;
+        //            $scope.$apply (function () { input.val (""); });
+        //        });
+        //    });
+        //};
+
+        //$scope.$on ('$viewContentLoaded', initClearControls);
+
     });
