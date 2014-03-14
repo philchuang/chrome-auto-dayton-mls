@@ -7,10 +7,12 @@ app.directive ("clearControl", function () {
         link: function (scope, element, attrs) {
             var input = element.prev().first();
             if (element[0].tagName === "A" || element[0].tagName === "a")
-                element[0].href = "";
+                element[0].href = "#"; // I hate this, prevent it from showing up in URL!
             element.bind ("click", function (e) {
                 e.preventDefault = true;
-                input.val ("");
+                scope.$apply (function (s) {
+                    input.val (""); // DAMMIT WHY DOES'NT THIS UPDATE FILTERING
+                });
             });
         }
     };
