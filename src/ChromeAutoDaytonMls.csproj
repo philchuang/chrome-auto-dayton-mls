@@ -63,7 +63,8 @@
     <Content Include="app\js\content_scripts\details.rapmls.js" />
     <Content Include="app\js\content_scripts\scrape.rapmls.js" />
     <Content Include="app\js\controllers\ListingsController.js" />
-    <Content Include="app\js\directives\InitClearControls.js" />
+    <Content Include="app\js\directives\ImgLazyLoad.js" />
+    <Content Include="app\js\directives\ClearControl.js" />
     <Content Include="app\js\directives\RepeatFinishedDirective.js" />
     <Content Include="app\js\eventPage.js" />
     <Content Include="app\js\app.js" />

@@ -43,39 +43,9 @@ app.controller ("ListingsController",
 
         $scope.refresh = refresh;
 
-        $scope.initPrettyPhoto = function () {
-            $ ("a[rel^='prettyPhoto']").prettyPhoto ({ social_tools: null });
-        };
-
         $scope.deleteAllListings = function () {
             $scope.listings = [];
             storageService.clearAllListings();
         };
-
-        $scope.listingsRendered = function () {
-
-            if (~$scope.initLazyLoadExecuted)
-                $timeout (function () {
-                    $("img.lazy").lazyload ({
-                        effect: "fadeIn"
-                    });
-                    $scope.initLazyLoadExecuted = true;
-                }, 100);
-        };
-        
-        //var initClearControls = function () {
-        //    $.each ($(".clear-control"), function (idx, control) {
-        //        var cc = $(control);
-        //        if (control.tagName === "a")
-        //            control.href = "javascript:return false;";
-        //        var input = cc.prev ().first ();
-        //        cc.click (function (e) {
-        //            e.preventDefault = true;
-        //            $scope.$apply (function () { input.val (""); });
-        //        });
-        //    });
-        //};
-
-        //$scope.$on ('$viewContentLoaded', initClearControls);
 
     });

@@ -1,6 +1,5 @@
 ﻿"use strict";
 
-// executes the given method on the parent scope
 app.directive ("clearControl", function () {
     return {
         restrict: 'A',

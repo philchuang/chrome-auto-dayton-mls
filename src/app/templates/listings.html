@@ -26,7 +26,7 @@
   <script type="text/javascript" src="../js/app.js"></script>
   <script type="text/javascript" src="../js/services/NotificationService.js"></script>
   <script type="text/javascript" src="../js/services/StorageService.js"></script>
-  <script type="text/javascript" src="../js/directives/RepeatFinishedDirective.js"></script>
+  <script type="text/javascript" src="../js/directives/ImgLazyLoad.js"></script>
   <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
   <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
@@ -149,8 +149,7 @@
 
       <section id="listings">
         <!-- TODO turn into a directive -->
-        <div class="row" ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls"
-             repeat-finished="listingsRendered">
+        <div class="row" ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls">
 
           <div class="col-md-12">
             <div class="panel panel-default">
@@ -168,14 +167,14 @@
                   <div class="col-md-2">
                     <div class="thumbnail">
                       <a ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
-                        <img data-original="{{listing.mainImageUrl}}" class="img-responsive lazy" alt="{{listing.streetNumber}} {{listing.streetName}}" />
+                        <img data-original="{{listing.mainImageUrl}}" class="img-responsive" img-lazy-load alt="{{listing.streetNumber}} {{listing.streetName}}" />
                         <span class="badge pull-right">{{listing.pictures.length}}</span>
                       </a>
                     </div>
                     <div style="display:none;">
                       <div ng-repeat="picture in listing.pictures">
                         <a ng-href="{{picture.url}}" href="#" title="{{picture.description}}" data-gallery="#{{listing.mls}}" data-description="{{picture.description}}">
-                          <img data-original="{{picture.url}}" alt="{{picture.description}}" class="lazy" />
+                          <img data-original="{{picture.url}}" alt="{{picture.description}}" img-lazy-load />
                         </a>
                       </div>
                     </div>

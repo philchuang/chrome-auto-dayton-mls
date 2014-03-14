@@ -6,6 +6,7 @@ WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
 * listings page 
+	* use ngcloak
 	* filters/sort
 		* redesign filters, put on left sidebar, float
 		* save filter/sort between page reloads
@@ -30,3 +31,7 @@ STUFF TO DO LATER
 	* OR have an event listener for sync save, replace listings live!
 * listing sets
 	* favorites (within set)
+* listings page
+	* do floating left filter bar the right way
+	* fix filter field clear controls binding
+	* don't use lazyload - just don't render listing pictures until thumbnail is clicked
