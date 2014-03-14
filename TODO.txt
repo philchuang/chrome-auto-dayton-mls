@@ -2,9 +2,9 @@ WHAT WAS JUST ACCOMPLISHED
 * scrape listing details
 
 WHERE TO START NOW
-* scrape pictures from details page
 * test change comparators
 * listings page 
+	* display listing pictures
 	* save filter/sort between page reloads
 	* status dropdown filter
 	* updated (hours) filter
