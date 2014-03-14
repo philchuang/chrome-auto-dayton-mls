@@ -1,24 +1,31 @@
 WHAT WAS JUST ACCOMPLISHED
 * scrape listing details
+* on extension initialize/1st run, clear all temp data
+* pictures!
 
 WHERE TO START NOW
 * test change comparators
 * listings page 
-	* display listing pictures
-	* save filter/sort between page reloads
-	* status dropdown filter
-	* updated (hours) filter
-	* personal listing notes
-	* delete button
+	* filters/sort
+		* save filter/sort between page reloads
+		* status dropdown filter
+		* updated (hours) filter
+		* (x) on the right of each field to clear it
+		* results paging, beginning to be a memory/cpu hog
+	* each listing
+		* reverse-sorted history
+		* collapsible history
+		* personal notes
+		* delete button
+		* save button
+		* favorite button
+		* ranking field
 
 STUFF TO DO LATER
-* on extension initialize/1st run, clear all temp data
+* data export
 * PageAction to trigger scrape, open listings
 * scrape compare picture urls
 * convert from event page back to background page for live updates to listings
 	* OR have an event listener for sync save, replace listings live!
 * listing sets
 	* favorites (within set)
-* listings page
-	* reverse-sorted history
-	* collapsible history

@@ -1,6 +1,15 @@
 "use strict";
 
-// TODO rewrite so that angular can inject storageService - angular bootstrap tie-in?
+// TODO rewrite so that angular can inject dependencies
+
+// lifecycle
+chrome.runtime.onInstalled.addListener (function (details) {
+    var injector = angular.injector (["AutoDaytonMls", "ng"]);
+    var storageService = injector.get("storageService");
+
+    storageService.clearAllTempData ();
+});
+
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
     var notificationService = injector.get ("notificationService");

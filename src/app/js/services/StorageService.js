@@ -4,18 +4,22 @@ var storageServiceBase = storageServiceBase || {
 
     LAST_CRITERIA: "lastCriteria",
 
-    getCriteriaKey: function (tabId) {
-        return "criteria_" + tabId;
-    },
-
-    getScrapeTokenKey: function (tabId) {
-        return "scrape_" + tabId;
-    },
+    // long-term data
 
     getListingKey: function (tabId) {
         return "listing_" + tabId;
     },
     
+    // temp data
+
+    getCriteriaKey: function (tabId) {
+        return "criteria_" + tabId;
+    },
+
+    getScrapeOptionsKey: function (tabId) {
+        return "scrape_" + tabId;
+    },
+
     getMlsDetailsFetchListKey: function (tabId) {
         return "mlsFetchList_" + tabId;
     }
@@ -29,7 +33,11 @@ app.service ('storageService', function ($q) {
         var items = {};
         items[storageServiceBase.LAST_CRITERIA] = criteria;
 
-        chrome.storage.sync.set(items);
+        chrome.storage.sync.set (items, function () {
+            var error = chrome.runtime.lastError;
+            if (typeof error !== "undefined")
+                console.log ("Error saving " + key + ": " + error);
+        });
     };
 
     var getListing = function (id) {
@@ -42,7 +50,7 @@ app.service ('storageService', function ($q) {
 
         var key = storageServiceBase.getListingKey (id);
 
-        chrome.storage.sync.get (key, function (items) {
+        chrome.storage.local.get (key, function (items) {
             var data = items[key];
             deferred.resolve (data);
         });
@@ -99,7 +107,7 @@ app.service ('storageService', function ($q) {
         },
 
         publishScrapeOptions: function (tabId, options) {
-            var key = storageServiceBase.getScrapeTokenKey(tabId);
+            var key = storageServiceBase.getScrapeOptionsKey(tabId);
             var items = {};
             items[key] = options;
 
@@ -115,7 +123,7 @@ app.service ('storageService', function ($q) {
                 return deferred.promise;
             }
 
-            var key = storageServiceBase.getScrapeTokenKey (tabId);
+            var key = storageServiceBase.getScrapeOptionsKey (tabId);
 
             chrome.storage.local.get (key, function (items) {
                 var data = items[key];
@@ -131,7 +139,7 @@ app.service ('storageService', function ($q) {
 
             var keyPrefix = storageServiceBase.getListingKey ("");
 
-            chrome.storage.sync.get (null, function (items) {
+            chrome.storage.local.get (null, function (items) {
                 var listings = [];
                 for (var propertyName in items) {
                     if (!S(propertyName).startsWith (keyPrefix)) continue;
@@ -170,14 +178,14 @@ app.service ('storageService', function ($q) {
         clearAllListings: function () {
             var keyPrefix = storageServiceBase.getListingKey ("");
 
-            chrome.storage.sync.get (null, function (items) {
+            chrome.storage.local.get (null, function (items) {
                 var listingKeys = [];
                 for (var propertyName in items) {
                     if (!S(propertyName).startsWith (keyPrefix)) continue;
                     listingKeys.push (propertyName);
                 }
 
-                chrome.storage.sync.remove (listingKeys);
+                chrome.storage.local.remove (listingKeys);
             });
         },
 
@@ -186,7 +194,11 @@ app.service ('storageService', function ($q) {
             var items = {};
             items[key] = listing;
 
-            chrome.storage.sync.set (items);
+            chrome.storage.local.set (items, function () {
+                var error = chrome.runtime.lastError;
+                if (typeof error !== "undefined")
+                    console.log("Error saving " + key + ": " + error);
+            });
         },
 
         saveMlsDetailsFetchList: function (tabId, mlsNums) {
@@ -220,7 +232,24 @@ app.service ('storageService', function ($q) {
             });
 
             return deferred.promise;
-        }
+        },
+        
+        clearAllTempData: function () {
+            var criteriaKeyPrefix = storageServiceBase.getCriteriaKey ("");
+            var scrapeKeyPrefix = storageServiceBase.getScrapeOptionsKey ("");
+            var detailsKeyPrefix = storageServiceBase.getMlsDetailsFetchListKey ("");
 
+            chrome.storage.local.get(null, function (items) {
+                var keys = [];
+                for (var propertyName in items) {
+                    if (S(propertyName).startsWith (criteriaKeyPrefix)
+                        || S(propertyName).startsWith (scrapeKeyPrefix)
+                        || S(propertyName).startsWith (detailsKeyPrefix))                        
+                        keys.push (propertyName);
+                }
+
+                chrome.storage.local.remove (keys);
+            });
+        }
     };
 });

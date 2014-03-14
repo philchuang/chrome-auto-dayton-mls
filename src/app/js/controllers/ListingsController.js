@@ -52,4 +52,12 @@ app.controller ("ListingsController",
             storageService.clearAllListings();
         };
 
+        $scope.initLazyLoad = function () {
+            setTimeout (function () {
+                $ ("img.lazy").lazyload ({
+                    effect: "fadeIn"
+                });
+            }, 100);
+        };
+        
     });

@@ -11,8 +11,12 @@
   <link rel="stylesheet" href="../../lib/bootstrap/css/flatly.bootstrap.min.css" />
   <script type="text/javascript" src="../../lib/bootstrap/js/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="../../lib/prettyPhoto/css/prettyPhoto.css" />
-  <script type="text/javascript" src="../../lib/prettyPhoto/js/jquery.prettyPhoto.js"></script>
+  <link rel="stylesheet" href="../../lib/blueimp-gallery/css/blueimp-gallery.min.css">
+  <link rel="stylesheet" href="../../lib/bootstrap-image-gallery/css/bootstrap-image-gallery.min.css">
+  <script src="../../lib/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
+  <script src="../../lib/bootstrap-image-gallery/js/bootstrap-image-gallery.min.js"></script>
+
+  <script src="../../lib/jquery.lazyload.min.js"></script>
 
   <script type="text/javascript" src="../../lib/underscore-min.js"></script>
 
@@ -141,7 +145,8 @@
           </div>
         </nav>
         <!-- TODO turn into a directive -->
-        <div class="row" ng-repeat="listing in listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc" repeat-finished="initPrettyPhoto">
+        <div class="row" ng-repeat="listing in listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc"
+             repeat-finished="initLazyLoad">
 
           <div class="col-md-12">
             <div class="panel panel-default">
@@ -158,9 +163,17 @@
                 <div class="row">
                   <div class="col-md-2">
                     <div class="thumbnail">
-                      <a href="{{listing.mainImageUrl}}" rel="prettyPhoto">
-                        <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.streetNumber}} {{listing.streetName}}" />
+                      <a ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
+                        <img data-original="{{listing.mainImageUrl}}" class="img-responsive lazy" alt="{{listing.streetNumber}} {{listing.streetName}}" />
+                        <span class="badge pull-right">{{listing.pictures.length}}</span>
                       </a>
+                    </div>
+                    <div style="display:none;">
+                      <div ng-repeat="picture in listing.pictures">
+                        <a ng-href="{{picture.url}}" href="#" title="{{picture.description}}" data-gallery="#{{listing.mls}}" data-description="{{picture.description}}">
+                          <img data-original="{{picture.url}}" alt="{{picture.description}}" class="lazy" />
+                        </a>
+                      </div>
                     </div>
                     <ul class="list-group list-inline">
                       <li class="list-group-item"><span class="text-info">{{listing.status}}</span></li>
@@ -214,6 +227,42 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+  <div id="blueimp-gallery" class="blueimp-gallery">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <p class="description"></p>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body next"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left prev">
+              <i class="glyphicon glyphicon-chevron-left"></i>
+              Previous
+            </button>
+            <button type="button" class="btn btn-primary next">
+              Next
+              <i class="glyphicon glyphicon-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </body>
