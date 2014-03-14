@@ -33,7 +33,7 @@ app.controller ("ListingsController",
 
         var refresh = function () {
             storageService.getAllListings().then(function (listings) {
-                ListingsControllerBase.prepareListings(listings);
+                ListingsControllerBase.prepareListings (listings);
                 $scope.listingsSortAsc = true;
                 $scope.listings = listings;
             });
@@ -52,7 +52,8 @@ app.controller ("ListingsController",
             storageService.clearAllListings();
         };
 
-        $scope.initLazyLoad = function () {
+        $scope.listingsRendered = function () {
+
             if (~$scope.initLazyLoadExecuted)
                 $timeout (function () {
                     $("img.lazy").lazyload ({
