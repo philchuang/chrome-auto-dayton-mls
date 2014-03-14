@@ -32,7 +32,7 @@ app.controller ("ListingsController",
     function ($scope, $timeout, storageService) {
 
         var refresh = function () {
-            storageService.getAllListings().then(function (listings) {
+            storageService.getAllListings().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
                 $scope.listingsSortAsc = true;
                 $scope.listings = listings;
