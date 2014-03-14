@@ -51,96 +51,84 @@
         </div>
       </div>
     </header>
-    
-    <!-- TODO there's gotta be a better way to do this -->  
+
+    <!-- TODO there's gotta be a better way to do this -->
     <div style="width: 250px; margin-left: 20px;" data-spy="affix">
       <div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">Sort</span>
-            <select name="sortOrder" class="form-control text-center" ng-model="listingsSortField">
-              <option value="mls">MLS</option>
-              <option value="listingDate">Listing Date</option>
-              <option value="listPrice">Price</option>
-              <option value="streetNameAndNumber">Street</option>
-              <option value="city">City</option>
-              <option value="zip">Zip</option>
-              <option value="sqft">SqFt</option>
-              <option value="lastUpdate">Updated</option>
-              <option value="timestamp">Refreshed</option>
-            </select>
-            <a class="input-group-addon btn btn-sm" ng-click="listingsSortAsc = !listingsSortAsc"><span class="glyphicon" ng-class="listingsSortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">Sort</span>
+          <select name="sortOrder" class="form-control text-center" ng-model="listingsSortField">
+            <option value="mls">MLS</option>
+            <option value="listingDate">Listing Date</option>
+            <option value="listPrice">Price</option>
+            <option value="streetNameAndNumber">Street</option>
+            <option value="city">City</option>
+            <option value="zip">Zip</option>
+            <option value="sqft">SqFt</option>
+            <option value="lastUpdate">Updated</option>
+            <option value="timestamp">Refreshed</option>
+          </select>
+          <a class="input-group-addon btn btn-sm" ng-click="listingsSortAsc = !listingsSortAsc"><span class="glyphicon" ng-class="listingsSortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">MLS</span>
-            <input type="text" class="form-control" ng-model="search.mls" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-heart"></span></span>
+          <!--<input type="text" class="form-control" ng-model="search.isFavorite" />-->
+          <select class="form-control text-center" ng-model="search.isFavorite">
+            <option value=""></option>
+            <option value="false">N</option>
+            <option value="true">Y</option>
+          </select>
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">$ (min)</span>
-            <input type="text" class="form-control" ng-model="minSearch.listPrice" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">MLS</span>
+          <input type="text" class="form-control" ng-model="search.mls" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">$ (max)</span>
-            <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">$ (min)</span>
+          <input type="text" class="form-control" ng-model="minSearch.listPrice" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">SqFt (min)</span>
-            <input type="text" class="form-control" ng-model="minSearch.sqft" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">$ (max)</span>
+          <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">Street</span>
-            <input type="text" class="form-control" ng-model="search.streetNumberAndName" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">SqFt (min)</span>
+          <input type="text" class="form-control" ng-model="minSearch.sqft" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">City</span>
-            <input type="text" class="form-control" ng-model="search.city" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">Street</span>
+          <input type="text" class="form-control" ng-model="search.streetNumberAndName" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">Zip</span>
-            <input type="text" class="form-control" ng-model="search.zip" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">City</span>
+          <input type="text" class="form-control" ng-model="search.city" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <!--<div class="row">
-          <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">Zip</span>
+          <input type="text" class="form-control" ng-model="search.zip" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+        </div>
+        <!--<div class="input-group input-group-sm">
             <span class="input-group-addon">Beds (min)</span>
             <input type="text" class="form-control" ng-model="minSearch.bedrooms" />
             <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
         </div>-->
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">Desc</span>
-            <input type="text" class="form-control" ng-model="search.description" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">Desc</span>
+          <input type="text" class="form-control" ng-model="search.description" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
-        <div class="row">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon">Days listed (min)</span>
-            <input type="text" class="form-control" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-          </div>
+        <div class="input-group input-group-sm">
+          <span class="input-group-addon">Days listed (min)</span>
+          <input type="text" class="form-control" />
+          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
         </div>
       </div>
     </div>
@@ -167,7 +155,7 @@
                   <div class="col-md-2">
                     <div class="thumbnail">
                       <a ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
-                        <img data-original="{{listing.mainImageUrl}}" class="img-responsive" img-lazy-load alt="{{listing.streetNumber}} {{listing.streetName}}" />
+                        <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.streetNumber}} {{listing.streetName}}" />
                         <span class="badge pull-right">{{listing.pictures.length}}</span>
                       </a>
                     </div>
@@ -184,6 +172,7 @@
                   </div>
                   <div class="col-md-10">
                     <div class="row">
+                      <button class="btn pull-left" style="margin-right: 12px;" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
                       <ul class="list-group list-inline pull-left">
                         <li class="list-group-item">SqFt <span class="text-info">{{listing.sqft}}</span></li>
                         <li class="list-group-item">Beds <span class="text-info">{{listing.bedrooms}}</span></li>
@@ -207,7 +196,13 @@
                   </div>
                 </div>
               </div>
-              <div class="panel-footer"></div>
+              <div class="panel-footer">
+                <div class="row">
+                  <div class="col-md-1">
+                    <button class="btn btn-danger btn-sm" title="delete this listing" ng-click="delete(listing)"><span class="glyphicon glyphicon-remove-circle"></span></button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

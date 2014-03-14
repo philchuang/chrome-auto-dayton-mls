@@ -2,18 +2,16 @@ WHAT WAS JUST ACCOMPLISHED
 * scrape listing details
 * on extension initialize/1st run, clear all temp data
 * pictures!
-* (x) on the right of each field to clear it
+* (x) on the right of each field to clear it - doesn't update binding :(
 
 WHERE TO START NOW
 * listings page 
 	* use ngcloak
 	* filters/sort
-		* redesign filters, put on left sidebar, float
 		* save filter/sort between page reloads
 		* status dropdown filter
 		* updated (hours) filter
 		* days listed filter
-		* results paging, beginning to be a memory/cpu hog
 	* each listing
 		* render picture list dynamically only when thumbnail clicked
 		* reverse-sorted history
@@ -21,7 +19,6 @@ WHERE TO START NOW
 		* personal notes
 		* delete button
 		* save button
-		* favorite button
 		* ranking field
 
 STUFF TO DO LATER
@@ -34,4 +31,4 @@ STUFF TO DO LATER
 * listings page
 	* do floating left filter bar the right way
 	* fix filter field clear controls binding
-	* don't use lazyload - just don't render listing pictures until thumbnail is clicked
+	* results paging, beginning to be a memory/cpu hog

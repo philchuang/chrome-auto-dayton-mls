@@ -5,6 +5,9 @@ var ListingsControllerBase = ListingsControllerBase || {};
 ListingsControllerBase.prepareListing = function (listing) {
     if (typeof listing === "undefined" || listing === null) return;
 
+    if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
+        listing.isFavorite = false;
+
     listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
     listing.streetNumberAndName = listing.streetNumber + " " + listing.streetName;
 
@@ -46,6 +49,16 @@ app.controller ("ListingsController",
         $scope.deleteAllListings = function () {
             $scope.listings = [];
             storageService.clearAllListings();
+        };
+
+        $scope.delete = function (listing) {
+            alert ('TODO: delete ' + listing.mls);
+        };
+
+        $scope.toggleFavorite = function (listing) {
+            listing.isFavorite = !listing.isFavorite;
+
+            storageService.saveListing (listing);
         };
 
     });
