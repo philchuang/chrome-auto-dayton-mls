@@ -174,6 +174,11 @@ app.service ('storageService', function ($q) {
         },
         
         getListing: getListing,
+        
+        deleteListing: function (id) {
+            var keyPrefix = storageServiceBase.getListingKey(id);
+            chrome.storage.local.remove (keyPrefix);
+        },
 
         clearAllListings: function () {
             var keyPrefix = storageServiceBase.getListingKey ("");
@@ -190,15 +195,23 @@ app.service ('storageService', function ($q) {
         },
 
         saveListing: function (listing) {
+            var deferred = $q.defer();
+            
             var key = storageServiceBase.getListingKey (listing.id);
             var items = {};
             items[key] = listing;
 
             chrome.storage.local.set (items, function () {
                 var error = chrome.runtime.lastError;
-                if (typeof error !== "undefined")
-                    console.log("Error saving " + key + ": " + error);
+                if (typeof error !== "undefined") {
+                    console.log ("Error saving " + key + ": " + error);
+                    deferred.error (error);
+                } else {
+                    deferred.resolve ();
+                }
             });
+
+            return deferred.promise ();
         },
 
         saveMlsDetailsFetchList: function (tabId, mlsNums) {

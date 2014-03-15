@@ -31,7 +31,7 @@
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
   <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MlsSearchUrlFilter.js"></script>
-  <script type="text/javascript" src="../js/filters/MinumumFilter.js"></script>
+  <script type="text/javascript" src="../js/filters/MinimumFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MaximumFilter.js"></script>
 
   <link rel="stylesheet" href="../css/listings.css" />
@@ -40,119 +40,124 @@
 </head>
 <body>
 
-  <div id="page" ng-controller="ListingsController">
+  <div id="page" class="container" ng-controller="ListingsController">
 
-    <header class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="page-header">
-            <h3>Dayton MLS saved listings <span class="badge">{{filteredListings.length}}</span></h3>
-          </div>
+    <header class="row clearfix">
+      <div class="col-md-12 column">
+        <div class="page-header">
+          <h3>Dayton MLS saved listings <span class="badge">{{filteredListings.length}}</span></h3>
         </div>
       </div>
     </header>
 
-    <!-- TODO there's gotta be a better way to do this -->
-    <div style="width: 250px; margin-left: 20px;" data-spy="affix">
-      <div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">Sort</span>
-          <select name="sortOrder" class="form-control text-center" ng-model="listingsSortField">
-            <option value="mls">MLS</option>
-            <option value="listingDate">Listing Date</option>
-            <option value="listPrice">Price</option>
-            <option value="streetNameAndNumber">Street</option>
-            <option value="city">City</option>
-            <option value="zip">Zip</option>
-            <option value="sqft">SqFt</option>
-            <option value="lastUpdate">Updated</option>
-            <option value="timestamp">Refreshed</option>
-          </select>
-          <a class="input-group-addon btn btn-sm" ng-click="listingsSortAsc = !listingsSortAsc"><span class="glyphicon" ng-class="listingsSortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon"><span class="glyphicon glyphicon-heart"></span></span>
-          <!--<input type="text" class="form-control" ng-model="search.isFavorite" />-->
-          <select class="form-control text-center" ng-model="search.isFavorite">
-            <option value=""></option>
-            <option value="false">N</option>
-            <option value="true">Y</option>
-          </select>
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">MLS</span>
-          <input type="text" class="form-control" ng-model="search.mls" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">$ (min)</span>
-          <input type="text" class="form-control" ng-model="minSearch.listPrice" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">$ (max)</span>
-          <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">SqFt (min)</span>
-          <input type="text" class="form-control" ng-model="minSearch.sqft" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">Street</span>
-          <input type="text" class="form-control" ng-model="search.streetNumberAndName" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">City</span>
-          <input type="text" class="form-control" ng-model="search.city" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">Zip</span>
-          <input type="text" class="form-control" ng-model="search.zip" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>
-        <!--<div class="input-group input-group-sm">
-            <span class="input-group-addon">Beds (min)</span>
-            <input type="text" class="form-control" ng-model="minSearch.bedrooms" />
+    <section id="body" class="row clearfix">
+
+      <!-- TODO get this working with affix like bootstrap's site -->
+      <div class="col-md-3 column">
+        <div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">Sort</span>
+            <select name="sortOrder" class="form-control text-center" ng-model="listingsSortField">
+              <option value="lastUpdate">Updated</option>
+              <option value="score">Score</option>
+              <option value="mls">MLS</option>
+              <option value="listingDate">Listing Date</option>
+              <option value="listPrice">Price</option>
+              <option value="sqft">SqFt</option>
+              <option value="streetNameAndNumber">Street</option>
+              <option value="city">City</option>
+              <option value="zip">Zip</option>
+              <option value="timestamp">Refreshed</option>
+            </select>
+            <a class="input-group-addon btn btn-sm" ng-click="listingsSortAsc = !listingsSortAsc"><span class="glyphicon" ng-class="listingsSortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-heart"></span></span>
+            <select class="form-control text-center" ng-model="search.isFavorite">
+              <option value=""></option>
+              <option value="false">N</option>
+              <option value="true">Y</option>
+            </select>
             <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>-->
-        <div class="input-group input-group-sm">
-          <span class="input-group-addon">Desc</span>
-          <input type="text" class="form-control" ng-model="search.description" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">Score (min)</span>
+            <input type="number" class="form-control" ng-model="minSearch.score" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">$ (min)</span>
+            <input type="text" class="form-control" ng-model="minSearch.listPrice" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">$ (max)</span>
+            <input type="text" class="form-control" ng-model="maxSearch.listPrice" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">SqFt (min)</span>
+            <input type="text" class="form-control" ng-model="minSearch.sqft" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">Desc</span>
+            <input type="text" class="form-control" ng-model="search.description" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">Street</span>
+            <input type="text" class="form-control" ng-model="search.streetNumberAndName" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">City</span>
+            <input type="text" class="form-control" ng-model="search.city" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">Zip</span>
+            <input type="text" class="form-control" ng-model="search.zip" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
+          <!--<div class="input-group input-group-sm bottom-buffer">
+              <span class="input-group-addon">Beds (min)</span>
+              <input type="text" class="form-control" ng-model="minSearch.bedrooms" />
+              <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>-->
+          <!--<div class="input-group input-group-sm bottom-buffer">
+              <span class="input-group-addon">Days listed (min)</span>
+              <input type="text" class="form-control" />
+              <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>-->
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon">MLS</span>
+            <input type="text" class="form-control" ng-model="search.mls" />
+            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+          </div>
         </div>
-        <!--<div class="input-group input-group-sm">
-          <span class="input-group-addon">Days listed (min)</span>
-          <input type="text" class="form-control" />
-          <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
-        </div>-->
       </div>
-    </div>
 
-    <section id="body" class="container">
+      <section id="listings" class="col-md-9 column">
 
-      <section id="listings">
-        <!-- TODO turn into a directive -->
-        <div class="row" ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls">
-
-          <div class="col-md-12">
+        <div class="row clearfix" ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls">
+          <div class="col-md-12 column">
+            <!-- TODO turn into a directive -->
             <div class="panel panel-default">
-              <div class="panel-heading">
-                <div class="row text-info">
-                  <div class="col-md-2"><a ng-href="{{listing.mls | mlsSearchUrl}}" href="#" target="_blank">#{{listing.mls}}</a></div>
-                  <div class="col-md-2">${{listing.listPrice | number:0}}</div>
-                  <div class="col-md-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.streetNumber}} {{listing.streetName}}</a></strong></div>
-                  <div class="col-md-3"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}">{{listing.city}} {{listing.zip}}</a></strong></div>
-                  <div class="col-md-2 text-muted small">{{listing.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
+
+              <div class="panel-heading text-info">
+                <div class="row clearfix">
+                  <div class="col-md-2 column"><a ng-href="{{listing.mls | mlsSearchUrl}}" href="#" target="_blank" title="go to MLS details page">#{{listing.mls}}</a></div>
+                  <div class="col-md-2 column">${{listing.listPrice | number:0}}</div>
+                  <div class="col-md-3 column"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}" title="display on google maps">{{listing.streetNumber}} {{listing.streetName}}</a></strong></div>
+                  <div class="col-md-3 column"><strong><a ng-href="http://maps.google.com?q={{listing.streetNumber | escape}}+{{listing.streetName | escape}}+{{listing.city | escape}}+{{listing.zip}}" href="#" target="{{listing.mls}}" title="display on google maps">{{listing.city}} {{listing.zip}}</a></strong></div>
+                  <div class="col-md-2 column text-muted small"><div class="listingTimestamp"><span title="refreshed on">{{listing.timestamp | date:"MM/dd/yy HH:mm"}}</span></div></div>
                 </div>
               </div>
+
               <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-2">
+                <div class="row clearfix">
+                  <div class="col-md-2 column">
                     <div class="thumbnail">
                       <a ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
                         <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.streetNumber}} {{listing.streetName}}" />
@@ -166,61 +171,68 @@
                         </a>
                       </div>
                     </div>
-                    <ul class="list-group list-inline">
+                    <ul class="list-group">
                       <li class="list-group-item"><span class="text-info">{{listing.status}}</span></li>
+                      <li class="list-group-item">Listed<br/><span class="text-info">{{listing.listingDate | date:"MM/dd/yy"}}</span><br /><span class="text-info small">{{listing.listingDate | daysSince}}d</span></li>
                     </ul>
                   </div>
-                  <div class="col-md-10">
-                    <div class="row">
-                      <button class="btn pull-left" style="margin-right: 12px;" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
-                      <ul class="list-group list-inline pull-left">
-                        <li class="list-group-item">SqFt <span class="text-info">{{listing.sqft}}</span></li>
-                        <li class="list-group-item">Beds <span class="text-info">{{listing.bedrooms}}</span></li>
-                        <li class="list-group-item">Baths <span class="text-info">{{listing.bathrooms}}</span></li>
-                        <li class="list-group-item">Built <span class="text-info">{{listing.yearBuilt}}</span></li>
-                        <li class="list-group-item" ng-show="listing.annualTaxes > 0">Taxes <span class="text-info">${{listing.annualTaxes | number:0}}/yr</span></li>
-                      </ul>
-                      <div class="pull-right">
+                  <div class="col-md-10 column">
+                    <div class="row clearfix">
+                      <div class="col-md-2 column">
+                        <button class="btn bottom-buffer" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
+                        <div class="input-group input-group-sm">
+                          <span class="input-group-addon small" title="score"><span class="glyphicon glyphicon-thumbs-up"></span></span>
+                          <input type="number" class="form-control" title="score" placeholder="score" ng-model="listing.score" ng-change="saveListing(listing)"/>
+                        </div>
+                      </div>
+                      <div class="col-md-10 column">
                         <ul class="list-group list-inline">
-                          <li class="list-group-item">Listed <span class="text-info">{{listing.listingDate | date:"yyyy-MM-dd"}} {{listing.listingDate | daysSince}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.sqft">SqFt <span class="text-info">{{listing.sqft}}<span class="small" ng-show="listing.sqft"> (${{listing.listPrice/listing.sqft | number:0}}/sqft)</span></span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.bedrooms">Beds <span class="text-info">{{listing.bedrooms}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.bathrooms">Baths <span class="text-info">{{listing.bathrooms}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.yearBuilt">Built <span class="text-info">{{listing.yearBuilt}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.annualTaxes > 0">Taxes <span class="text-info">${{listing.annualTaxes | number:0}}/yr</span></li>
                         </ul>
                       </div>
                     </div>
                     <div class="row"><div class="text-primary">{{listing.description}}</div></div>
                   </div>
                 </div>
-                <div class="row" ng-repeat="h in listing.history | orderBy:historySortProperty:historySortDescending">
-                  <div class="panel">
-                    <div class="col-md-2 small">{{h.timestamp | date:"yyyy-MM-dd HH:mm:ss Z"}}</div>
-                    <div class="col-md-10 small">{{h.action}}</div>
-                  </div>
-                </div>
               </div>
+              <table class="table table-striped table-hover table-condensed table-responsive">
+                <tbody>
+                  <tr ng-repeat="h in listing.history | orderBy:historySortProperty:historySortDescending">
+                    <td style="width: 0; padding-left: 10px; padding-right: 10px;"><span class="historyTimestamp">{{h.timestamp | date:"MM/dd/yy HH:mm"}}</span></td>
+                    <td style="width: 100%;"><span class="historyAction">{{h.action}}</span></td>
+                  </tr>
+                </tbody>
+              </table>
               <div class="panel-footer">
-                <div class="row">
-                  <div class="col-md-1">
+                <div class="row clearfix">
+                  <div class="col-md-2 column">
                     <button class="btn btn-danger btn-sm" title="delete this listing" ng-click="delete(listing)"><span class="glyphicon glyphicon-remove-circle"></span></button>
                   </div>
+                  <div class="col-md-2 column">
+                  </div>
+                  <div class="col-md-2 column">
+                  </div>
+                  <div class="col-md-2 column">
+                  </div>
+                  <div class="col-md-2 column">
+                  </div>
+                  <div class="col-md-2 column">
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
-
-        <div class="row panel-group">
-          <div class="col-md-2 col-md-offset-10">
-            <div class="pull-right">
-              <!-- TODO confirmation dialog -->
-              <button class="btn btn-danger" ng-click="deleteAllListings()">Delete All <span class="glyphicon glyphicon-remove"></span></button>
-            </div>
-          </div>
-        </div>
-
       </section>
     </section>
 
-    <section id="footer" class="container">
-      <div class="col-md-12">
+    <section id="footer" class="row clearfix">
+      <div class="col-md-12 column">
         <div class="pull-right">
           <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
         </div>

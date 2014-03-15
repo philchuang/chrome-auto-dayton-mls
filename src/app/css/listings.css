@@ -1,17 +1,21 @@
-#page {
-	padding-top: 20px;
+.bottom-buffer {
+    margin-bottom: 5px;
 }
 
-.container {
-	padding-left: 10px;
-	padding-right: 10px;
+.listingTimestamp {
+    text-align: right;
 }
 
-.smallPadAndAlignRight {
-	text-align: right;
-	padding-right: 0px;
+.historyTimestamp {
+    margin-left: 10px;
+    font-family: sans-serif;
+    font-size: x-small;
+    white-space: nowrap;
+    text-align: center;
 }
 
-nav > div > div.panel-group {
-    margin-bottom: 15px;
+.historyAction {
+    margin-left: -5px;
+    font-family: sans-serif;
+    font-size: small;
 }

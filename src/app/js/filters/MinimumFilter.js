@@ -19,8 +19,7 @@ app.filter ("minimum", function () {
             var add = true;
             for (var propertyName in minFilter) {
                 if (minFilter[propertyName] == "" || minFilter[propertyName] == null) continue;
-                if (typeof item[propertyName] === "undefined") continue;
-                if (item[propertyName] < minFilter[propertyName]) {
+                if (typeof item[propertyName] === "undefined" || item[propertyName] < minFilter[propertyName]) {
                     add = false;
                     break;
                 }

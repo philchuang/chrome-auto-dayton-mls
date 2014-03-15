@@ -19,8 +19,7 @@ app.filter ("maximum", function () {
             var add = true;
             for (var propertyName in maxFilter) {
                 if (maxFilter[propertyName] == "" || maxFilter[propertyName] == null) continue;
-                if (typeof item[propertyName] === "undefined") continue;
-                if (item[propertyName] > maxFilter[propertyName]) {
+                if (typeof item[propertyName] === "undefined" || item[propertyName] > maxFilter[propertyName]) {
                     add = false;
                     break;
                 }
