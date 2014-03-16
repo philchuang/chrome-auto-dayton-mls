@@ -57,6 +57,18 @@ app.controller ("ListingsController",
                 $scope.listingsSortAsc = true;
                 $scope.listings = listings;
             });
+            storageService.getLastListingsFilters ().then (function (filters) {
+                if (filters.listingsSortField)
+                    $scope.listingsSortField = filters.listingsSortField;
+                if (typeof filters.listingsSortAsc !== "undefined")
+                    $scope.listingsSortAsc = filters.listingsSortAsc;
+                if (filters.search)
+                    $scope.search = filters.search;
+                if (filters.minSearch)
+                    $scope.minSearch = filters.minSearch;
+                if (filters.maxSearch)
+                    $scope.maxSearch = filters.maxSearch;
+            });
         };
 
         refresh ();
@@ -102,6 +114,21 @@ app.controller ("ListingsController",
             });
         };
 
+        $scope.saveFilters = function () {
+            var filters = {};
+            if ($scope.listingsSortField)
+                filters.listingsSortField = $scope.listingsSortField;
+            if (typeof $scope.listingsSortAsc !== "undefined")
+                filters.listingsSortAsc = $scope.listingsSortAsc;
+            if ($scope.search)
+                filters.search = $scope.search;
+            if ($scope.minSearch)
+                filters.minSearch = $scope.minSearch;
+            if ($scope.maxSearch)
+                filters.maxSearch = $scope.maxSearch;
+            storageService.saveLastListingsFilters (filters);
+        };
+        
         $scope.historySortProperty = "timestamp";
         $scope.historySortDescending = true;
 

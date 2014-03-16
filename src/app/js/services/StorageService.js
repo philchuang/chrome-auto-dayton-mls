@@ -3,6 +3,7 @@
 var storageServiceBase = storageServiceBase || {
 
     LAST_CRITERIA: "lastCriteria",
+    LAST_FILTERS: "lastFilters",
 
     // long-term data
 
@@ -53,8 +54,12 @@ app.service ('storageService', function ($q) {
 
         chrome.storage.sync.set (items, function () {
             var error = chrome.runtime.lastError;
-            if (typeof error !== "undefined")
+            if (typeof error !== "undefined") {
                 console.log ("Error saving " + key + ": " + error);
+                deferred.error (error);
+            } else {
+                deferred.resolve ();
+            }
         });
     };
 
@@ -285,6 +290,37 @@ app.service ('storageService', function ($q) {
 
                 chrome.storage.local.remove (keys);
             });
+        },
+        
+        saveLastListingsFilters: function (filters) {
+            var items = {};
+            items[storageServiceBase.LAST_FILTERS] = filters;
+
+            chrome.storage.sync.set (items, function () {
+                var error = chrome.runtime.lastError;
+                if (typeof error !== "undefined")
+                {
+                    console.log ("Error saving " + key + ": " + error);
+                    deferred.error (error);
+                }
+                else
+                {
+                    deferred.resolve ();
+                }
+            });
+        },
+        
+        getLastListingsFilters: function () {
+            var deferred = $q.defer ();
+
+            chrome.storage.sync.get (storageServiceBase.LAST_FILTERS, function (items) {
+                var data = items[storageServiceBase.LAST_FILTERS];
+                if (typeof data === "undefined")
+                    data = null;
+                deferred.resolve (data);
+            });
+
+            return deferred.promise;
         }
     };
 });
