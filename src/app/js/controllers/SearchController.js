@@ -15,17 +15,22 @@ var criteriaUtils = criteriaUtils || {
             }
         }
     },
+    
+    prepareCriteria: function (criteria) {
+        criteriaUtils.updateMls (criteria);
+        criteria.viewDetailsFirstResult = criteria.mls.length == 1;
+    }
+};
 
-    getFromUrlSearch: function (search) {
+criteriaUtils.getFromUrlSearch = criteriaUtils.getFromUrlSearch ||
+    function (search) {
         if (search[0] === "?")
             search = search.substr (1);
         var criteria = jQuery.deparam (search);
         criteria.scrapeResults = criteria.scrapeResults === true || criteria.scrapeResults === "true";
-        criteriaUtils.updateMls(criteria);
-        criteria.viewDetailsFirstResult = criteria.mls.length == 1;
+        criteriaUtils.prepareCriteria (criteria);
         return criteria;
-    }
-};
+    };
 
 app.controller ("SearchController",
     function ($scope, $window, storageService, searchService, criteriaBookmarkService) {
@@ -37,13 +42,32 @@ app.controller ("SearchController",
             $scope.criteria = criteria;
             $scope.$apply();
 
-            chrome.tabs.getCurrent(function (tab) {
+            chrome.tabs.getCurrent (function (tab) {
                 searchService.searchDaytonRapmls (criteria, tab);
             });
+            return;
         }
 
         $scope.criteria = {
             scrapeResults: false
+        };
+
+        chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
+            if (typeof tabs === "undefined" || tabs === null || tabs.length === 0)
+                $scope.canScrapeCurrentPage = false;
+            chrome.tabs.sendMessage (tabs[0].id, { action: "getCanScrape" }, function (response) {
+                $scope.canScrapeCurrentPage = response === true;
+            });
+        });
+
+        $scope.scrapeCurrentPage = function () {
+            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
+                if (typeof tabs === "undefined" || tabs === null || tabs.length === 0)
+                    return;
+
+                chrome.tabs.sendMessage (tabs[0].id, { action: "scrape" });
+                window.close ();
+            });
         };
 
         storageService.getLastCriteria().then (function (criteria) {
@@ -57,12 +81,12 @@ app.controller ("SearchController",
         };
 
         $scope.executeSearch = function (criteria) {
-            criteriaUtils.updateMls (criteria);
+            criteriaUtils.prepareCriteria (criteria);
             searchService.searchDaytonRapmls (criteria);
         };
 
         $scope.bookmarkSearch = function (criteria) {
-            criteriaUtils.updateMls (criteria);
+            criteriaUtils.prepareCriteria (criteria);
             criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 

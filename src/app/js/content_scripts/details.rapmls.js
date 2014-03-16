@@ -24,6 +24,47 @@ function parseDollarAmount (str, listing, propertyName) {
     listing[propertyName] = val;
 }
 
+function processRoomDimensionRows (listing) {
+    if (typeof listing === "undefined" || listing == null) return;
+
+    if (typeof listing.rooms === "undefined" || listing.rooms == null)
+        listing.rooms = [];
+    
+    var dimRegex = new RegExp ("[0-9]+x[0-9]+");
+    var rows = $("a:contains('Room Dimensions')").parent ().parent ().siblings ().filter (function (idx, tr) { return dimRegex.test ($ (tr).text ()); });
+
+    var levelRegex = new RegExp ("Level:\\s*([^\\s]+)");
+
+    for (var i = 0; i < rows.length; i++) {
+        var row = $(rows[i]);
+        var room = {};
+        if (row.children ().length >= 1)
+            room.name = $(row.children ()[0]).text ();
+        if (row.children ().length >= 2) {
+            var t = $(row.children()[1]).text();
+            dimRegex.lastIndex = 0;
+            room.dimensions = dimRegex.exec (t)[0];
+            var sqft = 1;
+            var dims = room.dimensions.split ("x");
+            for (var j = 0; j < dims.length; j++)
+                sqft *= parseInt(dims[j]);
+            room.sqft = sqft;
+            levelRegex.lastIndex = 0;
+            room.level = $(levelRegex.exec (t)).get (1);
+        }
+        if (typeof room.name !== "undefined" && room.name !== null) {
+            var nextRowName = row.next ().children ("td").first ().text ();
+            if (nextRowName === room.name + " Desc.") {
+                row = row.next ();
+                if (row.children ().length >= 2) {
+                    room.name = $(row.children ()[1]).text ();
+                }
+            }
+        }
+        listing.rooms.push (room);
+    }
+}
+
 function updateMlsData () {
 
     var listing = {
@@ -31,11 +72,15 @@ function updateMlsData () {
     };
     
     var summaryTable = $("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
+    var firstSummaryBlock = summaryTable.children().first().children().first().children().first();
     
     // mls
-    var mlsStr = summaryTable.children ().first ().children ().first ().children ().first ().children ().first ().text ();
+    var mlsStr = firstSummaryBlock.children().first().text();
     listing.mls = S($(mlsStr.split ("#")).last ()[0]).trim ().s;
     listing.id = listing.mls;
+    
+    // list price
+    listing.listPrice = parseInt (new RegExp ("\\$([0-9,]+)").exec (firstSummaryBlock.find (":contains('(LP)')").last ().text ())[1].replace (",", ""));
 
     // listingDate
     var listingDate = summaryTable.children ().first ().children ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().last ().prev ().text ();
@@ -43,9 +88,31 @@ function updateMlsData () {
         listingDate = listingDate.substr (1, listingDate.length - 2);
     listing.listingDate = new Date(listingDate).toJSON();
     
-    // taxes/hoa
-    parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent().siblings().first().text(), listing, "semiAnnualTaxes");
-    parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent().siblings().first().text(), listing, "hoaFee");
+    // sqft
+    listing.sqft = parseInt (new RegExp ("[0-9]+").exec ($("a:contains('Sq Ft')").parent ().parent ().text ()));
+    
+    // lot sz
+    listing.lotSize = new RegExp ("Lot Sz: ([^\\s]+)").exec ($("a:contains('Lot Sz')").parent ().parent ().text ())[1];
+
+    // remarks
+    // skip this, can't reliably detect
+    
+    // subdivision
+    listing.subdivision = $("a:contains('Subdivision')").parent ().siblings ().first ().text ();
+    
+    // country
+    listing.county = $("a:contains('County')").parent ().siblings ().first ().text ();
+    
+    // taxes/hoa/assessments
+    parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent ().siblings ().first ().text (), listing, "semiAnnualTaxes");
+    parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent ().siblings ().first ().text (), listing, "hoaFee");
+    parseDollarAmount ($("a:contains('Assessments')").parent ().siblings ().first ().text (), listing, "assessments");
+
+    // school district
+    listing.schoolDistrict = $("a:contains('School District')").parent ().siblings ().first ().text ();
+
+    // room dimensions
+    processRoomDimensionRows (listing);
 
     // images
     var scriptText = $("form[name='InputForm']").children("table").first().find("table").first().find("script").first().text();
@@ -78,7 +145,22 @@ function updateMlsData () {
         }
     }
     
-    chrome.runtime.sendMessage({ action: "processListing", listing: listing }, function (_) {});
+    chrome.runtime.sendMessage ({ action: "processListing", listing: listing }, function (result) {
+        var message = "N/A";
+        if (result === -1)
+            message = "1 new";
+        else if (result === 0)
+            message = "1 unchanged";
+        else if (result === 1)
+            message = "1 updated";
+                
+        chrome.runtime.sendMessage ({
+            action: "displayNotification",
+            id: "",
+            title: "Scrape Results",
+            message: message
+        });
+    });
 
     chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
@@ -110,5 +192,27 @@ $(document).ready (function ()
     //    }
     //});
 
-    updateMlsData ();
+    chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+        if (request.action === "getCanScrape") {
+            sendResponse (true);
+            return true;
+        }
+        
+        if (request.action === "scrape") {
+            updateMlsData ();
+        }
+
+        console.log ("Don't know how to to handle request: " + request);
+
+        return false;
+    });
+
+    chrome.runtime.sendMessage({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+        if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
+            return;
+
+        var idx = $.inArray(listing.mls, mlsNums);
+        if (~idx)
+            updateMlsData();
+    });
 });

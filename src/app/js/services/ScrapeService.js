@@ -49,12 +49,39 @@ var picturesComparatorProvider = function () {
     };
 };
 
+var roomsComparatorProvider = function () {
+    var propertyName = "rooms";
+    return {
+        propertyName: propertyName,
+        getChanges: function (previous, latest) {
+            var previousVal = previous[propertyName];
+            var latestVal = latest[propertyName];
+
+            // nonexistent, empty, null comparison
+            if (typeof previousVal === "undefined" || previousVal === null) { 
+                // previous is nonexistent or null
+                // just means that we're populating this data for the first time
+                return null;
+            }
+
+            // size comparison
+            if (previousVal.length != latestVal.length)
+                return propertyName + ": [" + previousVal.length + "] -> [" + latestVal.length + "]";
+
+            // data comparison
+            // bah, don't care about data comparison right now
+            return null;
+        }
+    };
+};
+
 ListingUtils.comparators = [
     simpleComparatorProvider ("listPrice"),
     simpleComparatorProvider ("sqft"),
     simpleComparatorProvider ("status"),
-    simpleComparatorProvider("description"),
-    picturesComparatorProvider ()
+    simpleComparatorProvider ("description"),
+    picturesComparatorProvider (),
+    roomsComparatorProvider ()
 ];
 
 ListingUtils.getChanges = function (previous, latest) {
@@ -94,13 +121,29 @@ ListingUtils.processChanges = function (previous, latest) {
         });
         return ListingUtils.NEW_LISTING;
     }
+    
+    // find values which don't exist in the previous object
+    var newProperties = [];
+    var propertyName;
+    for (propertyName in latest) {
+        if (typeof previous[propertyName] === "undefined") {
+            newProperties.push (propertyName);
+        }
+    }
 
     // copy over values which don't exist in the latest object
-    for (var propertyName in previous)
+    for (propertyName in previous)
         if (typeof latest[propertyName] === "undefined")
             latest[propertyName] = previous[propertyName];
 
     var changes = ListingUtils.getChanges (previous, latest);
+    if (newProperties.length > 0) {
+        var newPropertiesStr = "added " + newProperties.join (", ");
+        if (changes === null)
+            changes = newPropertiesStr;
+        else
+            changes = newPropertiesStr + ", " + changes;
+    }
     if (changes !== null) {
         latest.history.push ({ action: changes, timestamp: latest.timestamp });
         return ListingUtils.UPDATED_LISTING;

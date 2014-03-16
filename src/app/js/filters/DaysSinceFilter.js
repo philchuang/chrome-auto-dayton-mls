@@ -2,7 +2,7 @@
 
 app.filter ("daysSince", function () {
     return function (dateObj) {
-        if (typeof dateObj === "undefined" || dateObj == null) return "(0)";
+        if (typeof dateObj === "undefined" || dateObj == null) return "0";
         var date = new Date();
         if (typeof dateObj === "string")
             date = Date.parse(dateObj);

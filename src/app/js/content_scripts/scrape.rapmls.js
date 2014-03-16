@@ -12,8 +12,6 @@ function processRows (resultRows, finishedCallback) {
     var numUpdated = 0;
     
     var currentListing = {};
-    
-    // TODO get all image URLs
 
     var scrapedMlsNums = [];
 
@@ -155,6 +153,9 @@ function handleScrapeOptions (options) {
             if (options.viewDetailsFirstResult)
                 openFirstResultDetailsPage (resultRows);
         });
+    } else {
+        if (options.viewDetailsFirstResult)
+            openFirstResultDetailsPage (getResultRows ());
     }
 }
 
@@ -162,7 +163,7 @@ $(document).ready (function ()
 {
     if ($("#WorkspaceBGSH").length === 0)
         return; // not on the results page
-
+    
     // currently not used
     //chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     //    if (request.action == "scrape") {
@@ -182,6 +183,22 @@ $(document).ready (function ()
             chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
                 processMlsNumsThatNeedDetails (mlsNums);
             });
+    });
+
+    chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+        if (request.action === "getCanScrape") {
+            sendResponse (true);
+            return true;
+        }
+        
+        if (request.action === "scrape") {
+            processRows (getResultRows ());
+            return false;
+        }
+
+        console.log("Don't know how to to handle request: " + request);
+
+        return false;
     });
 
 });

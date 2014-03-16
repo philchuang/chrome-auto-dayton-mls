@@ -211,7 +211,7 @@ app.service ('storageService', function ($q) {
                 }
             });
 
-            return deferred.promise ();
+            return deferred.promise;
         },
 
         saveMlsDetailsFetchList: function (tabId, mlsNums) {

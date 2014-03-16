@@ -16,9 +16,10 @@ ListingsControllerBase.prepareListing = function (listing) {
 
     var semiAnnualTaxes = typeof listing.semiAnnualTaxes !== "undefined" ? parseFloat (listing.semiAnnualTaxes) : 0;
     var hoaFee = typeof listing.hoaFee !== "undefined" ? parseFloat (listing.hoaFee) : 0;
+    var assessments = typeof listing.assessments !== "undefined" ? parseFloat (listing.assessments) : 0;
 
     if (!isNaN (semiAnnualTaxes) || !isNaN (hoaFee))
-        listing.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0);
+        listing.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0) + (!isNaN (assessments) ? assessments : 0);
 
     listing.lastUpdate = new Date (Math.max.apply (Math, listing.history.map (function (h) { return Date.parse (h.timestamp); })));
     if (typeof listing.listingDate !== "undefined" && listing.listingDate !== null

@@ -15,6 +15,8 @@ WHERE TO START NOW
 		* collapsible history
 		* personal notes
 		* save button
+* search page
+	* redo layoutit
 
 STUFF TO DO LATER
 * data export
@@ -29,5 +31,3 @@ STUFF TO DO LATER
 	* results paging, beginning to be a memory/cpu hog
 	* each listing
 		* render picture list dynamically only when thumbnail clicked
-* scrape details page
-	* scrape EVERYTHING

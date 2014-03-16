@@ -33,6 +33,7 @@
   <script type="text/javascript" src="../js/filters/MlsSearchUrlFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MinimumFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MaximumFilter.js"></script>
+  <script type="text/javascript" src="../js/filters/PropertySumFilter.js"></script>
 
   <link rel="stylesheet" href="../css/listings.css" />
   <script type="text/javascript" src="../js/controllers/ListingsController.js"></script>
@@ -181,7 +182,7 @@
                       <div class="col-md-2 column">
                         <button class="btn bottom-buffer" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
                         <div class="input-group input-group-sm">
-                          <span class="input-group-addon small" title="score"><span class="glyphicon glyphicon-thumbs-up"></span></span>
+                          <!--<span class="input-group-addon small" title="score"><span class="glyphicon glyphicon-thumbs-up"></span></span>-->
                           <input type="number" class="form-control" title="score" placeholder="score" ng-model="listing.score" ng-change="saveListing(listing)"/>
                         </div>
                       </div>
@@ -192,6 +193,10 @@
                           <li class="list-group-item bottom-buffer" ng-show="listing.bathrooms">Baths <span class="text-info">{{listing.bathrooms}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.yearBuilt">Built <span class="text-info">{{listing.yearBuilt}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.annualTaxes > 0">Taxes <span class="text-info">${{listing.annualTaxes | number:0}}/yr</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.county">County <span class="text-info">{{listing.county}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.subdivision">Subdiv <span class="text-info">{{listing.subdivision}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.schoolDistrict">School <span class="text-info">{{listing.schoolDistrict}}</span></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.rooms">Rooms <span class="text-info">{{listing.rooms.length}}<span class="small" ng-show="listing.rooms"> ({{listing.rooms | propertySum:"sqft"}}sqft)</span></span></li>
                         </ul>
                       </div>
                     </div>
