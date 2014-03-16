@@ -26,6 +26,8 @@ ListingsControllerBase.prepareListing = function (listing) {
         && (listing.history.length == 1 || isNaN (listing.lastUpdate) || isNaN (listing.lastUpdate.getTime()))) {
         listing.lastUpdate = new Date (Date.parse (listing.listingDate));
     }
+
+    listing.numRooms = listing.rooms ? listing.rooms.length : 0;
 };
 
 //ListingsControllerBase.sanitizeListing = function (listing) {

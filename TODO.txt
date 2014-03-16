@@ -12,9 +12,9 @@ WHERE TO START NOW
 		* save filter/sort between page reloads
 		* status dropdown filter
 	* each listing
-		* collapsible history
 		* personal notes
 		* save button
+		* collapsible history
 * search page
 	* redo layoutit
 
