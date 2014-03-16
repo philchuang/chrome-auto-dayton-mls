@@ -65,6 +65,11 @@ app.service ("listingStorageService", function ($q) {
 
         return deferred.promise;
     };
+    
+    /* TODO live-update thoughts...
+     * getAllListings renamed loadAllListings which gets saved locally, getAllListings returns that value
+     * saveListing replaces local copy
+     */
 
     return {
 
