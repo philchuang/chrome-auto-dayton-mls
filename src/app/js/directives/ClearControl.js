@@ -9,8 +9,8 @@ app.directive ("clearControl", function () {
                 element[0].href = "#"; // I hate this, prevent it from showing up in URL!
             element.bind ("click", function (e) {
                 e.preventDefault = true;
-                scope.$apply (function (s) {
-                    input.val (""); // DAMMIT WHY DOES'NT THIS UPDATE FILTERING
+                input.scope().$apply (function (s) {
+                    input.val (""); // DAMMIT WHY DOESN'T THIS UPDATE FILTERING
                 });
             });
         }

@@ -49,14 +49,15 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, $timeout, $modal, storageService) {
+    function ($scope, $timeout, $modal, listingStorageService, storageService) {
 
         var refresh = function () {
-            storageService.getAllListings().then (function (listings) {
+            listingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
                 $scope.listingsSortAsc = true;
                 $scope.listings = listings;
             });
+            
             storageService.getLastListingsFilters ().then (function (filters) {
                 if (filters.listingsSortField)
                     $scope.listingsSortField = filters.listingsSortField;
@@ -93,7 +94,7 @@ app.controller ("ListingsController",
 
         $scope.saveListing = function (listing) {
             //ListingsControllerBase.sanitizeListing (listing);
-            storageService.saveListing (listing).then (function () {
+            listingStorageService.saveListing (listing).then (function () {
                 //ListingsControllerBase.prepareListing (listing);
             });
         };

@@ -1,15 +1,5 @@
 ﻿"use strict";
 
-var ScrapeServiceBase = ScrapeServiceBase || {
-    stalenessThresholdMs: 1000 * 60 * 60 * 24 // 1 day in milliseconds
-};
-
-var ListingUtils = ListingUtils || {
-    NO_CHANGE: 0,
-    NEW_LISTING: -1,
-    UPDATED_LISTING: 1,
-};
-
 var simpleComparatorProvider = function (propertyName) {
     return {
         propertyName: propertyName,
@@ -75,16 +65,23 @@ var roomsComparatorProvider = function () {
     };
 };
 
-ListingUtils.comparators = [
-    simpleComparatorProvider ("listPrice"),
-    simpleComparatorProvider ("sqft"),
-    simpleComparatorProvider ("status"),
-    simpleComparatorProvider ("description"),
-    picturesComparatorProvider (),
-    roomsComparatorProvider ()
-];
+var ScrapeServiceBase = ScrapeServiceBase || {
+    stalenessThresholdMs: 1000 * 60 * 60 * 24, // 1 day in milliseconds
 
-ListingUtils.getChanges = function (previous, latest) {
+    NO_CHANGE: 0,
+    NEW_LISTING: -1,
+    UPDATED_LISTING: 1,
+    comparators: [
+        simpleComparatorProvider ("listPrice"),
+        simpleComparatorProvider ("sqft"),
+        simpleComparatorProvider ("status"),
+        simpleComparatorProvider ("description"),
+        picturesComparatorProvider (),
+        roomsComparatorProvider ()
+    ]
+};
+
+ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previous, latest) {
     if (typeof previous === "undefined"
         || typeof latest === "undefined"
         || previous === null
@@ -93,8 +90,9 @@ ListingUtils.getChanges = function (previous, latest) {
 
     var result = "";
 
-    for (var i = 0; i < ListingUtils.comparators.length; i++) {
-        var comparator = ListingUtils.comparators[i];
+    for (var i = 0; i < ScrapeServiceBase.comparators.length; i++)
+    {
+        var comparator = ScrapeServiceBase.comparators[i];
         var changes = comparator.getChanges (previous, latest);
         if (changes !== null)
             result += ", " + changes;
@@ -107,7 +105,7 @@ ListingUtils.getChanges = function (previous, latest) {
     return result.substr (2);
 };
 
-ListingUtils.processChanges = function (previous, latest) {
+ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function (previous, latest) {
 
     if (typeof latest === "undefined" || latest === null)
         return -2;
@@ -119,7 +117,7 @@ ListingUtils.processChanges = function (previous, latest) {
             timestamp: latest.timestamp,
             action: "started tracking"
         });
-        return ListingUtils.NEW_LISTING;
+        return ScrapeServiceBase.NEW_LISTING;
     }
     
     // find values which don't exist in the previous object
@@ -136,7 +134,7 @@ ListingUtils.processChanges = function (previous, latest) {
         if (typeof latest[propertyName] === "undefined")
             latest[propertyName] = previous[propertyName];
 
-    var changes = ListingUtils.getChanges (previous, latest);
+    var changes = ScrapeServiceBase.getChanges (previous, latest);
     if (newProperties.length > 0) {
         var newPropertiesStr = "added " + newProperties.join (", ");
         if (changes === null)
@@ -146,17 +144,18 @@ ListingUtils.processChanges = function (previous, latest) {
     }
     if (changes !== null) {
         latest.history.push ({ action: changes, timestamp: latest.timestamp });
-        return ListingUtils.UPDATED_LISTING;
+        return ScrapeServiceBase.UPDATED_LISTING;
     }
 
-    return ListingUtils.NO_CHANGE;
+    return ScrapeServiceBase.NO_CHANGE;
 };
 
-app.service ("scrapeService", function ($q, storageService) {
+app.service ("scrapeService", function ($q, listingStorageService) {
+
     var getAllListings = function () {
         var deferred = $q.defer ();
 
-        storageService.getAllListings ().then (function (listings) {
+        listingStorageService.getAllListings ().then (function (listings) {
             deferred.resolve (listings);
         });
 
@@ -169,11 +168,11 @@ app.service ("scrapeService", function ($q, storageService) {
             var deferred = $q.defer();
             
             // get previous listing
-            storageService.getListing (listing.id).then (function (existingListing) {
+            listingStorageService.getListing (listing.id).then (function (existingListing) {
                 // compare listing
-                var result = ListingUtils.processChanges (existingListing, listing);
+                var result = ScrapeServiceBase.processChanges (existingListing, listing);
                 // save listing
-                storageService.saveListing (listing);
+                listingStorageService.saveListing (listing);
                 deferred.resolve (result);
             });
 
@@ -187,7 +186,7 @@ app.service ("scrapeService", function ($q, storageService) {
                 var stalenessThreshold = new Date (new Date ().valueOf () - ScrapeServiceBase.stalenessThresholdMs);
                 for (var i = 0; i < listings.length; i++) {
                     listings[i].isStale = new Date (listings[i].timestamp) < stalenessThreshold;
-                    storageService.saveListing (listings[i]);
+                    listingStorageService.saveListing (listings[i]);
                 }
             });
         },
@@ -196,7 +195,7 @@ app.service ("scrapeService", function ($q, storageService) {
             if (typeof listing === "undefined" || listing === null
                 || typeof listing.id === "undefined" || listing.id === null || listing.id === "") return;
 
-            storageService.getListing (listing.id).then (function (existingListing) {
+            listingStorageService.getListing (listing.id).then (function (existingListing) {
                 if (typeof existingListing === "undefined" || existingListing === null) return;
                 
                 for (var propertyName in listing) {
@@ -204,14 +203,14 @@ app.service ("scrapeService", function ($q, storageService) {
                     existingListing[propertyName] = listing[propertyName];
                 }
 
-                storageService.saveListing (existingListing);
+                listingStorageService.saveListing (existingListing);
             });
         },
         
         checkNeedsListingDetails: function (mlsNums) {
             var deferred = $q.defer();
 
-            storageService.getListings (mlsNums).then (function (listings) {
+            listingStorageService.getListings (mlsNums).then (function (listings) {
                 var nums = [];
                 
                 if (typeof listings !== "undefined" && listings != null && listings.length > 0) {

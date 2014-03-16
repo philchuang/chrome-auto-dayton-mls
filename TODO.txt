@@ -27,6 +27,7 @@ STUFF TO DO LATER
 * listings page
 	* do floating left filter bar the right way
 	* fix filter field clear controls binding
+		* perhaps modify the model and not the input?
 	* results paging, beginning to be a memory/cpu hog
 	* each listing
 		* render picture list dynamically only when thumbnail clicked

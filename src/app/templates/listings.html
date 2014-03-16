@@ -27,6 +27,7 @@
   <script type="text/javascript" src="../js/app.js"></script>
   <script type="text/javascript" src="../js/services/NotificationService.js"></script>
   <script type="text/javascript" src="../js/services/StorageService.js"></script>
+  <script type="text/javascript" src="../js/services/ListingStorageService.js"></script>
   <script type="text/javascript" src="../js/directives/ImgLazyLoad.js"></script>
   <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
@@ -81,67 +82,67 @@
               <option value="false">N</option>
               <option value="true">Y</option>
             </select>
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Score (min)</span>
             <input type="number" class="form-control" ng-model="minSearch.score" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (min)</span>
             <input type="text" class="form-control" ng-model="minSearch.listPrice" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (max)</span>
             <input type="text" class="form-control" ng-model="maxSearch.listPrice" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">SqFt (min)</span>
             <input type="text" class="form-control" ng-model="minSearch.sqft" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Desc</span>
             <input type="text" class="form-control" ng-model="search.description" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Subdiv</span>
             <input type="text" class="form-control" ng-model="search.subdivision" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Street</span>
             <input type="text" class="form-control" ng-model="search.streetNumberAndName" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">City</span>
             <input type="text" class="form-control" ng-model="search.city" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Zip</span>
             <input type="text" class="form-control" ng-model="search.zip" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Beds (min)</span>
               <input type="text" class="form-control" ng-model="minSearch.bedrooms" ng-change="saveFilters()"/>
-              <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+              <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Days listed (min)</span>
               <input type="text" class="form-control" />
-              <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+              <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">MLS</span>
             <input type="text" class="form-control" ng-model="search.mls" ng-change="saveFilters()" />
-            <a class="input-group-addon" clear-control><span class="glyphicon glyphicon-remove"></span></a>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
         </div>
       </div>
@@ -167,7 +168,7 @@
                 <div class="row clearfix">
                   <div class="col-md-2 column">
                     <div class="thumbnail">
-                      <a ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
+                      <a href="#" ng-href="{{listing.mainImageUrl}}" title="{{listing.streetNumber}} {{listing.streetName}}" data-gallery="#{{listing.mls}}" data-description="{{listing.streetNumber}} {{listing.streetName}}">
                         <img ng-src="{{listing.mainImageUrl}}" class="img-responsive" alt="{{listing.streetNumber}} {{listing.streetName}}" />
                         <span class="badge pull-right">{{listing.pictures.length}}</span>
                       </a>
@@ -203,7 +204,7 @@
                           <li class="list-group-item bottom-buffer" ng-show="listing.county">County <span class="text-info">{{listing.county}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.subdivision">Subdiv <span class="text-info">{{listing.subdivision}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.schoolDistrict">School <span class="text-info">{{listing.schoolDistrict}}</span></li>
-                          <li class="list-group-item bottom-buffer" ng-show="listing.rooms">Rooms <button type="button" class="btn-link" style="border: 0; padding: 0; font-weight: bold;" ng-click="openRoomsDialog(listing)"><span class="text-info">{{listing.rooms.length}}<span class="small" ng-show="listing.rooms"> ({{listing.rooms | propertySum:"sqft"}}sqft)</span></span></button></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.rooms">Rooms <button type="button" class="btn btn-link" ng-click="openRoomsDialog(listing)"><span class="text-info">{{listing.rooms.length}}<span class="small" ng-show="listing.rooms"> ({{listing.rooms | propertySum:"sqft"}}sqft)</span></span></button></li>
                         </ul>
                       </div>
                     </div>

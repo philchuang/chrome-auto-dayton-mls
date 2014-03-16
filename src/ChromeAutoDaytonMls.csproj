@@ -81,6 +81,7 @@
     <Content Include="app\js\controllers\SearchController.js" />
     <Content Include="app\js\services\SearchService.js" />
     <Content Include="app\js\services\ScrapeService.js" />
+    <Content Include="app\js\services\ListingStorageService.js" />
     <Content Include="app\js\services\StorageService.js" />
     <Content Include="app\resources\icons\icon128.png" />
     <Content Include="app\resources\icons\icon16.png" />

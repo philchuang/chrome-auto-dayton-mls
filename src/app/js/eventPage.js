@@ -10,10 +10,13 @@ chrome.runtime.onInstalled.addListener (function (details) {
     storageService.clearAllTempData ();
 });
 
+// TODO split listeners into area/module specific files
+
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
     var notificationService = injector.get ("notificationService");
     var storageService = injector.get ("storageService");
+    var listingStorageService = injector.get ("listingStorageService");
     var scrapeService = injector.get ("scrapeService");
 
     if (request.action === "consumeCriteria") {
@@ -72,7 +75,7 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     }
 
     if (request.action === "getAllListings") {
-        storageService.getAllListings ().then (function (listings) {
+        listingStorageService.getAllListings ().then (function (listings) {
             sendResponse (listings);
         });
         return true; // this keeps the message channel open for asynchronous response
