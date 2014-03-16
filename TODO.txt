@@ -5,11 +5,12 @@ WHAT WAS JUST ACCOMPLISHED
 * (x) on the right of each field to clear it - doesn't update binding :(
 
 WHERE TO START NOW
+* convert from event page back to background page for live updates to listings
+	* OR have an event listener for local save, replace listings live!
 * listings page 
 	* use ngcloak
 	* delete functionality w/ confirm dialog
 	* filters/sort
-		* save filter/sort between page reloads
 		* status dropdown filter
 	* each listing
 		* personal notes
@@ -21,8 +22,6 @@ WHERE TO START NOW
 STUFF TO DO LATER
 * data export
 * PageAction to trigger scrape, open listings
-* convert from event page back to background page for live updates to listings
-	* OR have an event listener for local save, replace listings live!
 * listing sets
 	* favorites (within set)
 * listings page
