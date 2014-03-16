@@ -49,7 +49,7 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, $timeout, storageService) {
+    function ($scope, $timeout, $modal, storageService) {
 
         var refresh = function () {
             storageService.getAllListings().then (function (listings) {
@@ -92,7 +92,29 @@ app.controller ("ListingsController",
             $scope.saveListing (listing);
         };
 
+        $scope.openRoomsDialog = function (listing) {
+            var modalInstance = $modal.open ({
+                templateUrl: "roomsDisplay.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    listing: function () { return listing; }
+                }
+            });
+        };
+
         $scope.historySortProperty = "timestamp";
         $scope.historySortDescending = true;
 
     });
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+var ModalInstanceCtrl = function ($scope, $modalInstance, listing) {
+
+    $scope.listing = listing;
+
+    $scope.close = function () {
+        $modalInstance.close ();
+    };
+
+};

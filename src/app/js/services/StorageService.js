@@ -27,6 +27,24 @@ var storageServiceBase = storageServiceBase || {
 };
 
 app.service ('storageService', function ($q) {
+    
+    // temporary function used to massage in-dev properties
+    var fixListing = function (listing) {
+        var modified = false;
+        if (typeof listing === "undefined" || listing === null) return modified;
+        
+        if (typeof listing.rooms !== "undefined" && listing.rooms !== null) {
+            var entrances = listing.rooms.filter (function (r) {
+                return r.name === "Entrance";
+            });
+            $.each (entrances, function (idx, r2) {
+                 r2.level = "1";
+            });
+            modified = modified || entrances.length > 0;
+        }
+
+        return modified;
+    };
 
     // define this outside the service object b/c it's referenced internally
     var saveLastCriteria = function (criteria) {
@@ -53,6 +71,26 @@ app.service ('storageService', function ($q) {
         chrome.storage.local.get (key, function (items) {
             var data = items[key];
             deferred.resolve (data);
+        });
+
+        return deferred.promise;
+    };
+
+    var saveListing = function (listing) {
+        var deferred = $q.defer ();
+
+        var key = storageServiceBase.getListingKey (listing.id);
+        var items = {};
+        items[key] = listing;
+
+        chrome.storage.local.set (items, function () {
+            var error = chrome.runtime.lastError;
+            if (typeof error !== "undefined") {
+                console.log ("Error saving " + key + ": " + error);
+                deferred.error (error);
+            } else {
+                deferred.resolve ();
+            }
         });
 
         return deferred.promise;
@@ -143,6 +181,8 @@ app.service ('storageService', function ($q) {
                 var listings = [];
                 for (var propertyName in items) {
                     if (!S(propertyName).startsWith (keyPrefix)) continue;
+                    if (fixListing (items[propertyName]))
+                        saveListing (items[propertyName]);
                     listings.push (items[propertyName]);
                 }
                 deferred.resolve (listings);
@@ -194,25 +234,7 @@ app.service ('storageService', function ($q) {
             });
         },
 
-        saveListing: function (listing) {
-            var deferred = $q.defer();
-            
-            var key = storageServiceBase.getListingKey (listing.id);
-            var items = {};
-            items[key] = listing;
-
-            chrome.storage.local.set (items, function () {
-                var error = chrome.runtime.lastError;
-                if (typeof error !== "undefined") {
-                    console.log ("Error saving " + key + ": " + error);
-                    deferred.error (error);
-                } else {
-                    deferred.resolve ();
-                }
-            });
-
-            return deferred.promise;
-        },
+        saveListing: saveListing,
 
         saveMlsDetailsFetchList: function (tabId, mlsNums) {
             var key = storageServiceBase.getMlsDetailsFetchListKey(tabId);
