@@ -203,7 +203,7 @@
                           <li class="list-group-item bottom-buffer" ng-show="listing.county">County <span class="text-info">{{listing.county}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.subdivision">Subdiv <span class="text-info">{{listing.subdivision}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.schoolDistrict">School <span class="text-info">{{listing.schoolDistrict}}</span></li>
-                          <li class="list-group-item bottom-buffer" ng-show="listing.rooms">Rooms <a href="#" ng-click="openRoomsDialog(listing)"><span class="text-info">{{listing.rooms.length}}<span class="small" ng-show="listing.rooms"> ({{listing.rooms | propertySum:"sqft"}}sqft)</span></span></a></li>
+                          <li class="list-group-item bottom-buffer" ng-show="listing.rooms">Rooms <button type="button" class="btn-link" style="border: 0; padding: 0; font-weight: bold;" ng-click="openRoomsDialog(listing)"><span class="text-info">{{listing.rooms.length}}<span class="small" ng-show="listing.rooms"> ({{listing.rooms | propertySum:"sqft"}}sqft)</span></span></button></li>
                         </ul>
                       </div>
                     </div>
