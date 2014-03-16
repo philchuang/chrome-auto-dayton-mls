@@ -68,8 +68,9 @@
     <Content Include="app\js\directives\RepeatFinishedDirective.js" />
     <Content Include="app\js\eventPage.js" />
     <Content Include="app\js\app.js" />
+    <Content Include="app\js\filters\PropertySumFilter.js" />
     <Content Include="app\js\filters\MaximumFilter.js" />
-    <Content Include="app\js\filters\MinumumFilter.js" />
+    <Content Include="app\js\filters\MinimumFilter.js" />
     <Content Include="app\js\filters\MlsSearchUrlFilter.js" />
     <Content Include="app\js\filters\DaysSinceFilter.js" />
     <Content Include="app\js\filters\EscapeFilter.js" />
