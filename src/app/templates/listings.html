@@ -31,6 +31,7 @@
   <script type="text/javascript" src="../js/services/ScrapeService.js"></script>
   <script type="text/javascript" src="../js/directives/ImgLazyLoad.js"></script>
   <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
+  <script type="text/javascript" src="../js/filters/DynamicJavascriptFilter.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
   <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MlsSearchUrlFilter.js"></script>
@@ -160,12 +161,20 @@
             <input type="text" class="form-control" ng-model="search.mls" ng-change="saveFilters()" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
+          <!-- TODO make this have an explicit apply action -->  
+          <div class="input-group input-group-sm bottom-buffer" style="height: auto;">
+            <span class="input-group-addon">Custom</span>
+            <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="dynamicJavascriptFilter" ng-change="saveFilters();" title="javascript function (scope) that returns true/false"></textarea>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
+          </div>
         </div>
       </div>
 
       <section id="listings" class="col-md-9 column">
 
-        <div class="row clearfix" ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls">
+        <div class="row clearfix"
+             ng-repeat="listing in filteredListings = (listings | filter:search | minimum:minSearch | maximum:maxSearch | dynamicJavascript:dynamicJavascriptFilter | orderBy:listingsSortField:!listingsSortAsc) track by listing.mls">
+
           <div class="col-md-12 column">
             <!-- TODO turn into a directive -->
             <div class="panel panel-default">
@@ -361,7 +370,7 @@
       <button class="btn btn-primary" ng-click="close()">OK</button>
     </div>
   </script>
-    
+
   <script type="text/ng-template" id="ImportDialog.html">
     <div class="modal-header">
       <h3>{{dataContext.title}}</h3>
