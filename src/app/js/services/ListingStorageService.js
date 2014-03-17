@@ -119,7 +119,9 @@ app.service ("listingStorageService", function ($q) {
                 return deferred.promise;
             }
 
-            chrome.storage.local.get (ids, function (items) {
+            var storageIds = ids.map (function (id) { return getListingKey (id); });
+
+            chrome.storage.local.get (storageIds, function (items) {
                 var listings = [];
                 for (var propertyName in items) {
                     if (fixListing (items[propertyName]))

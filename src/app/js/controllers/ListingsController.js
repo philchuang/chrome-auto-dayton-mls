@@ -61,16 +61,18 @@ app.controller ("ListingsController",
                 $scope.listings = listings;
                 
                 storageService.getLastListingsFilters ().then (function (filters) {
-                    if (filters.listingsSortField)
-                        $scope.listingsSortField = filters.listingsSortField;
-                    if (typeof filters.listingsSortAsc !== "undefined")
-                        $scope.listingsSortAsc = filters.listingsSortAsc;
-                    if (filters.search)
-                        $scope.search = filters.search;
-                    if (filters.minSearch)
-                        $scope.minSearch = filters.minSearch;
-                    if (filters.maxSearch)
-                        $scope.maxSearch = filters.maxSearch;
+                    if (filters) {
+                        if (filters.listingsSortField)
+                            $scope.listingsSortField = filters.listingsSortField;
+                        if (typeof filters.listingsSortAsc !== "undefined")
+                            $scope.listingsSortAsc = filters.listingsSortAsc;
+                        if (filters.search)
+                            $scope.search = filters.search;
+                        if (filters.minSearch)
+                            $scope.minSearch = filters.minSearch;
+                        if (filters.maxSearch)
+                            $scope.maxSearch = filters.maxSearch;
+                    }
                 });
             });
         };
@@ -167,20 +169,21 @@ app.controller ("ListingsController",
         $scope.historySortDescending = true;
 
         $scope.exportAllListings = function () {
-            // TODO don't grab the live data, grab the ids off the live and get fresh data from storage
-            var exportData = JSON.stringify($scope.filteredListings);
-
-            $modal.open ({
-                templateUrl: "ExportDialog.html",
-                controller: ModalInstanceCtrl,
-                resolve: {
-                    dataContext: function () {
-                        return {
-                            title: "Exported "+ $scope.filteredListings.length +" Listings",
-                            json: exportData
-                        };
+            var ids = $scope.filteredListings.map (function (l) { return l.id; });
+            listingStorageService.getListings (ids).then (function (listings) {
+                var exportData = JSON.stringify (listings);
+                $modal.open ({
+                    templateUrl: "ExportDialog.html",
+                    controller: ModalInstanceCtrl,
+                    resolve: {
+                        dataContext: function () {
+                            return {
+                                title: "Exported " + listings.length + " Listings",
+                                json: exportData
+                            };
+                        }
                     }
-                }
+                });
             });
         };
 
