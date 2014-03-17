@@ -5,11 +5,15 @@ WHAT WAS JUST ACCOMPLISHED
 * (x) on the right of each field to clear it - doesn't update binding :(
 
 WHERE TO START NOW
+* data export/import
+	* think I may have borked up my data with an import... $$hashkey property?
+	* ListingsController:170
+	* figure out scrape.rapmls.js:74 mismatch
+* fix single MLS search -> details page
 * convert from event page back to background page for live updates to listings
 	* OR have an event listener for local save, replace listings live!
 * listings page 
 	* use ngcloak
-	* delete functionality w/ confirm dialog
 	* filters/sort
 		* status dropdown filter
 	* each listing
@@ -20,8 +24,6 @@ WHERE TO START NOW
 	* redo layoutit
 
 STUFF TO DO LATER
-* data export
-* PageAction to trigger scrape, open listings
 * listing sets
 	* favorites (within set)
 * listings page

@@ -173,7 +173,7 @@ app.service ("scrapeService", function ($q, listingStorageService) {
                 var result = ScrapeServiceBase.processChanges (existingListing, listing);
                 // save listing
                 listingStorageService.saveListing (listing);
-                deferred.resolve (result);
+                deferred.resolve ({ result: result, listing: listing });
             });
 
             return deferred.promise;

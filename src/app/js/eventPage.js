@@ -34,8 +34,8 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     }
     
     if (request.action === "processListing") {
-        scrapeService.processListing (request.listing).then (function (result) {
-            sendResponse (result);
+        scrapeService.processListing (request.listing).then (function (resultAndListing) {
+            sendResponse (resultAndListing);
         });
         return true; // this keeps the message channel open for asynchronous response
     }

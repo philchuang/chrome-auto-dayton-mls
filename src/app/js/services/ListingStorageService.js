@@ -22,6 +22,22 @@ app.service ("listingStorageService", function ($q) {
             modified = modified || entrances.length > 0;
         }
 
+        if (typeof listing.history !== "undefined" && listing.history !== null)
+        {
+            for (var i = 0; i < listing.history.length; i++) {
+                if (typeof listing.history[i].$$hashKey !== "undefined")
+                    delete listing.history[i].$$hashKey;
+            }
+        }
+
+        if (typeof listing.pictures !== "undefined" && listing.pictures !== null)
+        {
+            for (var i2 = 0; i2 < listing.pictures.length; i2++) {
+                if (typeof listing.pictures[i2].$$hashKey !== "undefined")
+                    delete listing.pictures[i2].$$hashKey;
+            }
+        }
+
         return modified;
     };
 
@@ -48,6 +64,8 @@ app.service ("listingStorageService", function ($q) {
 
     var saveListing = function (listing) {
         var deferred = $q.defer ();
+
+        fixListing (listing);
 
         var key = getListingKey (listing.id);
         var items = {};

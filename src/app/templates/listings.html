@@ -28,6 +28,7 @@
   <script type="text/javascript" src="../js/services/NotificationService.js"></script>
   <script type="text/javascript" src="../js/services/StorageService.js"></script>
   <script type="text/javascript" src="../js/services/ListingStorageService.js"></script>
+  <script type="text/javascript" src="../js/services/ScrapeService.js"></script>
   <script type="text/javascript" src="../js/directives/ImgLazyLoad.js"></script>
   <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
@@ -46,9 +47,19 @@
   <div id="page" class="container" ng-controller="ListingsController">
 
     <header class="row clearfix">
-      <div class="col-md-12 column">
+      <div class="col-md-4 column">
         <div class="page-header">
           <h3>Dayton MLS saved listings <span class="badge">{{filteredListings.length}}</span></h3>
+        </div>
+      </div>
+      <div class="col-md-2 col-md-offset-4">
+        <div class="page-header pull-right" style="border: 0;">
+          <button class="btn btn-info" ng-click="importListings()">Import <span class="glyphicon glyphicon-import"></span></button>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="page-header pull-right" style="border: 0;">
+          <button class="btn btn-info" ng-click="exportAllListings()">Export <span class="glyphicon glyphicon-export"></span></button>
         </div>
       </div>
     </header>
@@ -241,14 +252,16 @@
 
           </div>
         </div>
-      </section>
 
-      <div class="col-md-2 col-md-offset-10">
-        <div class="pull-right">
-          <button class="btn btn-danger" ng-click="deleteAllListings()">Delete All <span class="glyphicon glyphicon-remove"></span></button>
+        <div class="row clearfix">
+          <div class="col-md-2">
+            <div class="pull-left">
+              <button class="btn btn-danger" ng-click="deleteAllListings()">Delete All <span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+          </div>
         </div>
-      </div>
 
+      </section>
     </section>
 
     <section id="footer" class="row clearfix">
@@ -296,7 +309,7 @@
     </div>
   </div>
 
-  <script type="text/ng-template" id="roomsDisplay.html">
+  <script type="text/ng-template" id="RoomsDisplay.html">
     <div class="modal-header">
       <h3>{{dataContext.streetNumberAndName}} rooms</h3>
     </div>
@@ -319,12 +332,37 @@
     </div>
   </script>
 
-  <script type="text/ng-template" id="confirmationDialog.html">
+  <script type="text/ng-template" id="ConfirmationDialog.html">
     <div class="modal-header">
       <h3>{{dataContext.title}}</h3>
     </div>
     <div class="modal-body">
       {{dataContext.message}}
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="close()">OK</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="ExportDialog.html">
+    <div class="modal-header">
+      <h3>{{dataContext.title}}</h3>
+    </div>
+    <div class="modal-body">
+      <textarea rows="5" style="width: 100%;" ng-model="dataContext.json"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="close()">OK</button>
+    </div>
+  </script>
+    
+  <script type="text/ng-template" id="ImportDialog.html">
+    <div class="modal-header">
+      <h3>{{dataContext.title}}</h3>
+    </div>
+    <div class="modal-body">
+      <textarea rows="5" style="width: 100%;" ng-model="dataContext.json"></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" ng-click="close()">OK</button>

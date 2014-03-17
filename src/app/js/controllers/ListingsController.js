@@ -52,7 +52,7 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, $timeout, $modal, listingStorageService, storageService, notificationService) {
+    function ($scope, $timeout, $modal, listingStorageService, storageService, notificationService, scrapeService) {
 
         var refresh = function () {
             listingStorageService.getAllListings ().then (function (listings) {
@@ -84,7 +84,7 @@ app.controller ("ListingsController",
                 return;
 
             $modal.open({
-                templateUrl: "confirmationDialog.html",
+                templateUrl: "ConfirmationDialog.html",
                 controller: ModalInstanceCtrl,
                 resolve: {
                     dataContext: function () {
@@ -107,7 +107,7 @@ app.controller ("ListingsController",
                 return;
 
             $modal.open({
-                templateUrl: "confirmationDialog.html",
+                templateUrl: "ConfirmationDialog.html",
                 controller: ModalInstanceCtrl,
                 resolve: {
                     dataContext: function () {
@@ -140,7 +140,7 @@ app.controller ("ListingsController",
 
         $scope.openRoomsDialog = function (listing) {
             $modal.open ({
-                templateUrl: "roomsDisplay.html",
+                templateUrl: "RoomsDisplay.html",
                 controller: ModalInstanceCtrl,
                 resolve: {
                     dataContext: function () { return listing; }
@@ -165,6 +165,77 @@ app.controller ("ListingsController",
         
         $scope.historySortProperty = "timestamp";
         $scope.historySortDescending = true;
+
+        $scope.exportAllListings = function () {
+            // TODO don't grab the live data, grab the ids off the live and get fresh data from storage
+            var exportData = JSON.stringify($scope.filteredListings);
+
+            $modal.open ({
+                templateUrl: "ExportDialog.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    dataContext: function () {
+                        return {
+                            title: "Exported "+ $scope.filteredListings.length +" Listings",
+                            json: exportData
+                        };
+                    }
+                }
+            });
+        };
+
+        $scope.importListings = function () {
+            $modal.open ({
+                templateUrl: "ImportDialog.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    dataContext: function () {
+                        return {
+                            title: "Import Listings",
+                            json: ""
+                        };
+                    }
+                }
+            }).result.then (function (scope) {
+                var listings;
+                try {
+                    listings = JSON.parse (scope.dataContext.json);
+                } catch (ex) {
+                    notificationService.displayNotification("", "Import error", "Error parsing JSON: " + ex.message);
+                    return;
+                }
+                if (typeof listings === "undefined" || listings === null || listings.length === 0)
+                    return;
+
+                var numProcessed = 0;
+                var numNew = 0;
+                var numNoChange = 0;
+                var numUpdated = 0;
+                for (var i = 0; i < listings.length; i++) {
+                    var listing = listings[i];
+                    if (typeof listing === "undefined" || listing === null 
+                        || typeof listing.id === "undefined" || listing.id === null
+                        || typeof listing.mls === "undefined" || listing.mls === null)
+                        continue;
+                    numProcessed++;
+
+                    scrapeService.processListing (listing).then (function (resultAndListing) {
+                        if (resultAndListing.result === -1)
+                            numNew++;
+                        else if (resultAndListing.result === 0)
+                            numNoChange++;
+                        else if (resultAndListing.result === 1)
+                            numUpdated++;
+
+                        if (numProcessed === numNew + numNoChange + numUpdated) {
+                            var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
+
+                            notificationService.displayNotification ("", "Import Results", message);
+                        }
+                    });
+                }
+            });
+        };
 
     });
 
