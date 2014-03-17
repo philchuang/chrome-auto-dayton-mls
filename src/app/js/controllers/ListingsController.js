@@ -59,6 +59,7 @@ app.controller ("ListingsController",
 
             listingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
+                $scope.filteredListings = listings;
                 $scope.listings = listings;
                 deferred.resolve ();
             });
@@ -85,8 +86,8 @@ app.controller ("ListingsController",
             });
         });
 
-        $scope.deleteAllListings = function () {
-            if (typeof $scope.listings === "undefined" || $scope.listings === null || $scope.listings.length === 0)
+        $scope.deleteFilteredListings = function () {
+            if (typeof $scope.filteredListings === "undefined" || $scope.filteredListings === null || $scope.filteredListings.length === 0)
                 return;
 
             $modal.open({
@@ -96,15 +97,19 @@ app.controller ("ListingsController",
                     dataContext: function () {
                         return {
                             title: "Please confirm",
-                            message: "Are you sure you want to delete ALL listings?"
+                            message: "Are you sure you want to delete ALL these listings?"
                         };
                     }
                 }
             }).result.then (function (_) {
-                var numListings = $scope.listings.length;
-                $scope.listings = [];
-                storageService.clearAllListings();
-                notificationService.displayNotification ("", "Deleted all listings", numListings + " listings deleted.");
+                var listingsToDelete = $scope.filteredListings.filter (function (l) { return true; });
+                for (var i = 0; i < listingsToDelete.length; i++) {
+                    var listing = listingsToDelete[i];
+                    var idx = $.inArray (listing, $scope.listings);
+                    if (~idx) $scope.listings.splice (idx, 1);
+                    //listingStorageService.deleteListing (listing.id);
+                }
+                notificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
             });
         };
 
