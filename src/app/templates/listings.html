@@ -91,17 +91,17 @@
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (min)</span>
-            <input type="text" class="form-control" ng-model="minSearch.listPrice" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="minSearch.listPrice" ng-change="saveFilters()" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (max)</span>
-            <input type="text" class="form-control" ng-model="maxSearch.listPrice" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="maxSearch.listPrice" ng-change="saveFilters()" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">SqFt (min)</span>
-            <input type="text" class="form-control" ng-model="minSearch.sqft" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="minSearch.sqft" ng-change="saveFilters()" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
@@ -131,12 +131,12 @@
           </div>
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Beds (min)</span>
-              <input type="text" class="form-control" ng-model="minSearch.bedrooms" ng-change="saveFilters()"/>
+              <input type="number" class="form-control" ng-model="minSearch.bedrooms" ng-change="saveFilters()"/>
               <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Days listed (min)</span>
-              <input type="text" class="form-control" />
+              <input type="number" class="form-control" />
               <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <div class="input-group input-group-sm bottom-buffer">
@@ -242,6 +242,13 @@
           </div>
         </div>
       </section>
+
+      <div class="col-md-2 col-md-offset-10">
+        <div class="pull-right">
+          <button class="btn btn-danger" ng-click="deleteAllListings()">Delete All <span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      </div>
+
     </section>
 
     <section id="footer" class="row clearfix">
@@ -291,24 +298,38 @@
 
   <script type="text/ng-template" id="roomsDisplay.html">
     <div class="modal-header">
-      <h3>{{listing.streetNumberAndName}} rooms</h3>
+      <h3>{{dataContext.streetNumberAndName}} rooms</h3>
     </div>
     <div class="modal-body">
       <table class="table table-striped table-hover table-condensed table-responsive">
         <tbody>
-          <tr ng-repeat="room in listing.rooms | orderBy:['+level','+name']">
+          <tr ng-repeat="room in dataContext.rooms | orderBy:['+level','+name']">
             <td style="width: 0; padding-left: 10px; padding-right: 10px; white-space: nowrap;"><span class="">{{room.name}}</span></td>
             <td style="width: 100%;"><span class="">{{room.dimensions}} ({{room.sqft}} sqft) L: {{room.level}}</span></td>
           </tr>
           <tr>
             <td style="width: 0; padding-left: 10px; padding-right: 10px; white-space: nowrap;"><span class="">TOTAL</span></td>
-            <td style="width: 100%;"><span class="">{{listing.rooms.length}} ({{listing.rooms | propertySum:'sqft'}} sqft)</span></td>
+            <td style="width: 100%;"><span class="">{{dataContext.rooms.length}} ({{dataContext.rooms | propertySum:'sqft'}} sqft)</span></td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" ng-click="close()">Close</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="confirmationDialog.html">
+    <div class="modal-header">
+      <h3>{{dataContext.title}}</h3>
+    </div>
+    <div class="modal-body">
+      {{dataContext.message}}
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="close()">OK</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
   </script>
 

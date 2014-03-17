@@ -11,6 +11,9 @@ ListingsControllerBase.prepareListing = function (listing) {
     if (typeof listing.score === "undefined" || listing.score === null)
         listing.score = 0;
 
+    if (typeof listing.subdivision === "undefined")
+        listing.subdivision = "";
+
     listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
     listing.streetNumberAndName = listing.streetNumber + " " + listing.streetName;
 
@@ -49,26 +52,26 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, $timeout, $modal, listingStorageService, storageService) {
+    function ($scope, $timeout, $modal, listingStorageService, storageService, notificationService) {
 
         var refresh = function () {
             listingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
                 $scope.listingsSortAsc = true;
                 $scope.listings = listings;
-            });
-            
-            storageService.getLastListingsFilters ().then (function (filters) {
-                if (filters.listingsSortField)
-                    $scope.listingsSortField = filters.listingsSortField;
-                if (typeof filters.listingsSortAsc !== "undefined")
-                    $scope.listingsSortAsc = filters.listingsSortAsc;
-                if (filters.search)
-                    $scope.search = filters.search;
-                if (filters.minSearch)
-                    $scope.minSearch = filters.minSearch;
-                if (filters.maxSearch)
-                    $scope.maxSearch = filters.maxSearch;
+                
+                storageService.getLastListingsFilters ().then (function (filters) {
+                    if (filters.listingsSortField)
+                        $scope.listingsSortField = filters.listingsSortField;
+                    if (typeof filters.listingsSortAsc !== "undefined")
+                        $scope.listingsSortAsc = filters.listingsSortAsc;
+                    if (filters.search)
+                        $scope.search = filters.search;
+                    if (filters.minSearch)
+                        $scope.minSearch = filters.minSearch;
+                    if (filters.maxSearch)
+                        $scope.maxSearch = filters.maxSearch;
+                });
             });
         };
 
@@ -77,19 +80,49 @@ app.controller ("ListingsController",
         $scope.refresh = refresh;
 
         $scope.deleteAllListings = function () {
-            alert('disabled until confirmation dialog is added');
-            //$scope.listings = [];
-            //storageService.clearAllListings();
+            if (typeof $scope.listings === "undefined" || $scope.listings === null || $scope.listings.length === 0)
+                return;
+
+            $modal.open({
+                templateUrl: "confirmationDialog.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    dataContext: function () {
+                        return {
+                            title: "Please confirm",
+                            message: "Are you sure you want to delete ALL listings?"
+                        };
+                    }
+                }
+            }).result.then (function (_) {
+                var numListings = $scope.listings.length;
+                $scope.listings = [];
+                storageService.clearAllListings();
+                notificationService.displayNotification ("", "Deleted all listings", numListings + " listings deleted.");
+            });
         };
 
         $scope.delete = function (listing) {
             if (typeof $scope.listings === "undefined" || $scope.listings === null || $scope.listings.length === 0)
                 return;
 
-            alert('disabled until confirmation dialog is added');
-            //var idx = $.inArray(listing, $scope.listings);
-            //if (~idx) $scope.listings.splice(idx, 1);
-            //storageService.deleteListing (listing.id);
+            $modal.open({
+                templateUrl: "confirmationDialog.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    dataContext: function () {
+                        return {
+                            title: "Please confirm",
+                            message: "Are you sure you want to delete listing for " + listing.streetNumberAndName + "?"
+                        };
+                    }
+                }
+            }).result.then(function (_) {
+                var idx = $.inArray (listing, $scope.listings);
+                if (~idx) $scope.listings.splice (idx, 1);
+                listingStorageService.deleteListing (listing.id);
+                notificationService.displayNotification("", "Deleted listing", "Deleted " + listing.streetNumberAndName);
+            });
         };
 
         $scope.saveListing = function (listing) {
@@ -106,11 +139,11 @@ app.controller ("ListingsController",
         };
 
         $scope.openRoomsDialog = function (listing) {
-            var modalInstance = $modal.open ({
+            $modal.open ({
                 templateUrl: "roomsDisplay.html",
                 controller: ModalInstanceCtrl,
                 resolve: {
-                    listing: function () { return listing; }
+                    dataContext: function () { return listing; }
                 }
             });
         };
@@ -137,12 +170,16 @@ app.controller ("ListingsController",
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.
-var ModalInstanceCtrl = function ($scope, $modalInstance, listing) {
+var ModalInstanceCtrl = function ($scope, $modalInstance, dataContext) {
 
-    $scope.listing = listing;
+    $scope.dataContext = dataContext;
 
     $scope.close = function () {
-        $modalInstance.close ();
+        $modalInstance.close ($scope);
+    };
+    
+    $scope.cancel = function () {
+        $modalInstance.dismiss ('cancel');
     };
 
 };

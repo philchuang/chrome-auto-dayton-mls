@@ -119,8 +119,8 @@ app.service ("listingStorageService", function ($q) {
         saveListing: saveListing,
         
         deleteListing: function (id) {
-            var keyPrefix = getListingKey(id);
-            chrome.storage.local.remove (keyPrefix);
+            var key = getListingKey (id);
+            chrome.storage.local.remove (key);
         },
 
         clearAllListings: function () {
