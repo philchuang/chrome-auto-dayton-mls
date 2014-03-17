@@ -52,34 +52,38 @@ ListingsControllerBase.prepareListings = function (listings) {
 };
 
 app.controller ("ListingsController",
-    function ($scope, $timeout, $modal, listingStorageService, storageService, notificationService, scrapeService) {
+    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, notificationService, scrapeService) {
 
         var refresh = function () {
+            var deferred = $q.defer ();
+
             listingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
-                $scope.listingsSortAsc = true;
                 $scope.listings = listings;
-                
-                storageService.getLastListingsFilters ().then (function (filters) {
-                    if (filters) {
-                        if (filters.listingsSortField)
-                            $scope.listingsSortField = filters.listingsSortField;
-                        if (typeof filters.listingsSortAsc !== "undefined")
-                            $scope.listingsSortAsc = filters.listingsSortAsc;
-                        if (filters.search)
-                            $scope.search = filters.search;
-                        if (filters.minSearch)
-                            $scope.minSearch = filters.minSearch;
-                        if (filters.maxSearch)
-                            $scope.maxSearch = filters.maxSearch;
-                    }
-                });
+                deferred.resolve ();
             });
+
+            return deferred.promise;
         };
 
-        refresh ();
-
         $scope.refresh = refresh;
+
+        refresh ().then (function () {
+            storageService.getLastListingsFilters ().then (function (filters) {
+                if (filters) {
+                    if (filters.listingsSortField)
+                        $scope.listingsSortField = filters.listingsSortField;
+                    if (typeof filters.listingsSortAsc !== "undefined")
+                        $scope.listingsSortAsc = filters.listingsSortAsc;
+                    if (filters.search)
+                        $scope.search = filters.search;
+                    if (filters.minSearch)
+                        $scope.minSearch = filters.minSearch;
+                    if (filters.maxSearch)
+                        $scope.maxSearch = filters.maxSearch;
+                }
+            });
+        });
 
         $scope.deleteAllListings = function () {
             if (typeof $scope.listings === "undefined" || $scope.listings === null || $scope.listings.length === 0)
