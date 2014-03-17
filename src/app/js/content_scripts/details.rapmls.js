@@ -145,13 +145,13 @@ function updateMlsData () {
         }
     }
     
-    chrome.runtime.sendMessage ({ action: "processListing", listing: listing }, function (result) {
+    chrome.runtime.sendMessage ({ action: "processListing", listing: listing }, function (resultAndListing) {
         var message = "N/A";
-        if (result === -1)
+        if (resultAndListing.result === -1)
             message = "1 new";
-        else if (result === 0)
+        else if (resultAndListing.result === 0)
             message = "1 unchanged";
-        else if (result === 1)
+        else if (resultAndListing.result === 1)
             message = "1 updated";
                 
         chrome.runtime.sendMessage ({
