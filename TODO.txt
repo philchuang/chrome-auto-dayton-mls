@@ -1,15 +1,12 @@
 WHAT WAS JUST ACCOMPLISHED
-* scrape listing details
-* on extension initialize/1st run, clear all temp data
-* pictures!
-* (x) on the right of each field to clear it - doesn't update binding :(
 * data export/import
+* custom filter
+* refresh button
 
 WHERE TO START NOW
-* convert from event page back to background page for live updates to listings
-	* OR have an event listener for local save, replace listings live!
 * listings page 
-	* use ngcloak
+	* when clicking on MLS# link, scrape details
+	* use ngcloak/loading graphic
 	* filters/sort
 		* status dropdown filter
 	* each listing
@@ -20,6 +17,8 @@ WHERE TO START NOW
 	* redo layoutit
 
 STUFF TO DO LATER
+* convert from event page back to background page for live updates to listings
+	* OR have an event listener for local save, replace listings live!
 * listing sets
 	* favorites (within set)
 * listings page

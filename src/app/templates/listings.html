@@ -161,11 +161,14 @@
             <input type="text" class="form-control" ng-model="search.mls" ng-change="saveFilters()" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
-          <!-- TODO make this have an explicit apply action -->  
+          <!-- TODO make this have an explicit apply action -->
           <div class="input-group input-group-sm bottom-buffer" style="height: auto;">
             <span class="input-group-addon">Custom</span>
-            <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="dynamicJavascriptFilter" ng-change="saveFilters();" title="javascript function (scope) that returns true/false"></textarea>
+            <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="tempDynamicJavascriptFilter" ng-change="saveFilters();" title="javascript function (scope) that returns true/false"></textarea>
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <button type="button" class="btn" ng-click="dynamicJavascriptFilter = tempDynamicJavascriptFilter">Apply Custom Filter</button>
           </div>
         </div>
       </div>
