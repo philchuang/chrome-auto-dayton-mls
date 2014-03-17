@@ -16,7 +16,7 @@ app.service ("listingStorageService", function ($q) {
             var entrances = listing.rooms.filter (function (r) {
                 return r.name === "Entrance";
             });
-            $.each(entrances, function (idx, r2) {
+            angular.forEach (entrances, function (r2) {
                 r2.level = "1";
             });
             modified = modified || entrances.length > 0;

@@ -23,6 +23,8 @@ app.service ('storageService', function ($q) {
     
     // define this outside the service object b/c it's referenced internally
     var saveLastCriteria = function (criteria) {
+        var deferred = $q.defer ();
+
         var items = {};
         items[storageServiceBase.LAST_CRITERIA] = criteria;
 
@@ -35,6 +37,8 @@ app.service ('storageService', function ($q) {
                 deferred.resolve ();
             }
         });
+
+        return deferred.promise;
     };
 
     return {
@@ -165,6 +169,8 @@ app.service ('storageService', function ($q) {
         },
         
         saveLastListingsFilters: function (filters) {
+            var deferred = $q.defer();
+
             var items = {};
             items[storageServiceBase.LAST_FILTERS] = filters;
 
@@ -180,6 +186,8 @@ app.service ('storageService', function ($q) {
                     deferred.resolve ();
                 }
             });
+
+            return deferred.promise;
         },
         
         getLastListingsFilters: function () {

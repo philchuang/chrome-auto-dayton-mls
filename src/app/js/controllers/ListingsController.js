@@ -119,11 +119,11 @@ app.controller ("ListingsController",
                         };
                     }
                 }
-            }).result.then(function (_) {
+            }).result.then (function (_) {
                 var idx = $.inArray (listing, $scope.listings);
                 if (~idx) $scope.listings.splice (idx, 1);
                 listingStorageService.deleteListing (listing.id);
-                notificationService.displayNotification("", "Deleted listing", "Deleted " + listing.streetNumberAndName);
+                notificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.streetNumberAndName);
             });
         };
 

@@ -15,8 +15,6 @@ function processRows (resultRows, finishedCallback) {
 
     var scrapedMlsNums = [];
 
-    var DEBUG_sentMlsNums = [];
-
     for (var i = 0; i < resultRows.length; i++) {
         var cellIdx = 0;
         if (i % 4 === 0) {
@@ -58,7 +56,6 @@ function processRows (resultRows, finishedCallback) {
         if (i % 4 === 3) {
             // process listing
             numProcessed++;
-            DEBUG_sentMlsNums.push (currentListing.mls);
             chrome.runtime.sendMessage ({ action: "processListing", listing: currentListing }, function (resultAndListing) {
                 if (resultAndListing.result === -1)
                     numNew++;
@@ -66,14 +63,6 @@ function processRows (resultRows, finishedCallback) {
                     numNoChange++;
                 else if (resultAndListing.result === 1)
                     numUpdated++;
-
-                var idx = DEBUG_sentMlsNums.indexOf (resultAndListing.listing.mls);
-                if (~idx) DEBUG_sentMlsNums.splice (idx, 1);
-
-                // DEBUG 
-                console.log ("num sent = " + numProcessed + ", num finished = " + (numNew + numNoChange + numUpdated));
-                if (numProcessed === 49)
-                    console.log ("unprocessed: " + DEBUG_sentMlsNums.join (", "));
 
                 if (numProcessed === numNew + numNoChange + numUpdated) {
                     var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
