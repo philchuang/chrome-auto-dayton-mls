@@ -11,8 +11,9 @@ app.filter ("daysSince", function () {
 
         var today = new Date();
         var diffMs = today - date;
-        var diffDays = Math.round(diffMs / 1000 / 60 / 60 / 24);
+        var diffHrs = Math.round (diffMs / 1000 / 60 / 60);
+        var diffDays = Math.round (diffMs / 1000 / 60 / 60 / 24);
 
-        return diffDays;
+        return diffHrs <= 48 ? diffHrs + "h" : diffDays + "d";
     };
 });
