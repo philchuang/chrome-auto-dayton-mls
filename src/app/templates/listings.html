@@ -93,11 +93,20 @@
             <a class="input-group-addon btn btn-sm" ng-click="filters.sortAsc = !filters.sortAsc; saveFilters();"><span class="glyphicon" ng-class="filters.sortAsc ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></a>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
-            <span class="input-group-addon"><span class="glyphicon glyphicon-heart"></span></span>
-            <select class="form-control text-center" ng-model="filters.search.isFavorite" ng-change="saveFilters()">
+            <span class="input-group-addon" title="favorite"><span class="glyphicon glyphicon-heart"></span></span>
+            <select class="form-control text-center" title="favorite" ng-model="filters.search.isFavorite" ng-change="saveFilters()">
               <option value=""></option>
               <option value="false">N</option>
               <option value="true">Y</option>
+            </select>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon" title="staleness"><span class="glyphicon glyphicon-time"></span></span>
+            <select class="form-control text-center" title="staleness" ng-model="filters.search.isStale" ng-change="saveFilters()">
+              <option value=""></option>
+              <option value="false">Fresh</option>
+              <option value="true">Stale</option>
             </select>
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
