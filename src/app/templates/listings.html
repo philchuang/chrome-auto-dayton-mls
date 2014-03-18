@@ -31,6 +31,7 @@
   <script type="text/javascript" src="../js/services/ScrapeService.js"></script>
   <script type="text/javascript" src="../js/directives/ImgLazyLoad.js"></script>
   <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
+  <script type="text/javascript" src="../js/directives/UsDebounceDirective.js"></script>
   <script type="text/javascript" src="../js/filters/DynamicJavascriptFilter.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
   <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
@@ -112,62 +113,62 @@
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Score (min)</span>
-            <input type="number" class="form-control" ng-model="filters.minSearch.score" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="filters.minSearch.score" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (min)</span>
-            <input type="number" class="form-control" ng-model="filters.minSearch.listPrice" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="filters.minSearch.listPrice" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">$ (max)</span>
-            <input type="number" class="form-control" ng-model="filters.maxSearch.listPrice" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="filters.maxSearch.listPrice" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">SqFt (min)</span>
-            <input type="number" class="form-control" ng-model="filters.minSearch.sqft" ng-change="saveFilters()" />
+            <input type="number" class="form-control" ng-model="filters.minSearch.sqft" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Desc</span>
-            <input type="text" class="form-control" ng-model="filters.search.description" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.description" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Subdiv</span>
-            <input type="text" class="form-control" ng-model="filters.search.subdivision" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.subdivision" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Street</span>
-            <input type="text" class="form-control" ng-model="filters.search.streetNumberAndName" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.streetNumberAndName" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">City</span>
-            <input type="text" class="form-control" ng-model="filters.search.city" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.city" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Zip</span>
-            <input type="text" class="form-control" ng-model="filters.search.zip" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.zip" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Beds (min)</span>
-              <input type="number" class="form-control" ng-model="filters.minSearch.bedrooms" ng-change="saveFilters()"/>
+              <input type="number" class="form-control" ng-model="filters.minSearch.bedrooms" ng-change="saveFilters()"  us-debounce="700" />
               <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <!--<div class="input-group input-group-sm bottom-buffer">
               <span class="input-group-addon">Days listed (min)</span>
-              <input type="number" class="form-control" />
+              <input type="number" class="form-control"  us-debounce="700" />
               <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>-->
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">MLS</span>
-            <input type="text" class="form-control" ng-model="filters.search.mls" ng-change="saveFilters()" />
+            <input type="text" class="form-control" ng-model="filters.search.mls" ng-change="saveFilters()" us-debounce="700" />
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer" style="height: auto;">
@@ -228,7 +229,7 @@
                         <button class="btn bottom-buffer" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
                         <div class="input-group input-group-sm">
                           <!--<span class="input-group-addon small" title="score"><span class="glyphicon glyphicon-thumbs-up"></span></span>-->
-                          <input type="number" class="form-control" title="score" placeholder="score" ng-model="listing.score" ng-change="saveListing(listing)" />
+                          <input type="number" class="form-control" title="score" placeholder="score" ng-model="listing.score" ng-change="saveListing(listing)" us-debounce="1000" />
                         </div>
                       </div>
                       <div class="col-md-10 column">

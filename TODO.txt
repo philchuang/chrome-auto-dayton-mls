@@ -7,8 +7,6 @@ WHERE TO START NOW
 * listings page 
 	* use ngcloak/loading graphic
 	* filters/sort
-		* debounce input
-		* staleness filter
 		* status dropdown filter
 	* each listing
 		* personal notes
