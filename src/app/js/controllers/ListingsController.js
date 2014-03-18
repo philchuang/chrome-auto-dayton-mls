@@ -2,7 +2,7 @@
 
 var ListingsControllerBase = ListingsControllerBase || {};
 
-ListingsControllerBase.prepareListing = function (listing) {
+ListingsControllerBase.prepareListing = ListingsControllerBase.prepareListing || function (listing) {
     if (typeof listing === "undefined" || listing === null) return;
 
     if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
@@ -33,18 +33,7 @@ ListingsControllerBase.prepareListing = function (listing) {
     listing.numRooms = listing.rooms ? listing.rooms.length : 0;
 };
 
-//ListingsControllerBase.sanitizeListing = function (listing) {
-//    if (typeof listing === "undefined" || listing === null) return;
-
-//    delete listing.streetNameAndNumber;
-//    delete listing.streetNumberAndName;
-
-//    delete listing.annualTaxes;
-
-//    delete listing.lastUpdate;
-//};
-
-ListingsControllerBase.prepareListings = function (listings) {
+ListingsControllerBase.prepareListings = ListingsControllerBase.prepareListings || function (listings) {
     if (typeof listings === "undefined" || listings === null) return;
     for (var i = 0; i < listings.length; i++) {
         ListingsControllerBase.prepareListing (listings[i]);
@@ -54,7 +43,7 @@ ListingsControllerBase.prepareListings = function (listings) {
 app.controller ("ListingsController",
     function ($scope, $q, $timeout, $modal, listingStorageService, storageService, notificationService, scrapeService) {
 
-        var refresh = function () {
+        $scope.refresh = function () {
             var deferred = $q.defer ();
 
             $scope.filteredListings = null;
@@ -67,44 +56,6 @@ app.controller ("ListingsController",
             });
 
             return deferred.promise;
-        };
-
-        $scope.refresh = refresh;
-
-        refresh ().then (function () {
-            storageService.getLastListingsFilters ().then (function (filters) {
-                if (filters) {
-                    $scope.filters = filters;
-                    $scope.tempDynamicJavascriptFilter = $scope.filters.dynamicJavascriptFilter;
-                }
-            });
-        });
-
-        $scope.deleteFilteredListings = function () {
-            if (typeof $scope.filteredListings === "undefined" || $scope.filteredListings === null || $scope.filteredListings.length === 0)
-                return;
-
-            $modal.open({
-                templateUrl: "ConfirmationDialog.html",
-                controller: ModalInstanceCtrl,
-                resolve: {
-                    dataContext: function () {
-                        return {
-                            title: "Please confirm",
-                            message: "Are you sure you want to delete ALL these listings?"
-                        };
-                    }
-                }
-            }).result.then (function (_) {
-                var listingsToDelete = $scope.filteredListings.filter (function (l) { return true; });
-                for (var i = 0; i < listingsToDelete.length; i++) {
-                    var listing = listingsToDelete[i];
-                    var idx = $.inArray (listing, $scope.listings);
-                    if (~idx) $scope.listings.splice (idx, 1);
-                    //listingStorageService.deleteListing (listing.id);
-                }
-                notificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
-            });
         };
 
         $scope.delete = function (listing) {
@@ -130,6 +81,33 @@ app.controller ("ListingsController",
             });
         };
 
+        $scope.deleteFilteredListings = function () {
+            if (typeof $scope.filteredListings === "undefined" || $scope.filteredListings === null || $scope.filteredListings.length === 0)
+                return;
+
+            $modal.open ({
+                templateUrl: "ConfirmationDialog.html",
+                controller: ModalInstanceCtrl,
+                resolve: {
+                    dataContext: function () {
+                        return {
+                            title: "Please confirm",
+                            message: "Are you sure you want to delete ALL these listings?"
+                        };
+                    }
+                }
+            }).result.then (function (_) {
+                var listingsToDelete = $scope.filteredListings.filter (function (l) { return true; });
+                for (var i = 0; i < listingsToDelete.length; i++) {
+                    var listing = listingsToDelete[i];
+                    var idx = $.inArray (listing, $scope.listings);
+                    if (~idx) $scope.listings.splice (idx, 1);
+                    listingStorageService.deleteListing (listing.id);
+                }
+                notificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
+            });
+        };
+
         $scope.saveListing = function (listing) {
             //ListingsControllerBase.sanitizeListing (listing);
             listingStorageService.saveListing (listing).then (function () {
@@ -152,16 +130,8 @@ app.controller ("ListingsController",
                 }
             });
         };
-
-        $scope.saveFilters = function () {
-            if ($scope.filters)
-                storageService.saveLastListingsFilters ($scope.filters);
-        };
         
-        $scope.historySortProperty = "timestamp";
-        $scope.historySortDescending = true;
-
-        $scope.exportAllListings = function () {
+        $scope.exportListings = function () {
             var ids = $scope.filteredListings.map (function (l) { return l.id; });
             listingStorageService.getListings (ids).then (function (listings) {
                 var exportData = JSON.stringify (listings);
@@ -233,6 +203,25 @@ app.controller ("ListingsController",
             });
         };
 
+        $scope.loadFilters = function () {
+            storageService.getLastListingsFilters ().then (function (filters) {
+                if (filters) {
+                    $scope.filters = filters;
+                    $scope.tempDynamicJavascriptFilter = $scope.filters.dynamicJavascriptFilter;
+                }
+            });
+        };
+
+        $scope.saveFilters = function () {
+            if ($scope.filters)
+                storageService.saveLastListingsFilters ($scope.filters);
+        };
+
+        $scope.historySortProperty = "timestamp";
+        $scope.historySortDescending = true;
+
+        $scope.loadFilters ();
+        $scope.refresh ();
     });
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
@@ -248,5 +237,4 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, dataContext) {
     $scope.cancel = function () {
         $modalInstance.dismiss ('cancel');
     };
-
 };
