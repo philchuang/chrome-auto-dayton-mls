@@ -9,8 +9,7 @@ WHERE TO START NOW
 	* filters/sort
 		* status dropdown filter
 	* each listing
-		* personal notes
-		* save button
+		* turn personal notes textarea into plain div, but editable textarea once clicked
 		* collapsible history
 * search page
 	* redo layoutit

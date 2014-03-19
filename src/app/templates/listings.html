@@ -249,6 +249,18 @@
                     <div class="row"><div class="text-primary">{{listing.description}}</div></div>
                   </div>
                 </div>
+                <div class="row clearfix" ng-init="showPersonalNotesField = listing.personalNotes != null && listing.personalNotes.length > 0">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title input-group">
+                            <button type="button" class="btn btn-default btn-link" ng-click="showPersonalNotesField = !showPersonalNotesField">Personal Notes <span class="glyphicon" ng-class="showPersonalNotesField ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></button>
+                        </h4>
+                    </div>
+                    <div class="panel-body" ng-show="showPersonalNotesField">
+                      <textarea name="personalNotes" class="form-control" rows="7" placeholder="notes about this listing..." ng-model="listing.personalNotes" ng-change="saveListing(listing)" us-debounce="1000"></textarea>
+                    </div>
+                  </div>
+                </div>
               </div>
               <table class="table table-striped table-hover table-condensed table-responsive">
                 <tbody>
