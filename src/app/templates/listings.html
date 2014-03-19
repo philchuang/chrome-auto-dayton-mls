@@ -186,7 +186,7 @@
       <section id="listings" class="col-md-9 column">
 
         <div class="row clearfix"
-             ng-repeat="listing in filteredListings = (listings | filter:filters.search | minimum:filters.minSearch | maximum:filters.maxSearch | dynamicJavascript:filters.dynamicJavascriptFilter | orderBy:filters.sortField:!filters.sortAsc) track by listing.mls">
+             ng-repeat="listing in filteredListings = (listings | filter:filters.search | minimum:filters.minSearch | maximum:filters.maxSearch | dynamicJavascript:filters.dynamicJavascriptFilter:'listing' | orderBy:filters.sortField:!filters.sortAsc) track by listing.mls">
 
           <div class="col-md-12 column">
             <!-- TODO turn into a directive -->
