@@ -66,6 +66,7 @@
     <Content Include="app\js\directives\ImgLazyLoad.js" />
     <Content Include="app\js\directives\ClearControl.js" />
     <Content Include="app\js\directives\RepeatFinishedDirective.js" />
+    <Content Include="app\js\directives\UsDebounceDirective.js" />
     <Content Include="app\js\eventPage.js" />
     <Content Include="app\js\app.js" />
     <Content Include="app\js\filters\DynamicJavascriptFilter.js" />
