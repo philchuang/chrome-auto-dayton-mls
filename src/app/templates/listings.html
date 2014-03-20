@@ -103,6 +103,14 @@
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer">
+            <span class="input-group-addon" title="hidden"><span class="glyphicon glyphicon-eye-open"></span></span>
+            <select class="form-control text-center" title="hidden" ng-model="filters.search.isHidden" ng-change="saveFilters()">
+              <option value="false">Don't show hidden</option>
+              <option value="true">Show only hidden</option>
+            </select>
+            <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
+          </div>
+          <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon" title="staleness"><span class="glyphicon glyphicon-time"></span></span>
             <select class="form-control text-center" title="staleness" ng-model="filters.search.isStale" ng-change="saveFilters()">
               <option value=""></option>
@@ -226,7 +234,7 @@
                   <div class="col-md-10 column">
                     <div class="row clearfix">
                       <div class="col-md-2 column">
-                        <button class="btn bottom-buffer" title="toggle favorite" ng-click="toggleFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
+                        <button class="btn bottom-buffer" title="toggle favorite" ng-click="toggleIsFavorite(listing)" ng-class="listing.isFavorite ? 'btn-info' : 'btn-default'"><span class="glyphicon" ng-class="listing.isFavorite ? 'glyphicon-heart' : 'glyphicon-heart-empty'"></span></button>
                         <div class="input-group input-group-sm">
                           <!--<span class="input-group-addon small" title="score"><span class="glyphicon glyphicon-thumbs-up"></span></span>-->
                           <input type="number" class="form-control" title="score" placeholder="score" ng-model="listing.score" ng-change="saveListing(listing)" us-debounce="1000" />
@@ -250,7 +258,7 @@
                   </div>
                 </div>
                 <div class="row clearfix" ng-init="showPersonalNotesField = listing.personalNotes != null && listing.personalNotes.length > 0">
-                  <div class="panel panel-default">
+                  <div class="panel panel-default noBottomMargin">
                     <div class="panel-heading">
                         <h4 class="panel-title input-group">
                             <button type="button" class="btn btn-default btn-link" ng-click="showPersonalNotesField = !showPersonalNotesField">Personal Notes <span class="glyphicon" ng-class="showPersonalNotesField ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></button>
@@ -272,7 +280,7 @@
               </table>
               <div class="panel-footer">
                 <div class="row clearfix">
-                  <div class="col-md-2 column">
+                  <div class="col-md-2 column pull-left">
                     <button class="btn btn-danger btn-sm" title="delete this listing" ng-click="delete(listing)"><span class="glyphicon glyphicon-remove-circle"></span></button>
                   </div>
                   <div class="col-md-2 column">
@@ -284,6 +292,7 @@
                   <div class="col-md-2 column">
                   </div>
                   <div class="col-md-2 column">
+                    <button class="btn btn-sm pull-right" title="toggle hidden" ng-click="toggleIsHidden(listing)" ng-class="listing.isHidden ? 'btn-info' : 'btn-default'"><span class="glyphicon glyphicon-eye-close"></span></button>
                   </div>
                 </div>
               </div>

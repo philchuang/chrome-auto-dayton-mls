@@ -11,9 +11,12 @@ WHERE TO START NOW
 	* each listing
 		* turn personal notes textarea into plain div, but editable textarea once clicked
 		* collapsible history
-		* hide button
 * search page
 	* redo layoutit
+
+* architecture
+	* restructure directories by functional area
+	* extract all chrome related code into separate classes
 
 STUFF TO DO LATER
 * convert from event page back to background page for live updates to listings
@@ -21,7 +24,8 @@ STUFF TO DO LATER
 * listing sets
 	* favorites (within set)
 * listings page
-	* do floating left filter bar the right way
+	* floating left filter bar
+	* floating top bar
 	* results paging, beginning to be a memory/cpu hog
 	* each listing
 		* render picture list dynamically only when thumbnail clicked

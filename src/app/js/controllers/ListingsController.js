@@ -8,6 +8,9 @@ ListingsControllerBase.prepareListing = ListingsControllerBase.prepareListing ||
     if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
         listing.isFavorite = false;
 
+    if (typeof listing.isHidden === "undefined" || listing.isHidden === null)
+        listing.isHidden = false;
+
     if (typeof listing.score === "undefined" || listing.score === null)
         listing.score = 0;
 
@@ -115,8 +118,14 @@ app.controller ("ListingsController",
             });
         };
 
-        $scope.toggleFavorite = function (listing) {
+        $scope.toggleIsFavorite = function (listing) {
             listing.isFavorite = !listing.isFavorite;
+
+            $scope.saveListing (listing);
+        };
+
+        $scope.toggleIsHidden = function (listing) {
+            listing.isHidden = !listing.isHidden;
 
             $scope.saveListing (listing);
         };
