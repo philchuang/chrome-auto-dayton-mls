@@ -118,17 +118,21 @@ app.service ('storageService', function ($q) {
         },
         
         saveMlsDetailsFetchList: function (tabId, mlsNums) {
-            var key = storageServiceBase.getMlsDetailsFetchListKey(tabId);
+            var deferred = $q.defer ();
+
+            var key = storageServiceBase.getMlsDetailsFetchListKey (tabId);
             
             if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0) {
-                chrome.storage.local.remove (key);
-                return;
+                chrome.storage.local.remove (key, function () { deferred.resolve(); });
+                return deferred.promise;
             }
             
             var items = {};
             items[key] = mlsNums;
 
-            chrome.storage.local.set (items);
+            chrome.storage.local.set (items, function () { deferred.resolve(); });
+
+            return deferred.promise;
         },
 
         getMlsDetailsFetchList: function (tabId) {

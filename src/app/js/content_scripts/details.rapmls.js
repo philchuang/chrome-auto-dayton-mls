@@ -65,6 +65,15 @@ function processRoomDimensionRows (listing) {
     }
 }
 
+function getMls () {
+    var summaryTable = $("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
+    var firstSummaryBlock = summaryTable.children ().first ().children ().first ().children ().first ();
+
+    // mls
+    var mlsStr = firstSummaryBlock.children ().first ().text ();
+    return S($(mlsStr.split ("#")).last ()[0]).trim ().s;
+}
+
 function updateMlsData () {
 
     var listing = {
@@ -207,12 +216,12 @@ $(document).ready (function ()
         return false;
     });
 
-    chrome.runtime.sendMessage({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+    chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
             return;
 
-        var idx = $.inArray(listing.mls, mlsNums);
+        var idx = $.inArray (getMls (), mlsNums);
         if (~idx)
-            updateMlsData();
+            updateMlsData ();
     });
 });

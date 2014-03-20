@@ -11,6 +11,7 @@ WHERE TO START NOW
 	* each listing
 		* turn personal notes textarea into plain div, but editable textarea once clicked
 		* collapsible history
+		* hide button
 * search page
 	* redo layoutit
 

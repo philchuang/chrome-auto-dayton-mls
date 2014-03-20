@@ -56,8 +56,9 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
                 sendResponse(null);
                 return;
             }
-            storageService.saveMlsDetailsFetchList (sender.tab.id, mlsNums);
-            sendResponse (mlsNums);
+            storageService.saveMlsDetailsFetchList (sender.tab.id, mlsNums).then (function () {
+                sendResponse (mlsNums);
+            });
         });
         return true; // this keeps the message channel open for asynchronous response
     }
