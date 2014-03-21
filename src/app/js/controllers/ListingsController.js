@@ -49,13 +49,15 @@ app.controller ("ListingsController",
         $scope.refresh = function () {
             var deferred = $q.defer ();
 
+            $scope.isRefreshing = true;
             $scope.filteredListings = null;
             $scope.listings = null;
 
             listingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
                 $scope.listings = listings;
-                deferred.resolve ();
+                $scope.isRefreshing = false;
+                deferred.resolve();
             });
 
             return deferred.promise;

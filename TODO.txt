@@ -1,13 +1,6 @@
 WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
-* listings page 
-	* use ngcloak/loading graphic
-	* filters/sort
-		* status dropdown filter
-	* each listing
-		* turn personal notes textarea into plain div, but editable textarea once clicked
-		* collapsible history
 * smarter import
 * search page
 	* saved searches or last 5 searches
@@ -27,3 +20,7 @@ STUFF TO DO LATER
 	* results paging, beginning to be a memory/cpu hog
 	* each listing
 		* render picture list dynamically only when thumbnail clicked
+		* turn personal notes textarea into plain div, but editable textarea once clicked
+		* collapsible history
+	* filters/sort
+		* status dropdown filter

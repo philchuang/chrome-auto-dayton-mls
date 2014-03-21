@@ -181,21 +181,24 @@
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>
           <div class="input-group input-group-sm bottom-buffer" style="height: auto;">
-            <span class="input-group-addon">Custom</span>
+            <span class="input-group-addon">func<br />(listing)</span>
+            <span class="input-group-addon btn btn-link" ng-click="filters.dynamicJavascriptFilter = tempDynamicJavascriptFilter; saveFilters();" title="apply"><span class="glyphicon glyphicon-check" title="apply"></span></span>
             <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="tempDynamicJavascriptFilter" title="javascript function (scope) that returns true/false"></textarea>
             <!-- TODO have this clear filters.dynamicJavascriptFilter and save filters -->
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
-          </div>
-          <div class="input-group input-group-sm bottom-buffer">
-            <button type="button" class="btn" ng-click="filters.dynamicJavascriptFilter = tempDynamicJavascriptFilter; saveFilters();">Apply Custom Filter</button>
           </div>
         </div>
       </section>
 
       <section id="listings" class="col-md-9 column">
 
+        <div class="row clearfix" ng-show="isRefreshing">
+          <div class="loadingDialog"><img src="../../lib/blueimp-gallery/img/loading.gif"></div>
+        </div>
+
         <div class="row clearfix"
-             ng-repeat="listing in filteredListings = (listings | filter:filters.search | minimum:filters.minSearch | maximum:filters.maxSearch | dynamicJavascript:filters.dynamicJavascriptFilter:'listing' | orderBy:filters.sortField:!filters.sortAsc) track by listing.mls">
+             ng-repeat="listing in filteredListings = (listings | filter:filters.search | minimum:filters.minSearch | maximum:filters.maxSearch | dynamicJavascript:filters.dynamicJavascriptFilter:'listing' | orderBy:filters.sortField:!filters.sortAsc) track by listing.mls"
+             ng-hide="isRefreshing">
 
           <div class="col-md-12 column">
             <!-- TODO turn into a directive -->
@@ -261,9 +264,9 @@
                 <div class="row clearfix" ng-init="showPersonalNotesField = listing.personalNotes != null && listing.personalNotes.length > 0">
                   <div class="panel panel-default noBottomMargin">
                     <div class="panel-heading">
-                        <h4 class="panel-title input-group">
-                            <button type="button" class="btn btn-default btn-link" ng-click="showPersonalNotesField = !showPersonalNotesField">Personal Notes <span class="glyphicon" ng-class="showPersonalNotesField ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></button>
-                        </h4>
+                      <h4 class="panel-title input-group">
+                        <button type="button" class="btn btn-default btn-link" ng-click="showPersonalNotesField = !showPersonalNotesField">Personal Notes <span class="glyphicon" ng-class="showPersonalNotesField ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span></button>
+                      </h4>
                     </div>
                     <div class="panel-body" ng-show="showPersonalNotesField">
                       <textarea name="personalNotes" class="form-control" rows="7" placeholder="notes about this listing..." ng-model="listing.personalNotes" ng-change="saveListing(listing)" us-debounce="1000"></textarea>
@@ -321,9 +324,8 @@
       </div>
     </section>
   </div>
-  
+
   <!-- MODAL DIALOGS, TEMPLATES -->
-  
   <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
   <div id="blueimp-gallery" class="blueimp-gallery">
     <!-- The container for the modal slides -->

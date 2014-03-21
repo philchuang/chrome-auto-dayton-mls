@@ -15,3 +15,9 @@
     font-family: sans-serif;
     font-size: small;
 }
+
+.loadingDialog {
+    text-align: center;
+    font-size: large;
+    margin: 100px;
+}

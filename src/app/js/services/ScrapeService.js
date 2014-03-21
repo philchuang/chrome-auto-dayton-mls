@@ -119,6 +119,10 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
         });
         return ScrapeServiceBase.NEW_LISTING;
     }
+
+    // TODO use latest timestamp
+    // TODO if latest timestamp < previous, only copy missing values
+    // TODO merge histories?
     
     // find values which don't exist in the previous object
     var newProperties = [];
