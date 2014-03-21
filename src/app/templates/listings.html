@@ -40,6 +40,7 @@
   <script type="text/javascript" src="../js/filters/MaximumFilter.js"></script>
   <script type="text/javascript" src="../js/filters/PropertySumFilter.js"></script>
 
+  <link rel="stylesheet" href="../css/common.css" />
   <link rel="stylesheet" href="../css/listings.css" />
   <script type="text/javascript" src="../js/controllers/ListingsController.js"></script>
 
@@ -74,7 +75,7 @@
     <section id="body" class="row clearfix">
 
       <!-- TODO get this working with affix like bootstrap's site -->
-      <div class="col-md-3 column">
+      <section id="filters" class="col-md-3 column">
         <div>
           <div class="input-group input-group-sm bottom-buffer">
             <span class="input-group-addon">Sort</span>
@@ -189,7 +190,7 @@
             <button type="button" class="btn" ng-click="filters.dynamicJavascriptFilter = tempDynamicJavascriptFilter; saveFilters();">Apply Custom Filter</button>
           </div>
         </div>
-      </div>
+      </section>
 
       <section id="listings" class="col-md-9 column">
 
@@ -320,7 +321,9 @@
       </div>
     </section>
   </div>
-
+  
+  <!-- MODAL DIALOGS, TEMPLATES -->
+  
   <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
   <div id="blueimp-gallery" class="blueimp-gallery">
     <!-- The container for the modal slides -->

@@ -1,7 +1,4 @@
 WHAT WAS JUST ACCOMPLISHED
-* data export/import
-* custom filter
-* refresh button
 
 WHERE TO START NOW
 * listings page 
@@ -11,8 +8,9 @@ WHERE TO START NOW
 	* each listing
 		* turn personal notes textarea into plain div, but editable textarea once clicked
 		* collapsible history
+* smarter import
 * search page
-	* redo layoutit
+	* saved searches or last 5 searches
 
 * architecture
 	* restructure directories by functional area

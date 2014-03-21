@@ -24,152 +24,156 @@
   <script type="text/javascript" src="../js/services/RapmlsContentScriptMessageService.js"></script>
   <script type="text/javascript" src="../js/services/SearchService.js"></script>
 
+  <link rel="stylesheet" href="../css/common.css" />
   <link rel="stylesheet" href="../css/search.css" />
   <script type="text/javascript" src="../js/controllers/SearchController.js"></script>
 
 </head>
 <body>
 
-  <div id="page" ng-controller="SearchController">
-    <header class="container">
-      <div class="row panel-group">
-        <div class="col-xs-10">
-          <h4>Dayton MLS search</h4>
-        </div>
-        <div class="col-xs-2">
-          <div class="pull-right">
-            <button id="listingsButton" ng-click="viewListings()" class="btn btn-primary btn-sm" title="view saved listings"><span class="glyphicon glyphicon-list-alt"></span></button>
-          </div>
+  <div id="page" class="container" ng-controller="SearchController">
+
+    <header class="row clearfix bottom-buffer">
+      <div class="col-xs-10">
+        <h4>Dayton MLS search</h4>
+      </div>
+      <div class="col-xs-2 smallPadAndAlignRight">
+        <div class="pull-right">
+          <button id="listingsButton" ng-click="viewListings()" class="btn btn-primary btn-sm" title="view saved listings"><span class="glyphicon glyphicon-list-alt"></span></button>
         </div>
       </div>
     </header>
-    <section id="body" class="container">
-      <section id="search" class="col-xs-12">
-        <!-- TODO turn into a directive -->
-        <div class="row">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <div class="col-xs-10 col-xs-offset-2">
-                <span class="input-group input-group-sm">
-                  <span class="input-group-addon">min $k</span>
-                  <input type="text" name="minPrice" ng-model="criteria.minPriceK" size="4" class="form-control" placeholder="100" />
-                </span>
+
+    <section id="body" class="row clearfix">
+
+      <div id="search">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-xs-10 col-xs-offset-2">
+              <span class="input-group input-group-sm">
+                <span class="input-group-addon">min $k</span>
+                <input type="text" name="minPrice" ng-model="criteria.minPriceK" size="4" class="form-control" placeholder="100" />
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-10 col-xs-offset-2">
+              <span class="input-group input-group-sm">
+                <span class="input-group-addon">max $k</span>
+                <input type="text" name="maxPrice" ng-model="criteria.maxPriceK" size="4" class="form-control" placeholder="200" />
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-10 col-xs-offset-2">
+              <span class="input-group input-group-sm">
+                <span class="input-group-addon">beds</span>
+                <select name="minBedrooms" ng-model="criteria.minBedrooms" class="form-control text-center">
+                  <option value="">any</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                </select>
+              </span>
+              <!-- TODO get bootstrap dropdown working because it looks/acts better
+                  <div class="dropdown">
+                      <div class="btn-group">
+                          <button class="btn" id="minBedroomsDropdownBtn">Any</button>
+                          <button class="btn" data-toggle="dropdown"><span class="caret"></span></button>
+                          <ul class="dropdown-menu" id="minBedroomsDropdown">
+                              <li><a href="#" tabindex="-1"></a></li>
+                              <li><a href="#" tabindex="-1">1</a></li>
+                              <li><a href="#" tabindex="-1">2</a></li>
+                              <li><a href="#" tabindex="-1">3</a></li>
+                              <li><a href="#" tabindex="-1">4</a></li>
+                              <li><a href="#" tabindex="-1">5</a></li>
+                              <li><a href="#" tabindex="-1">6</a></li>
+                              <li><a href="#" tabindex="-1">7</a></li>
+                              <li><a href="#" tabindex="-1">8</a></li>
+                              <li><a href="#" tabindex="-1">9</a></li>
+                          </ul>
+                      </div>
+                  </div> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-10 col-xs-offset-2">
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">zips</span>
+                <textarea name="zipCodes" ng-model="criteria.zipCodes" class="form-control textarea-lg" placeholder="45458, 45429"></textarea>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-xs-10 col-xs-offset-2">
-                <span class="input-group input-group-sm">
-                  <span class="input-group-addon">max $k</span>
-                  <input type="text" name="maxPrice" ng-model="criteria.maxPriceK" size="4" class="form-control" placeholder="200" />
-                </span>
+          </div>
+          <hr />
+          <div class="form-group">
+            <div class="col-xs-10 col-xs-offset-2">
+              <div class="input-group input-group-sm">
+                <span class="input-group-addon">MLS</span>
+                <textarea name="mls" ng-model="criteria.mlsStr" class="form-control textarea-lg" placeholder="(up to 5)"></textarea>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-xs-10 col-xs-offset-2">
-                <span class="input-group input-group-sm">
-                  <span class="input-group-addon">beds</span>
-                  <select name="minBedrooms" ng-model="criteria.minBedrooms" class="form-control text-center">
-                    <option value="">any</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                  </select>
-                </span>
-                <!-- TODO get bootstrap dropdown working because it looks/acts better
-                <div class="dropdown">
-                  <div class="btn-group">
-                    <button class="btn" id="minBedroomsDropdownBtn">Any</button>
-                    <button class="btn" data-toggle="dropdown"><span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="minBedroomsDropdown">
-                      <li><a href="#" tabindex="-1"></a></li>
-                      <li><a href="#" tabindex="-1">1</a></li>
-                      <li><a href="#" tabindex="-1">2</a></li>
-                      <li><a href="#" tabindex="-1">3</a></li>
-                      <li><a href="#" tabindex="-1">4</a></li>
-                      <li><a href="#" tabindex="-1">5</a></li>
-                      <li><a href="#" tabindex="-1">6</a></li>
-                      <li><a href="#" tabindex="-1">7</a></li>
-                      <li><a href="#" tabindex="-1">8</a></li>
-                      <li><a href="#" tabindex="-1">9</a></li>
-                    </ul>
-                  </div>
-                </div> -->
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-xs-10 col-xs-offset-2">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-addon">zips</span>
-                  <textarea name="zipCodes" ng-model="criteria.zipCodes" class="form-control textarea-lg" placeholder="45458, 45429"></textarea>
+          </div>
+          <hr />
+          <div class="form-group">
+            <div class="col-xs-4 smallPadAndAlignRight">
+              <div class="pull-right">
+                <div class="btn-group btn-group-sm">
+                  <button id="scrapeButton" ng-click="scrapeCurrentPage()" class="btn btn-info" title="scrape current page" ng-show="canScrapeCurrentPage"><span class="glyphicon glyphicon-import"></span></button>
                 </div>
               </div>
             </div>
-            <hr />
-            <div class="form-group">
-              <div class="col-xs-10 col-xs-offset-2">
-                <div class="input-group input-group-sm">
-                  <span class="input-group-addon">MLS</span>
-                  <textarea name="mls" ng-model="criteria.mlsStr" class="form-control textarea-lg" placeholder="(up to 5)"></textarea>
+            <div class="col-xs-6 col-xs-offset-2">
+              <div class="pull-right">
+                <div class="btn-group btn-group-sm">
+                  <button id="scrapeButton"
+                          title="and scrape results"
+                          class="btn btn-toolbar btn-sm"
+                          ng-click="toggleScrapeResults()">
+                    scrape
+                  </button>
+                  <button class="btn btn-toolbar btn-sm" ng-click="toggleScrapeResults()" ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'"><span class="glyphicon" ng-class="criteria.scrapeResults ? 'glyphicon-ok' : 'glyphicon-remove'"></span></button>
                 </div>
               </div>
             </div>
-            <hr />
-            <div class="form-group">
-              <div class="col-xs-4 smallPadAndAlignRight">
-                <div class="pull-right">
-                  <div class="btn-group btn-group-sm">
-                    <button id="scrapeButton" ng-click="scrapeCurrentPage()" class="btn btn-info" title="scrape current page" ng-show="canScrapeCurrentPage"><span class="glyphicon glyphicon-import"></span></button>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xs-6 col-xs-offset-2">
-                <div class="pull-right">
-                  <div class="btn-group btn-group-sm">
-                    <button id="scrapeButton"
-                            title="and scrape results"
-                            class="btn btn-toolbar btn-sm"
-                            ng-click="toggleScrapeResults()">
-                      scrape
-                    </button>
-                    <button class="btn btn-toolbar btn-sm" ng-click="toggleScrapeResults()" ng-class="criteria.scrapeResults ? 'btn-success' : 'btn-default'"><span class="glyphicon" ng-class="criteria.scrapeResults ? 'glyphicon-ok' : 'glyphicon-remove'"></span></button>
-                  </div>
-                </div>
+          </div>
+          <div class="form-group">
+            <div class="col-xs-4 smallPadAndAlignRight">
+              <div class="pull-right">
+                <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-xs-4 smallPadAndAlignRight">
-                <div class="pull-right">
-                  <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
-                </div>
-              </div>
-              <div class="col-xs-4 col-xs-offset-4">
-                <div class="pull-right">
-                  <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"></span></button>
-                </div>
+            <div class="col-xs-4 col-xs-offset-4">
+              <div class="pull-right">
+                <button id="bookmarkButton" ng-click="bookmarkSearch(criteria)" class="btn btn-info" title="bookmark this search"><span class="glyphicon glyphicon-bookmark"></span></button>
               </div>
             </div>
-          </form>
-        </div>
-      </section>
+          </div>
+        </form>
+      </div>
+
     </section>
-    <section id="footer" class="container">
+
+    <section id="footer" class="row clearfix">
       <!-- dress it up like a form group to maintain consistent right margin -->
-      <div class="form-horizontal">
-        <div class="form-group">
-          <div class="col-xs-12">
-            <div class="pull-right">
-              <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
+      <div>
+        <div class="form-horizontal">
+          <div class="form-group">
+            <div class="col-xs-12">
+              <div class="pull-right">
+                <em><a href="http://www.philchuang.com/" target="_blank" class="text-muted" style="text-decoration: none;">philchuang.com</a></em>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
   </div>
 
 </body>
