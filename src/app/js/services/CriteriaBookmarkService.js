@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+// handles chrome bookmarks for search criteria
 var criteriaCookmarkServiceBase = criteriaCookmarkServiceBase || {
 
     createOrGetBookmarkFolder: function (folderIdCallback) {

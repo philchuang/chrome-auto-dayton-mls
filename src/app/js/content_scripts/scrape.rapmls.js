@@ -1,5 +1,6 @@
 /*
  * Content script for http://dayton.rapmls.com result list page
+ * scrapes basic MLS data
  */
 
 "use strict";
@@ -94,14 +95,6 @@ function processRows (resultRows, finishedCallback) {
 function getResultRows ()
 {
     return $($($("#WorkspaceBGSH > table:nth-child(1) > tbody > tr > td > table")[1]).children ("tbody")).children ("tr[class!=HeaderRow]");
-}
-
-var DEBUG_allListings = [];
-
-function DEBUG_loadAllListings () {
-    chrome.runtime.sendMessage ({ action: "getAllListings" }, function (listings) {
-        DEBUG_allListings = listings;
-    });
 }
 
 function openFirstResultDetailsPage (resultRows) {

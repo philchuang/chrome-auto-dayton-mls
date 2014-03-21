@@ -1,18 +1,20 @@
 ﻿"use strict";
 
+// handles persistence of listings
 app.service ("listingStorageService", function ($q) {
 
     var getListingKey = function (tabId) {
         return "listing_" + tabId;
     };
     
+    // TODO move this somewhere else!
     // function used to clean up the listing object
     var fixListing = function (listing) {
         var modified = false;
 
         if (typeof listing === "undefined" || listing === null) return modified;
 
-        // make sure user data is present
+        // make sure user data is present (this should be moved somewhere else)
         if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
             listing.isFavorite = false;
 
@@ -24,7 +26,6 @@ app.service ("listingStorageService", function ($q) {
 
         if (typeof listing.subdivision === "undefined")
             listing.subdivision = "";
-
 
         // delete $$hashKey (gets added somehow)
 

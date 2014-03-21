@@ -1,5 +1,6 @@
 /*
  * Content script for http://dayton.rapmls.com search page
+ * executes a search with the given criteria
  */
 
 "use strict";

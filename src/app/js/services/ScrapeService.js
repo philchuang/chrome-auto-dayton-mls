@@ -155,17 +155,8 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     return ScrapeServiceBase.NO_CHANGE;
 };
 
+// processes scraped listing data and merges into the existing data
 app.service ("scrapeService", function ($q, listingStorageService) {
-
-    var getAllListings = function () {
-        var deferred = $q.defer ();
-
-        listingStorageService.getAllListings ().then (function (listings) {
-            deferred.resolve (listings);
-        });
-
-        return deferred.promise;
-    };
 
     return {
 
@@ -184,31 +175,13 @@ app.service ("scrapeService", function ($q, listingStorageService) {
             return deferred.promise;
         },
 
-        getAllListings: getAllListings,
-        
         updateListingStaleness: function () {
-            getAllListings ().then (function (listings) {
+            listingStorageService.getAllListings().then(function (listings) {
                 var stalenessThreshold = new Date (new Date ().valueOf () - ScrapeServiceBase.stalenessThresholdMs);
                 for (var i = 0; i < listings.length; i++) {
                     listings[i].isStale = new Date (listings[i].timestamp) < stalenessThreshold;
                     listingStorageService.saveListing (listings[i]);
                 }
-            });
-        },
-        
-        updateListing: function (listing) {
-            if (typeof listing === "undefined" || listing === null
-                || typeof listing.id === "undefined" || listing.id === null || listing.id === "") return;
-
-            listingStorageService.getListing (listing.id).then (function (existingListing) {
-                if (typeof existingListing === "undefined" || existingListing === null) return;
-                
-                for (var propertyName in listing) {
-                    if (propertyName === "id" || propertyName === "mls") continue;
-                    existingListing[propertyName] = listing[propertyName];
-                }
-
-                listingStorageService.saveListing (existingListing);
             });
         },
         
@@ -224,7 +197,10 @@ app.service ("scrapeService", function ($q, listingStorageService) {
                             || listings[i].listingDate === null
                             || typeof listings[i].pictures === "undefined"
                             || listings[i].pictures === null
-                            || listings[i].pictures.length === 0)
+                            || listings[i].pictures.length === 0
+                            || typeof listings[i].rooms === "undefined"
+                            || listings[i].rooms === null
+                            || listings[i].rooms.length === 0)
                             nums.push (listings[i].mls);
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+// handles chrome notifications
 app.service ("notificationService", function () {
     return {
 

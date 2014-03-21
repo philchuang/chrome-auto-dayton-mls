@@ -120,10 +120,9 @@ app.controller ("ListingsController",
         };
 
         $scope.saveListing = function (listing) {
-            //ListingsControllerBase.sanitizeListing (listing);
-            listingStorageService.saveListing (listing).then (function () {
-                //ListingsControllerBase.prepareListing (listing);
-            });
+            var copy = JSON.parse (JSON.stringify (listing));
+            ListingsControllerBase.sanitizeListing (copy);
+            listingStorageService.saveListing (copy);
         };
 
         $scope.toggleIsFavorite = function (listing) {
@@ -202,7 +201,7 @@ app.controller ("ListingsController",
                         || typeof listing.mls === "undefined" || listing.mls === null)
                         continue;
                     numProcessed++;
-
+                    // TODO convert to use a new importService
                     scrapeService.processListing (listing).then (function (resultAndListing) {
                         if (resultAndListing.result === -1)
                             numNew++;

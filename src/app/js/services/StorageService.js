@@ -19,6 +19,7 @@ var storageServiceBase = storageServiceBase || {
 
 };
 
+// general app data persistence
 app.service ('storageService', function ($q) {
     
     // define this outside the service object b/c it's referenced internally

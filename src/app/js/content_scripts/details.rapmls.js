@@ -1,5 +1,6 @@
 /*
  * Content script for http://dayton.rapmls.com listing details page
+ * scrapes detailed MLS data
  */
 
 "use strict";

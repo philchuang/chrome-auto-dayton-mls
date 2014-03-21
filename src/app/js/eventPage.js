@@ -45,11 +45,6 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         return false;
     }
     
-    if (request.action === "updateListing") {
-        scrapeService.updateListing (request.listing);
-        return false;
-    }
-
     if (request.action === "checkNeedsListingDetails") {
         scrapeService.checkNeedsListingDetails (request.mlsNums).then (function (mlsNums) {
             if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length == 0) {
@@ -71,13 +66,6 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     if (request.action === "getMlsDetailsFetchList") {
         storageService.getMlsDetailsFetchList (sender.tab.id).then (function (mlsNums) {
             sendResponse (mlsNums);
-        });
-        return true; // this keeps the message channel open for asynchronous response
-    }
-
-    if (request.action === "getAllListings") {
-        listingStorageService.getAllListings ().then (function (listings) {
-            sendResponse (listings);
         });
         return true; // this keeps the message channel open for asynchronous response
     }
