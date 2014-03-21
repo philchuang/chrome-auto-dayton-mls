@@ -1,0 +1,7 @@
+Scrape process
+1) scrape.rapmls.js content script runs on MLS results list
+1.1) listing object contains only properties to be added/updated (also ID/MLS), there should be no other propertie
+1.2) listing is sent to ScrapeService.processListing
+2) ScrapeService.processListing processes listing
+2.1) if create, all other fields are added, history entry is added, listing saved
+2.2) if update, latest properties are merged into existing, changes added to history, listing saved

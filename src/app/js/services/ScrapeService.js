@@ -70,6 +70,7 @@ var ScrapeServiceBase = ScrapeServiceBase || {
 
     NO_CHANGE: 0,
     NEW_LISTING: -1,
+    INVALID_OPERATION: -2,
     UPDATED_LISTING: 1,
     comparators: [
         simpleComparatorProvider ("listPrice"),
@@ -108,7 +109,7 @@ ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previou
 ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function (previous, latest) {
 
     if (typeof latest === "undefined" || latest === null)
-        return -2;
+        return ScrapeServiceBase.INVALID_OPERATION;
 
     if (typeof previous === "undefined" || previous === null)
     {

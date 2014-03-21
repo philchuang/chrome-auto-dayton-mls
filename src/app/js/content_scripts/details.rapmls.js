@@ -61,6 +61,9 @@ function processRoomDimensionRows (listing) {
                 }
             }
         }
+        if ((typeof room.level === "undefined" || room.level === null)
+            && (room.name === "Entrance"))
+            room.level = "1";
         listing.rooms.push (room);
     }
 }

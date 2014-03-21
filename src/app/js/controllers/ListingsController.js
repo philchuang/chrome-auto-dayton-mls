@@ -2,20 +2,9 @@
 
 var ListingsControllerBase = ListingsControllerBase || {};
 
+// calculates values
 ListingsControllerBase.prepareListing = ListingsControllerBase.prepareListing || function (listing) {
     if (typeof listing === "undefined" || listing === null) return;
-
-    if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
-        listing.isFavorite = false;
-
-    if (typeof listing.isHidden === "undefined" || listing.isHidden === null)
-        listing.isHidden = false;
-
-    if (typeof listing.score === "undefined" || listing.score === null)
-        listing.score = 0;
-
-    if (typeof listing.subdivision === "undefined")
-        listing.subdivision = "";
 
     listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
     listing.streetNumberAndName = listing.streetNumber + " " + listing.streetName;
@@ -33,13 +22,30 @@ ListingsControllerBase.prepareListing = ListingsControllerBase.prepareListing ||
         listing.lastUpdate = new Date (Date.parse (listing.listingDate));
     }
 
+    // use this instead of setting filter to rooms.length b/c undefined will not filter out
     listing.numRooms = listing.rooms ? listing.rooms.length : 0;
+};
+
+// removes calculated values
+ListingsControllerBase.sanitizeListing = ListingsControllerBase.sanitizeListing || function (listing) {
+    delete listing.streetNameAndNumber;
+    delete listing.streetNumberAndName;
+    delete listing.annualTaxes;
+    delete listing.lastUpdate;
+    delete listing.numRooms;
 };
 
 ListingsControllerBase.prepareListings = ListingsControllerBase.prepareListings || function (listings) {
     if (typeof listings === "undefined" || listings === null) return;
     for (var i = 0; i < listings.length; i++) {
         ListingsControllerBase.prepareListing (listings[i]);
+    }
+};
+
+ListingsControllerBase.sanitizeListings = ListingsControllerBase.sanitizeListings || function (listings) {
+    if (typeof listings === "undefined" || listings === null) return;
+    for (var i = 0; i < listings.length; i++) {
+        ListingsControllerBase.sanitizeListing (listings[i]);
     }
 };
 
@@ -145,6 +151,7 @@ app.controller ("ListingsController",
         $scope.exportListings = function () {
             var ids = $scope.filteredListings.map (function (l) { return l.id; });
             listingStorageService.getListings (ids).then (function (listings) {
+                ListingsControllerBase.sanitizeListings (listings);
                 var exportData = JSON.stringify (listings);
                 $modal.open ({
                     templateUrl: "ExportDialog.html",

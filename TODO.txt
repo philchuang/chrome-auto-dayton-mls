@@ -2,6 +2,7 @@ WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
 * smarter import
+	* needs own method, don't reuse processlisting
 * search page
 	* saved searches or last 5 searches
 

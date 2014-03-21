@@ -6,35 +6,45 @@ app.service ("listingStorageService", function ($q) {
         return "listing_" + tabId;
     };
     
-    // temporary function used to massage in-dev properties
+    // function used to clean up the listing object
     var fixListing = function (listing) {
         var modified = false;
+
         if (typeof listing === "undefined" || listing === null) return modified;
 
-        if (typeof listing.rooms !== "undefined" && listing.rooms !== null)
-        {
-            var entrances = listing.rooms.filter (function (r) {
-                return r.name === "Entrance";
-            });
-            angular.forEach (entrances, function (r2) {
-                r2.level = "1";
-            });
-            modified = modified || entrances.length > 0;
-        }
+        // make sure user data is present
+        if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null)
+            listing.isFavorite = false;
+
+        if (typeof listing.isHidden === "undefined" || listing.isHidden === null)
+            listing.isHidden = false;
+
+        if (typeof listing.score === "undefined" || listing.score === null)
+            listing.score = 0;
+
+        if (typeof listing.subdivision === "undefined")
+            listing.subdivision = "";
+
+
+        // delete $$hashKey (gets added somehow)
 
         if (typeof listing.history !== "undefined" && listing.history !== null)
         {
             for (var i = 0; i < listing.history.length; i++) {
-                if (typeof listing.history[i].$$hashKey !== "undefined")
+                if (typeof listing.history[i].$$hashKey !== "undefined") {
                     delete listing.history[i].$$hashKey;
+                    modified = true;
+                }
             }
         }
 
         if (typeof listing.pictures !== "undefined" && listing.pictures !== null)
         {
             for (var i2 = 0; i2 < listing.pictures.length; i2++) {
-                if (typeof listing.pictures[i2].$$hashKey !== "undefined")
+                if (typeof listing.pictures[i2].$$hashKey !== "undefined") {
                     delete listing.pictures[i2].$$hashKey;
+                    modified = true;
+                }
             }
         }
 
