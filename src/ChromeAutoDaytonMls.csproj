@@ -57,6 +57,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\css\common.css" />
     <Content Include="app\css\listings.css" />
     <Content Include="app\css\search.css" />
     <Content Include="app\js\app.eventPage.js" />
@@ -76,6 +77,7 @@
     <Content Include="app\js\filters\MlsSearchUrlFilter.js" />
     <Content Include="app\js\filters\DaysSinceFilter.js" />
     <Content Include="app\js\filters\EscapeFilter.js" />
+    <Content Include="app\js\services\ListingFactory.js" />
     <Content Include="app\js\services\NotificationService.js" />
     <Content Include="app\js\services\CriteriaBookmarkService.js" />
     <Content Include="app\js\content_scripts\search.rapmls.js" />
