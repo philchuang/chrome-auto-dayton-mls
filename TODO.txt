@@ -5,6 +5,7 @@ WHERE TO START NOW
 	* needs own method, don't reuse processlisting
 * search page
 	* saved searches or last 5 searches
+* remaining TODOs
 
 * architecture
 	* restructure directories by functional area
