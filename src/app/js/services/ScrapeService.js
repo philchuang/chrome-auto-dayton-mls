@@ -22,7 +22,7 @@ var picturesComparatorProvider = function () {
             var latestVal = latest[propertyName];
 
             // nonexistent, empty, null comparison
-            if (typeof previousVal === "undefined" || previousVal === null) { 
+            if (!Utils.isDefinedAndNotNull (previousVal)) { 
                 // previous is nonexistent or null
                 // just means that we're populating this data for the first time
                 return null;
@@ -48,7 +48,7 @@ var roomsComparatorProvider = function () {
             var latestVal = latest[propertyName];
 
             // nonexistent, empty, null comparison
-            if (typeof previousVal === "undefined" || previousVal === null) { 
+            if (!Utils.isDefinedAndNotNull (previousVal)) { 
                 // previous is nonexistent or null
                 // just means that we're populating this data for the first time
                 return null;
@@ -83,10 +83,8 @@ var ScrapeServiceBase = ScrapeServiceBase || {
 };
 
 ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previous, latest) {
-    if (typeof previous === "undefined"
-        || typeof latest === "undefined"
-        || previous === null
-        || latest === null)
+    if (!Utils.isDefinedAndNotNull (previous)
+        || !Utils.isDefinedAndNotNull (latest))
         return null;
 
     var result = "";
@@ -108,10 +106,10 @@ ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previou
 
 ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function (previous, latest) {
 
-    if (typeof latest === "undefined" || latest === null)
+    if (!Utils.isDefinedAndNotNull (latest))
         return ScrapeServiceBase.INVALID_OPERATION;
 
-    if (typeof previous === "undefined" || previous === null)
+    if (!Utils.isDefinedAndNotNull (previous))
     {
         latest.history = [];
         latest.history.push({
@@ -155,7 +153,9 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     return ScrapeServiceBase.NO_CHANGE;
 };
 
-// processes scraped listing data and merges into the existing data
+/*
+ * processes scraped listing data and merges into the existing data
+ */
 app.factory ("scrapeService", function ($q, listingStorageService) {
 
     return {
@@ -191,15 +191,12 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
             listingStorageService.getListings (mlsNums).then (function (listings) {
                 var nums = [];
                 
-                if (typeof listings !== "undefined" && listings != null && listings.length > 0) {
+                if (Utils.isDefinedAndNotNull (listings) && listings.length > 0) {
                     for (var i = 0; i < listings.length; i++) {
-                        if (typeof listings[i].listingDate === "undefined"
-                            || listings[i].listingDate === null
-                            || typeof listings[i].pictures === "undefined"
-                            || listings[i].pictures === null
+                        if (!Utils.isDefinedAndNotNull (listings[i].listingDate)
+                            || !Utils.isDefinedAndNotNull (listings[i].pictures)
                             || listings[i].pictures.length === 0
-                            || typeof listings[i].rooms === "undefined"
-                            || listings[i].rooms === null
+                            || !Utils.isDefinedAndNotNull (listings[i].rooms)
                             || listings[i].rooms.length === 0)
                             nums.push (listings[i].mls);
                     }

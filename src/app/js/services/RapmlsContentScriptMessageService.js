@@ -1,12 +1,14 @@
 ﻿"use strict";
 
-// sends a message to the given tab to execute a MLS search with the given criteria
+/*
+ * Sends a message to the given tab to execute a MLS search with the given criteria, using Chrome API
+ */
 app.factory ("rapmlsContentScriptMessageService", function () {
     return {
 
         sendCriteriaToTab: function (tabId, criteria, response) {
             var message = { "action": "setCriteriaAndExecute", "criteria": criteria };
-            chrome.tabs.sendMessage(tabId, message, response);
+            chrome.tabs.sendMessage (tabId, message, response);
         }
 
     };
