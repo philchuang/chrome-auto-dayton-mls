@@ -18,6 +18,11 @@ var criteriaUtils = criteriaUtils || {
     
     prepareCriteria: function (criteria) {
         criteriaUtils.updateMls (criteria);
+
+        Utils.convertStringToInt (criteria, "minPriceK");
+        Utils.convertStringToInt (criteria, "maxPriceK");
+        Utils.convertStringToInt (criteria, "minBedrooms");
+
         criteria.viewDetailsFirstResult = criteria.mls.length == 1;
     }
 };
@@ -38,7 +43,7 @@ app.controller ("SearchController",
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
         {
-            var criteria = criteriaUtils.getFromUrlSearch($window.location.search);
+            var criteria = criteriaUtils.getFromUrlSearch ($window.location.search);
             $scope.criteria = criteria;
             $scope.$apply();
 

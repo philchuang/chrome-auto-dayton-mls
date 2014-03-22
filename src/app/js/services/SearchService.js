@@ -7,7 +7,7 @@ var searchServiceBase = searchServiceBase || {
 
 // TODO refactor chrome calls to new service
 // executes searches
-app.service ('searchService', function (storageService, rapmlsContentScriptMessageService) {
+app.factory ('searchService', function (storageService, rapmlsContentScriptMessageService) {
     
     return {
 

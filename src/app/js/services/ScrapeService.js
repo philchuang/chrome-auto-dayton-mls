@@ -156,7 +156,7 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
 };
 
 // processes scraped listing data and merges into the existing data
-app.service ("scrapeService", function ($q, listingStorageService) {
+app.factory ("scrapeService", function ($q, listingStorageService) {
 
     return {
 

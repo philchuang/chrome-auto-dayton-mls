@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 // handles chrome notifications
-app.service ("notificationService", function () {
+app.factory ("notificationService", function () {
     return {
 
         displayDebugNotification: function (message) {
