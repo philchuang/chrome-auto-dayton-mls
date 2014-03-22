@@ -10,7 +10,7 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
     {
         chrome.bookmarks.search ("Dayton MLS searches", function (nodes)
         {
-            if (typeof nodes == "undefined" || nodes == null || nodes.length == 0)
+            if (!Utils.isDefinedAndNotNull (nodes) || nodes.length === 0)
             {
                 chrome.bookmarks.create ({ title: "Dayton MLS searches" }, function (node) {
                     folderIdCallback (node.id);
@@ -25,19 +25,19 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
     {
         chrome.bookmarks.getChildren (folderId, function (nodes)
         {
-            if (typeof nodes != "undefined" && nodes != null && nodes.length > 0)
+            if (Utils.isDefinedAndNotNull (nodes) && nodes.length > 0)
             {
                 for (var i = 0; i < nodes.length; i++)
                 {
                     if (nodes[i].title == title)
                     {
-                        nodeCallback(nodes[i]);
+                        nodeCallback (nodes[i]);
                         return;
                     }
                 }
             }
 
-            nodeCallback(null);
+            nodeCallback (null);
         });
     };
 
