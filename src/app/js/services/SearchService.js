@@ -13,9 +13,6 @@ app.factory ('searchService', function (storageService, rapmlsContentScriptMessa
 
         searchDaytonRapmls: function (criteria, tab) {
 
-            // uncomment this line to freshen up the listing data
-            //storageService.clearAllListings();
-
             if (typeof tab !== "undefined" && tab != null)
             {
                 // re-use the given tab

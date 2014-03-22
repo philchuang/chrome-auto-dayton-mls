@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 /*
- * handles persistence of listings
+ * handles persistence of listings, using Chrome API
  */
 app.factory ("listingStorageService", function ($q, listingConformerService) {
 
@@ -11,6 +11,9 @@ app.factory ("listingStorageService", function ($q, listingConformerService) {
 
     var saveListing = function (listing) {
         var deferred = $q.defer ();
+
+        //if (!Utils.isDefinedAndNotNull (listing))
+        // TODO throw exception if listing is undefined or null
 
         listingConformerService.conform (listing);
 
@@ -81,7 +84,7 @@ app.factory ("listingStorageService", function ($q, listingConformerService) {
         getListings: function (ids) {
             var deferred = $q.defer();
 
-            if (typeof ids === "undefined" || ids == null || ids.length === 0)
+            if (!Utils.isDefinedAndNotNull (ids) || ids.length === 0)
             {
                 deferred.resolve ([]);
                 return deferred.promise;
@@ -109,20 +112,20 @@ app.factory ("listingStorageService", function ($q, listingConformerService) {
         deleteListing: function (id) {
             var key = getListingKey (id);
             chrome.storage.local.remove (key);
-        },
-
-        clearAllListings: function () {
-            var keyPrefix = getListingKey ("");
-
-            chrome.storage.local.get (null, function (items) {
-                var listingKeys = [];
-                for (var propertyName in items) {
-                    if (!S(propertyName).startsWith (keyPrefix)) continue;
-                    listingKeys.push (propertyName);
-                }
-
-                chrome.storage.local.remove (listingKeys);
-            });
         }
+
+        //clearAllListings: function () {
+        //    var keyPrefix = getListingKey ("");
+
+        //    chrome.storage.local.get (null, function (items) {
+        //        var listingKeys = [];
+        //        for (var propertyName in items) {
+        //            if (!S(propertyName).startsWith (keyPrefix)) continue;
+        //            listingKeys.push (propertyName);
+        //        }
+
+        //        chrome.storage.local.remove (listingKeys);
+        //    });
+        //}
     };
 });

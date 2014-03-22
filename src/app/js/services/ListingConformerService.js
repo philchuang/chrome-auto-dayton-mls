@@ -3,21 +3,26 @@
 /*
  * ensures listing objects are consistent, clean, and migrated
  */
-app.factory ("listingConformerService", function ($q) {
+app.factory ("listingConformerService", function () {
     
     var migrate = function (listing) {
+        var modified = false;
+
+        if (!Utils.isDefinedAndNotNull (listing)) return modified;
+
         // nothing here right now
-        return false;
+
+        return modified;
     };
 
     var cleanse = function (listing) {
         var modified = false;
 
-        if (typeof listing === "undefined" || listing === null) return modified;
+        if (!Utils.isDefinedAndNotNull (listing)) return modified;
 
         // delete $$hashKey (gets added somehow)
 
-        if (typeof listing.history !== "undefined" && listing.history !== null)
+        if (Utils.isDefinedAndNotNull (listing.history))
         {
             for (var i = 0; i < listing.history.length; i++)
             {
@@ -29,7 +34,7 @@ app.factory ("listingConformerService", function ($q) {
             }
         }
 
-        if (typeof listing.pictures !== "undefined" && listing.pictures !== null)
+        if (Utils.isDefinedAndNotNull (listing.pictures))
         {
             for (var i2 = 0; i2 < listing.pictures.length; i2++)
             {
@@ -47,20 +52,20 @@ app.factory ("listingConformerService", function ($q) {
     var conform = function (listing) {
         var modified = false;
 
-        if (typeof listing === "undefined" || listing === null) return modified;
+        if (!Utils.isDefinedAndNotNull (listing)) return modified;
 
         // make sure user data is present
-        if (typeof listing.isFavorite === "undefined" || listing.isFavorite === null) {
+        if (!Utils.isDefinedAndNotNull (listing.isFavorite)) {
             listing.isFavorite = false;
             modified = true;
         }
 
-        if (typeof listing.isHidden === "undefined" || listing.isHidden === null) {
+        if (!Utils.isDefinedAndNotNull (listing.isHidden)) {
             listing.isHidden = false;
             modified = true;
         }
 
-        if (typeof listing.score === "undefined" || listing.score === null) {
+        if (!Utils.isDefinedAndNotNull (listing.score)) {
             listing.score = 0;
             modified = true;
         }

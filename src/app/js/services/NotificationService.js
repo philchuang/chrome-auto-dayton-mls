@@ -1,6 +1,8 @@
 ﻿"use strict";
 
-// handles chrome notifications
+/*
+ * Handles notifications, using Chrome API
+ */
 app.factory ("notificationService", function () {
     return {
 
