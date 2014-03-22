@@ -10,8 +10,9 @@ app.factory ("listingFactory", function () {
             return {
                 // app data
                 id: null,  // same as mls
+                history: [],
                 // MLS-scraped data
-                timestamp: new Date().toJSON(),
+                timestamp: new Date ().toJSON (),
                 mls: null, // string
                 listingDate: null, // JSON'd Date
                 listPrice: null, // number

@@ -4,13 +4,57 @@
  * ensures listing objects are consistent, clean, and migrated
  */
 app.factory ("listingConformerService", function () {
-    
+
+    var migrateToListingRecord = function (listing, propName, newPropName) {
+        if (!Utils.isDefinedAndNotNull (listing)
+            || !Utils.isDefinedAndNotNull (listing[propName]))
+            return;
+
+        if (!Utils.isDefinedAndNotNull (listing.record))
+            listing.record = {};
+
+        if (!Utils.isDefinedAndNotNull (newPropName))
+            newPropName = propName;
+
+        listing.record[newPropName] = listing[propName];
+        delete listing[propName];
+    };
+
     var migrate = function (listing) {
         var modified = false;
 
         if (!Utils.isDefinedAndNotNull (listing)) return modified;
 
-        // nothing here right now
+        return false; // not ready to test the rest yet
+
+        if (!Utils.isDefinedAndNotNull (listing.record)) {
+            modified = true;
+            migrateToListingRecord (listing, "mls");
+            migrateToListingRecord (listing, "timestamp", "refreshed");
+            migrateToListingRecord (listing, "listingDate");
+            migrateToListingRecord (listing, "listPrice");
+            migrateToListingRecord (listing, "bedrooms");
+            migrateToListingRecord (listing, "bathrooms");
+            migrateToListingRecord (listing, "sqft");
+            migrateToListingRecord (listing, "lotSize");
+            migrateToListingRecord (listing, "yearBuilt");
+            migrateToListingRecord (listing, "listingType");
+            migrateToListingRecord (listing, "status");
+            migrateToListingRecord (listing, "streetNumber");
+            migrateToListingRecord (listing, "streetName");
+            migrateToListingRecord (listing, "city");
+            migrateToListingRecord (listing, "zip");
+            migrateToListingRecord (listing, "description");
+            migrateToListingRecord (listing, "mainImageUrl");
+            migrateToListingRecord (listing, "subdivision");
+            migrateToListingRecord (listing, "county");
+            migrateToListingRecord (listing, "semiAnnualTaxes");
+            migrateToListingRecord (listing, "hoaFee");
+            migrateToListingRecord (listing, "assessments");
+            migrateToListingRecord (listing, "schoolDistrict");
+            migrateToListingRecord (listing, "rooms");
+            migrateToListingRecord (listing, "pictures");
+        }
 
         return modified;
     };
