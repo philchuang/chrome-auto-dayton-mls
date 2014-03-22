@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+// TODO move this inside factory method
 var storageServiceBase = storageServiceBase || {
 
     LAST_CRITERIA: "lastCriteria",
@@ -19,8 +20,10 @@ var storageServiceBase = storageServiceBase || {
 
 };
 
-// general app data persistence
-app.factory ('storageService', function ($q) {
+/*
+ * general app data persistence
+ */
+app.factory ("storageService", function ($q) {
     
     // define this outside the service object b/c it's referenced internally
     var saveLastCriteria = function (criteria) {
