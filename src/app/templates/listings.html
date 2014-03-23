@@ -250,6 +250,7 @@
                       </div>
                       <div class="col-md-10 column">
                         <ul class="list-group list-inline">
+                          <!--<li class="list-group-item bottom-buffer" ng-show="listing.calculated.lastUpdate">lastUpdate <span class="text-info">{{listing.calculated.lastUpdate | date:"MM/dd/yy HH:mm:ss"}}</span></li>-->
                           <li class="list-group-item bottom-buffer" ng-show="listing.record.sqft">SqFt <span class="text-info">{{listing.record.sqft}}<span class="small" ng-show="listing.record.sqft"> (${{listing.record.listPrice/listing.record.sqft | number:0}}/sqft)</span></span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.record.bedrooms">Beds <span class="text-info">{{listing.record.bedrooms}}</span></li>
                           <li class="list-group-item bottom-buffer" ng-show="listing.record.bathrooms">Baths <span class="text-info">{{listing.record.bathrooms}}</span></li>
