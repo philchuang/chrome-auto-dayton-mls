@@ -108,17 +108,13 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     if (!Utils.isDefinedAndNotNull (previous))
     {
         latest.history = [];
-        latest.history.push({
+        latest.history.push ({
             timestamp: latest.record.refreshed,
             action: "started tracking"
         });
         return ScrapeServiceBase.NEW_LISTING;
     }
 
-    // TODO use latest timestamp
-    // TODO if latest timestamp < previous, only copy missing values
-    // TODO merge histories?
-    
     // find values which don't exist in the previous object
     var newProperties = [];
     var propertyName;
@@ -150,13 +146,14 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     }
 
     var changes = ScrapeServiceBase.getChanges (previous, latest);
-    if (newProperties.length > 0) {
-        var newPropertiesStr = "added " + newProperties.join (", ");
-        if (changes === null)
-            changes = newPropertiesStr;
-        else
-            changes = newPropertiesStr + ", " + changes;
-    }
+    // don't care to see this change right now
+    //if (newProperties.length > 0) {
+    //    var newPropertiesStr = "added " + newProperties.join (", ");
+    //    if (changes === null)
+    //        changes = newPropertiesStr;
+    //    else
+    //        changes = newPropertiesStr + ", " + changes;
+    //}
     if (changes !== null) {
         latest.history.push ({ action: changes, timestamp: latest.record.refreshed });
         return ScrapeServiceBase.UPDATED_LISTING;
