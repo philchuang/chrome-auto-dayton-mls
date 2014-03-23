@@ -40,6 +40,7 @@
             "js": [
                 "/lib/jquery-2.1.0.min.js", 
                 "/lib/string.js", 
+                "/app/js/utils/utils.js", 
                 "/app/js/content_scripts/search.rapmls.js",
                 "/app/js/content_scripts/scrape.rapmls.js",
                 "/app/js/content_scripts/details.rapmls.js"

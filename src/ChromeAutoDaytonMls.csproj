@@ -71,6 +71,7 @@
     <Content Include="app\js\eventPage.js" />
     <Content Include="app\js\app.js" />
     <Content Include="app\js\filters\DynamicJavascriptFilter.js" />
+    <Content Include="app\js\filters\ListingFilter.js" />
     <Content Include="app\js\filters\PropertySumFilter.js" />
     <Content Include="app\js\filters\MaximumFilter.js" />
     <Content Include="app\js\filters\MinimumFilter.js" />
@@ -78,6 +79,7 @@
     <Content Include="app\js\filters\DaysSinceFilter.js" />
     <Content Include="app\js\filters\EscapeFilter.js" />
     <Content Include="app\js\services\ListingFactory.js" />
+    <Content Include="app\js\services\ListingConformerService.js" />
     <Content Include="app\js\services\NotificationService.js" />
     <Content Include="app\js\services\CriteriaBookmarkService.js" />
     <Content Include="app\js\content_scripts\search.rapmls.js" />
@@ -87,6 +89,7 @@
     <Content Include="app\js\services\ScrapeService.js" />
     <Content Include="app\js\services\ListingStorageService.js" />
     <Content Include="app\js\services\StorageService.js" />
+    <Content Include="app\js\utils\utils.js" />
     <Content Include="app\resources\icons\icon128.png" />
     <Content Include="app\resources\icons\icon16.png" />
     <Content Include="app\resources\icons\icon19.png" />

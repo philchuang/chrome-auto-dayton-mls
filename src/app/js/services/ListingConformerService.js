@@ -19,18 +19,32 @@ app.factory ("listingConformerService", function () {
         listing.record[newPropName] = listing[propName];
         delete listing[propName];
     };
+    
+    var migrateToListingPersonal = function (listing, propName, newPropName) {
+        if (!Utils.isDefinedAndNotNull (listing)
+            || !Utils.isDefinedAndNotNull (listing[propName]))
+            return;
+
+        if (!Utils.isDefinedAndNotNull (listing.personal))
+            listing.personal = {};
+
+        if (!Utils.isDefinedAndNotNull (newPropName))
+            newPropName = propName;
+
+        listing.personal[newPropName] = listing[propName];
+        delete listing[propName];
+    };
 
     var migrate = function (listing) {
         var modified = false;
 
         if (!Utils.isDefinedAndNotNull (listing)) return modified;
 
-        return false; // not ready to test the rest yet
-
         if (!Utils.isDefinedAndNotNull (listing.record)) {
             modified = true;
             migrateToListingRecord (listing, "mls");
             migrateToListingRecord (listing, "timestamp", "refreshed");
+            migrateToListingRecord (listing, "isStale");
             migrateToListingRecord (listing, "listingDate");
             migrateToListingRecord (listing, "listPrice");
             migrateToListingRecord (listing, "bedrooms");
@@ -56,6 +70,14 @@ app.factory ("listingConformerService", function () {
             migrateToListingRecord (listing, "pictures");
         }
 
+        if (!Utils.isDefinedAndNotNull (listing.personal)) {
+            modified = true;
+            migrateToListingPersonal (listing, "score");
+            migrateToListingPersonal (listing, "isFavorite");
+            migrateToListingPersonal (listing, "isHidden");
+            migrateToListingPersonal (listing, "personalNotes", "notes");
+        }
+
         return modified;
     };
 
@@ -63,6 +85,35 @@ app.factory ("listingConformerService", function () {
         var modified = false;
 
         if (!Utils.isDefinedAndNotNull (listing)) return modified;
+
+        if (typeof listing.lastUpdate !== "undefined") {
+            delete listing.lastUpdate;
+            modified = true;
+        }
+        if (typeof listing.annualTaxes !== "undefined") {
+            delete listing.annualTaxes;
+            modified = true;
+        }
+        if (typeof listing.numRooms !== "undefined") {
+            delete listing.numRooms;
+            modified = true;
+        }
+        if (typeof listing.streetNameAndNumber !== "undefined") {
+            delete listing.streetNameAndNumber;
+            modified = true;
+        }
+        if (typeof listing.streetNumberAndName !== "undefined") {
+            delete listing.streetNumberAndName;
+            modified = true;
+        }
+        if (typeof listing.roomDimensions !== "undefined") {
+            delete listing.roomDimensions;
+            modified = true;
+        }
+        if (typeof listing.calculated !== "undefined") {
+            delete listing.calculated;
+            modified = true;
+        }
 
         // delete $$hashKey (gets added somehow)
 
@@ -78,13 +129,13 @@ app.factory ("listingConformerService", function () {
             }
         }
 
-        if (Utils.isDefinedAndNotNull (listing.pictures))
+        if (Utils.isDefinedAndNotNull (listing.record.pictures))
         {
-            for (var i2 = 0; i2 < listing.pictures.length; i2++)
+            for (var i2 = 0; i2 < listing.record.pictures.length; i2++)
             {
-                if (typeof listing.pictures[i2].$$hashKey !== "undefined")
+                if (typeof listing.record.pictures[i2].$$hashKey !== "undefined")
                 {
-                    delete listing.pictures[i2].$$hashKey;
+                    delete listing.record.pictures[i2].$$hashKey;
                     modified = true;
                 }
             }
@@ -99,23 +150,32 @@ app.factory ("listingConformerService", function () {
         if (!Utils.isDefinedAndNotNull (listing)) return modified;
 
         // make sure user data is present
-        if (!Utils.isDefinedAndNotNull (listing.isFavorite)) {
-            listing.isFavorite = false;
+        if (!Utils.isDefinedAndNotNull (listing.personal))
+            listing.personal = {};
+
+        if (!Utils.isDefinedAndNotNull (listing.personal.isFavorite)) {
+            listing.personal.isFavorite = false;
             modified = true;
         }
 
-        if (!Utils.isDefinedAndNotNull (listing.isHidden)) {
-            listing.isHidden = false;
+        if (!Utils.isDefinedAndNotNull (listing.personal.isHidden)) {
+            listing.personal.isHidden = false;
             modified = true;
         }
 
-        if (!Utils.isDefinedAndNotNull (listing.score)) {
-            listing.score = 0;
+        if (!Utils.isDefinedAndNotNull (listing.personal.score)) {
+            listing.personal.score = 0;
+            modified = true;
+        }
+        
+        // make sure some record data is present
+        if (!Utils.isDefinedAndNotNull (listing.record.isStale)) {
+            listing.record.isStale = false;
             modified = true;
         }
 
-        if (typeof listing.subdivision === "undefined") {
-            listing.subdivision = null;
+        if (!Utils.isDefinedAndNotNull (listing.record.subdivision)) {
+            listing.record.subdivision = null;
             modified = true;
         }
 
@@ -126,8 +186,8 @@ app.factory ("listingConformerService", function () {
 
         conform: function (listing) {
             var modified = migrate (listing);
-            modified |= cleanse (listing);
-            modified |= conform (listing);
+            modified = cleanse (listing) || modified;
+            modified = conform (listing) || modified;
             return modified;
         }
 

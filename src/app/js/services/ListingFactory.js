@@ -12,36 +12,41 @@ app.factory ("listingFactory", function () {
                 id: null,  // same as mls
                 history: [],
                 // MLS-scraped data
-                timestamp: new Date ().toJSON (),
-                mls: null, // string
-                listingDate: null, // JSON'd Date
-                listPrice: null, // number
-                bedrooms: null, // number
-                bathrooms: null, // number
-                sqft: null, // number
-                lotSize: null, // string
-                yearBuilt: null, // number
-                listingType: null, // string
-                status: null, // string
-                streetNumber: null, // string
-                streetName: null, // string
-                city: null, // string
-                zip: null, // string
-                description: null, // string
-                mainImageUrl: null, // string
-                subdivision: null, // string
-                county: null, // string
-                semiAnnualTaxes: null, // number
-                hoaFee: null, // number
-                assessments: null, // number
-                schoolDistrict: null, // string
-                rooms: [],
-                pictures: [],
+                record: {
+                    refreshed: new Date ().toJSON (),
+                    mls: null, // string
+                    isStale: null, // bool
+                    listingDate: null, // JSON'd Date
+                    listPrice: null, // number
+                    bedrooms: null, // number
+                    bathrooms: null, // number
+                    sqft: null, // number
+                    lotSize: null, // string
+                    yearBuilt: null, // number
+                    listingType: null, // string
+                    status: null, // string
+                    streetNumber: null, // string
+                    streetName: null, // string
+                    city: null, // string
+                    zip: null, // string
+                    description: null, // string
+                    mainImageUrl: null, // string
+                    subdivision: null, // string
+                    county: null, // string
+                    semiAnnualTaxes: null, // number
+                    hoaFee: null, // number
+                    assessments: null, // number
+                    schoolDistrict: null, // string
+                    rooms: [],
+                    pictures: []
+                },
                 // user-added data
-                isFavorite: false,
-                isHidden: false,
-                score: 0,
-                personalNotes: null // string
+                personal: {
+                    isFavorite: false,
+                    isHidden: false,
+                    score: 0,
+                    personalNotes: null // string
+                }
             };
         },
 

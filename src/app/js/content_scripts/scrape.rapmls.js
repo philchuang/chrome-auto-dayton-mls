@@ -13,6 +13,7 @@ function processRows (resultRows, finishedCallback) {
     var numUpdated = 0;
     
     var currentListing = {};
+    currentListing.record = {};
 
     var scrapedMlsNums = [];
 
@@ -21,36 +22,37 @@ function processRows (resultRows, finishedCallback) {
         if (i % 4 === 0) {
             var cells = $(resultRows[i]).children ("td");
             currentListing = {};
-            currentListing.timestamp = new Date ().toJSON ();
-            currentListing.listPrice = parseInt (S($(cells[cellIdx++]).text ()).replaceAll ("$", "").replaceAll (",", ""));
-            currentListing.bedrooms = parseInt ($(cells[cellIdx++]).text ());
-            currentListing.bathrooms = $(cells[cellIdx++]).text ();
-            currentListing.sqft = parseInt ($(cells[cellIdx++]).text ());
-            currentListing.lotSize = $(cells[cellIdx++]).text ();
-            currentListing.yearBuilt = parseInt ($(cells[cellIdx++]).text ());
-            currentListing.listingType = $(cells[cellIdx++]).text();
+            currentListing.record = {};
+            currentListing.record.refreshed = new Date ().toJSON ();
+            currentListing.record.listPrice = parseInt (S($(cells[cellIdx++]).text ()).replaceAll ("$", "").replaceAll (",", ""));
+            currentListing.record.bedrooms = parseInt ($(cells[cellIdx++]).text ());
+            currentListing.record.bathrooms = $(cells[cellIdx++]).text ();
+            currentListing.record.sqft = parseInt ($(cells[cellIdx++]).text ());
+            currentListing.record.lotSize = $(cells[cellIdx++]).text ();
+            currentListing.record.yearBuilt = parseInt ($(cells[cellIdx++]).text ());
+            currentListing.record.listingType = $(cells[cellIdx++]).text ();
             continue;
         }
 
         if (i % 4 === 1) {
-            currentListing.status = S($(resultRows[i]).find ("font.mStatusTextB").text ()).trim ().s;
+            currentListing.record.status = S($(resultRows[i]).find ("font.mStatusTextB").text ()).trim ().s;
             var addressCells = $($(resultRows[i]).find ("table table")[1]).find ("td");
-            currentListing.streetNumber = $(addressCells[1]).text ();
-            currentListing.streetName = S($(addressCells[2]).text ()).trim ().s;
+            currentListing.record.streetNumber = $(addressCells[1]).text ();
+            currentListing.record.streetName = S($(addressCells[2]).text ()).trim ().s;
             var cityAndZip = $(addressCells[3]).text ();
             var cityAndZipSplit = $(cityAndZip.split (decodeURIComponent ("%C2%A0")));
-            currentListing.city = cityAndZipSplit.first ()[0];
-            currentListing.zip = cityAndZipSplit.last ()[0];
-            currentListing.description = $($($(resultRows[i]).find ("table table")[0]).children ("tbody").children ("tr").children ()[5]).text ();
-            currentListing.mainImageUrl = $(resultRows[i]).find("img")[0].src;
+            currentListing.record.city = cityAndZipSplit.first ()[0];
+            currentListing.record.zip = cityAndZipSplit.last ()[0];
+            currentListing.record.description = $($($(resultRows[i]).find ("table table")[0]).children ("tbody").children ("tr").children ()[5]).text ();
+            currentListing.record.mainImageUrl = $(resultRows[i]).find ("img")[0].src;
             continue;
         }
 
         if (i % 4 === 2) {
             var mlsStr = $($(resultRows[i]).find ("td")[1]).text ();
-            currentListing.mls = $(mlsStr.split ("#")).last ()[0];
-            scrapedMlsNums.push (currentListing.mls);
-            currentListing.id = currentListing.mls;
+            currentListing.record.mls = $(mlsStr.split ("#")).last ()[0];
+            scrapedMlsNums.push (currentListing.record.mls);
+            currentListing.id = currentListing.record.mls;
             continue;
         }
 
@@ -99,7 +101,7 @@ function getResultRows ()
 
 function openFirstResultDetailsPage (resultRows) {
     var row3 = resultRows[2];
-    var link = $(row3).find("a:contains('View Details')")[0];
+    var link = $(row3).find ("a:contains('View Details')")[0];
     link.click ();
 }
 
@@ -109,7 +111,7 @@ function processMlsNumsThatNeedDetails (mlsNums)
 
     var foundLink = null;
     for (var i = 0; i < mlsNums.length; i++) {
-        var link = getDetailsPageLinkFor(mlsNums[i]);
+        var link = getDetailsPageLinkFor (mlsNums[i]);
         if (link != null) {
             foundLink = link;
             break;
@@ -188,7 +190,7 @@ $(document).ready (function ()
             return false;
         }
 
-        console.log("Don't know how to to handle request: " + request);
+        console.log ("Don't know how to to handle request: " + request);
 
         return false;
     });

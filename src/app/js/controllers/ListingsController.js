@@ -4,35 +4,34 @@ var ListingsControllerBase = ListingsControllerBase || {};
 
 // calculates values
 ListingsControllerBase.prepareListing = ListingsControllerBase.prepareListing || function (listing) {
-    if (typeof listing === "undefined" || listing === null) return;
+    if (!Utils.isDefinedAndNotNull (listing)) return;
 
-    listing.streetNameAndNumber = listing.streetName + " " + listing.streetNumber;
-    listing.streetNumberAndName = listing.streetNumber + " " + listing.streetName;
+    if (!Utils.isDefinedAndNotNull (listing.calculated))
+        listing.calculated = {};
 
-    var semiAnnualTaxes = typeof listing.semiAnnualTaxes !== "undefined" ? parseFloat (listing.semiAnnualTaxes) : 0;
-    var hoaFee = typeof listing.hoaFee !== "undefined" ? parseFloat (listing.hoaFee) : 0;
-    var assessments = typeof listing.assessments !== "undefined" ? parseFloat (listing.assessments) : 0;
+    listing.calculated.streetNameAndNumber = listing.record.streetName + " " + listing.record.streetNumber;
+    listing.calculated.streetNumberAndName = listing.record.streetNumber + " " + listing.record.streetName;
+
+    var semiAnnualTaxes = Utils.isDefinedAndNotNull (listing.record.semiAnnualTaxes) ? parseFloat (listing.record.semiAnnualTaxes) : 0;
+    var hoaFee = Utils.isDefinedAndNotNull (listing.record.hoaFee) ? parseFloat (listing.record.hoaFee) : 0;
+    var assessments = Utils.isDefinedAndNotNull (listing.record.assessments) ? parseFloat (listing.record.assessments) : 0;
 
     if (!isNaN (semiAnnualTaxes) || !isNaN (hoaFee))
-        listing.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0) + (!isNaN (assessments) ? assessments : 0);
+        listing.calculated.annualTaxes = (!isNaN (semiAnnualTaxes) ? semiAnnualTaxes : 0) * 2 + (!isNaN (hoaFee) ? hoaFee : 0) + (!isNaN (assessments) ? assessments : 0);
 
-    listing.lastUpdate = new Date (Math.max.apply (Math, listing.history.map (function (h) { return Date.parse (h.timestamp); })));
-    if (typeof listing.listingDate !== "undefined" && listing.listingDate !== null
-        && (listing.history.length == 1 || isNaN (listing.lastUpdate) || isNaN (listing.lastUpdate.getTime()))) {
-        listing.lastUpdate = new Date (Date.parse (listing.listingDate));
+    listing.calculated.lastUpdate = new Date (Math.max.apply (Math, listing.history.map (function (h) { return Date.parse (h.timestamp); })));
+    if (Utils.isDefinedAndNotNull (listing.record.listingDate)
+        && (listing.history.length == 1 || isNaN (listing.calculated.lastUpdate) || isNaN (listing.calculated.lastUpdate.getTime ()))) {
+        listing.calculated.lastUpdate = new Date (Date.parse (listing.record.listingDate));
     }
 
     // use this instead of setting filter to rooms.length b/c undefined will not filter out
-    listing.numRooms = listing.rooms ? listing.rooms.length : 0;
+    listing.calculated.numRooms = listing.record.rooms ? listing.record.rooms.length : 0;
 };
 
 // removes calculated values
 ListingsControllerBase.sanitizeListing = ListingsControllerBase.sanitizeListing || function (listing) {
-    delete listing.streetNameAndNumber;
-    delete listing.streetNumberAndName;
-    delete listing.annualTaxes;
-    delete listing.lastUpdate;
-    delete listing.numRooms;
+    delete listing.calculated;
 };
 
 ListingsControllerBase.prepareListings = ListingsControllerBase.prepareListings || function (listings) {
@@ -80,7 +79,7 @@ app.controller ("ListingsController",
                     dataContext: function () {
                         return {
                             title: "Please confirm",
-                            message: "Are you sure you want to delete listing for " + listing.streetNumberAndName + "?"
+                            message: "Are you sure you want to delete listing for " + listing.calculated.streetNumberAndName + "?"
                         };
                     }
                 }
@@ -88,7 +87,7 @@ app.controller ("ListingsController",
                 var idx = $.inArray (listing, $scope.listings);
                 if (~idx) $scope.listings.splice (idx, 1);
                 listingStorageService.deleteListing (listing.id);
-                notificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.streetNumberAndName);
+                notificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.calculated.streetNumberAndName);
             });
         };
 
@@ -126,13 +125,13 @@ app.controller ("ListingsController",
         };
 
         $scope.toggleIsFavorite = function (listing) {
-            listing.isFavorite = !listing.isFavorite;
+            listing.personal.isFavorite = !listing.personal.isFavorite;
 
             $scope.saveListing (listing);
         };
 
         $scope.toggleIsHidden = function (listing) {
-            listing.isHidden = !listing.isHidden;
+            listing.personal.isHidden = !listing.personal.isHidden;
 
             $scope.saveListing (listing);
         };
@@ -184,7 +183,7 @@ app.controller ("ListingsController",
                 try {
                     listings = JSON.parse (scope.dataContext.json);
                 } catch (ex) {
-                    notificationService.displayNotification("", "Import error", "Error parsing JSON: " + ex.message);
+                    notificationService.displayNotification ("", "Import error", "Error parsing JSON: " + ex.message);
                     return;
                 }
                 if (typeof listings === "undefined" || listings === null || listings.length === 0)
@@ -196,9 +195,9 @@ app.controller ("ListingsController",
                 var numUpdated = 0;
                 for (var i = 0; i < listings.length; i++) {
                     var listing = listings[i];
-                    if (typeof listing === "undefined" || listing === null 
-                        || typeof listing.id === "undefined" || listing.id === null
-                        || typeof listing.mls === "undefined" || listing.mls === null)
+                    if (!Utils.isDefinedAndNotNull (listing)
+                        || !Utils.isDefinedAndNotNull (listing.id)
+                        || !Utils.isDefinedAndNotNull (listing.record.mls))
                         continue;
                     numProcessed++;
                     // TODO convert to use a new importService

@@ -6,7 +6,7 @@
 "use strict";
 
 function parseDollarAmount (str, listing, propertyName) {
-    if (typeof str === "undefined" || str === null) {
+    if (!Utils.isDefinedAndNotNull (str)) {
         str = "";
     }
 
@@ -26,10 +26,13 @@ function parseDollarAmount (str, listing, propertyName) {
 }
 
 function processRoomDimensionRows (listing) {
-    if (typeof listing === "undefined" || listing == null) return;
+    if (!Utils.isDefinedAndNotNull (listing)) return;
 
-    if (typeof listing.rooms === "undefined" || listing.rooms == null)
-        listing.rooms = [];
+    if (!Utils.isDefinedAndNotNull (listing.record))
+        listing.record = {};
+
+    if (!Utils.isDefinedAndNotNull (listing.record.rooms))
+        listing.record.rooms = [];
     
     var dimRegex = new RegExp ("[0-9]+x[0-9]+");
     var rows = $("a:contains('Room Dimensions')").parent ().parent ().siblings ().filter (function (idx, tr) { return dimRegex.test ($ (tr).text ()); });
@@ -65,7 +68,7 @@ function processRoomDimensionRows (listing) {
         if ((typeof room.level === "undefined" || room.level === null)
             && (room.name === "Entrance"))
             room.level = "1";
-        listing.rooms.push (room);
+        listing.record.rooms.push (room);
     }
 }
 
@@ -81,7 +84,9 @@ function getMls () {
 function updateMlsData () {
 
     var listing = {
-        timestamp: new Date ().toJSON ()
+        record: {
+            refreshed: new Date ().toJSON ()
+        }
     };
     
     var summaryTable = $("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
@@ -89,46 +94,46 @@ function updateMlsData () {
     
     // mls
     var mlsStr = firstSummaryBlock.children().first().text();
-    listing.mls = S($(mlsStr.split ("#")).last ()[0]).trim ().s;
-    listing.id = listing.mls;
+    listing.record.mls = S($(mlsStr.split ("#")).last ()[0]).trim ().s;
+    listing.id = listing.record.mls;
     
     // list price
-    listing.listPrice = parseInt (new RegExp ("\\$([0-9,]+)").exec (firstSummaryBlock.find (":contains('(LP)')").last ().text ())[1].replace (",", ""));
+    listing.record.listPrice = parseInt (new RegExp ("\\$([0-9,]+)").exec (firstSummaryBlock.find (":contains('(LP)')").last ().text ())[1].replace (",", ""));
 
     // listingDate
     var listingDate = summaryTable.children ().first ().children ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().first ().children ().first ().siblings ().last ().prev ().text ();
     if (listingDate.length > 2)
         listingDate = listingDate.substr (1, listingDate.length - 2);
-    listing.listingDate = new Date(listingDate).toJSON();
+    listing.record.listingDate = new Date (listingDate).toJSON ();
     
     // sqft
-    listing.sqft = parseInt (new RegExp ("[0-9]+").exec ($("a:contains('Sq Ft')").parent ().parent ().text ()));
+    listing.record.sqft = parseInt (new RegExp ("[0-9]+").exec ($("a:contains('Sq Ft')").parent ().parent ().text ()));
     
     // lot sz
-    listing.lotSize = new RegExp ("Lot Sz: ([^\\s]+)").exec ($("a:contains('Lot Sz')").parent ().parent ().text ())[1];
+    listing.record.lotSize = new RegExp ("Lot Sz: ([^\\s]+)").exec ($("a:contains('Lot Sz')").parent ().parent ().text ())[1];
 
     // remarks
     // skip this, can't reliably detect
     
     // subdivision
-    listing.subdivision = $("a:contains('Subdivision')").parent ().siblings ().first ().text ();
+    listing.record.subdivision = $("a:contains('Subdivision')").parent ().siblings ().first ().text ();
     
     // country
-    listing.county = $("a:contains('County')").parent ().siblings ().first ().text ();
+    listing.record.county = $("a:contains('County')").parent ().siblings ().first ().text ();
     
     // taxes/hoa/assessments
-    parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent ().siblings ().first ().text (), listing, "semiAnnualTaxes");
-    parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent ().siblings ().first ().text (), listing, "hoaFee");
-    parseDollarAmount ($("a:contains('Assessments')").parent ().siblings ().first ().text (), listing, "assessments");
+    parseDollarAmount ($("a:contains('Semi Annual Taxes')").parent ().siblings ().first ().text (), listing.record, "semiAnnualTaxes");
+    parseDollarAmount ($("a:contains('HOA/Condo Fee')").parent ().siblings ().first ().text (), listing.record, "hoaFee");
+    parseDollarAmount ($("a:contains('Assessments')").parent ().siblings ().first ().text (), listing.record, "assessments");
 
     // school district
-    listing.schoolDistrict = $("a:contains('School District')").parent ().siblings ().first ().text ();
+    listing.record.schoolDistrict = $("a:contains('School District')").parent ().siblings ().first ().text ();
 
     // room dimensions
     processRoomDimensionRows (listing);
 
     // images
-    var scriptText = $("form[name='InputForm']").children("table").first().find("table").first().find("script").first().text();
+    var scriptText = $("form[name='InputForm']").children ("table").first ().find ("table").first ().find ("script").first ().text ();
     var picUrlRegex = new RegExp ("Pic\\[[0-9]+\\] = \"(http.+?)\";", "gim");
     var picDescRegex = new RegExp ("PicDescription\\[[0-9]+\\] = \"(.*?)\";", "gim");
     var picUrlCodes = scriptText.match (picUrlRegex);
@@ -145,7 +150,7 @@ function updateMlsData () {
 
         var codeRegex = new RegExp (" = \"(.*)\";", "gim");
 
-        listing.pictures = [];
+        listing.record.pictures = [];
         var length = Math.min (picUrlCodes.length, picDescCodes.length);
         for (var i = 0; i < length; i++)
         {
@@ -154,7 +159,7 @@ function updateMlsData () {
             codeRegex.lastIndex = 0; // reset codeRegex
             pic.description = codeRegex.exec (picDescCodes[i])[1];
             codeRegex.lastIndex = 0; // reset codeRegex
-            listing.pictures.push (pic);
+            listing.record.pictures.push (pic);
         }
     }
     
@@ -179,7 +184,7 @@ function updateMlsData () {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
             return;
 
-        var idx = $.inArray (listing.mls, mlsNums);
+        var idx = $.inArray (listing.record.mls, mlsNums);
         if (~idx) {
             mlsNums.splice (idx, 1);
             chrome.runtime.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: mlsNums });

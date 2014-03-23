@@ -14,12 +14,10 @@ var simpleComparatorProvider = function (propertyName) {
 };
 
 var picturesComparatorProvider = function () {
-    var propertyName = "pictures";
     return {
-        propertyName: propertyName,
         getChanges: function (previous, latest) {
-            var previousVal = previous[propertyName];
-            var latestVal = latest[propertyName];
+            var previousVal = previous.pictures;
+            var latestVal = latest.pictures;
 
             // nonexistent, empty, null comparison
             if (!Utils.isDefinedAndNotNull (previousVal)) { 
@@ -30,7 +28,7 @@ var picturesComparatorProvider = function () {
 
             // size comparison
             if (previousVal.length != latestVal.length)
-                return propertyName + ": [" + previousVal.length + "] -> [" + latestVal.length + "]";
+                return "pictures: [" + previousVal.length + "] -> [" + latestVal.length + "]";
 
             // data comparison
             // bah, don't care about data comparison right now
@@ -40,12 +38,10 @@ var picturesComparatorProvider = function () {
 };
 
 var roomsComparatorProvider = function () {
-    var propertyName = "rooms";
     return {
-        propertyName: propertyName,
         getChanges: function (previous, latest) {
-            var previousVal = previous[propertyName];
-            var latestVal = latest[propertyName];
+            var previousVal = previous.rooms;
+            var latestVal = latest.rooms;
 
             // nonexistent, empty, null comparison
             if (!Utils.isDefinedAndNotNull (previousVal)) { 
@@ -56,7 +52,7 @@ var roomsComparatorProvider = function () {
 
             // size comparison
             if (previousVal.length != latestVal.length)
-                return propertyName + ": [" + previousVal.length + "] -> [" + latestVal.length + "]";
+                return "rooms: [" + previousVal.length + "] -> [" + latestVal.length + "]";
 
             // data comparison
             // bah, don't care about data comparison right now
@@ -92,7 +88,7 @@ ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previou
     for (var i = 0; i < ScrapeServiceBase.comparators.length; i++)
     {
         var comparator = ScrapeServiceBase.comparators[i];
-        var changes = comparator.getChanges (previous, latest);
+        var changes = comparator.getChanges (previous.record, latest.record);
         if (changes !== null)
             result += ", " + changes;
     }
@@ -113,7 +109,7 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     {
         latest.history = [];
         latest.history.push({
-            timestamp: latest.timestamp,
+            timestamp: latest.record.refreshed,
             action: "started tracking"
         });
         return ScrapeServiceBase.NEW_LISTING;
@@ -126,16 +122,32 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     // find values which don't exist in the previous object
     var newProperties = [];
     var propertyName;
-    for (propertyName in latest) {
-        if (typeof previous[propertyName] === "undefined") {
-            newProperties.push (propertyName);
+
+    if (Utils.isDefinedAndNotNull (latest.record)) {
+        for (propertyName in latest.record) {
+            if (!Utils.isDefinedAndNotNull (previous.record) || typeof previous.record[propertyName] === "undefined") {
+                newProperties.push (propertyName);
+            }
         }
     }
+
+    // ensure record obj is present
+    if (!Utils.isDefinedAndNotNull (previous.record))
+        previous.record = {};
+
+    if (!Utils.isDefinedAndNotNull (latest.record))
+        latest.record = {};
 
     // copy over values which don't exist in the latest object
     for (propertyName in previous)
         if (typeof latest[propertyName] === "undefined")
             latest[propertyName] = previous[propertyName];
+    if (Utils.isDefinedAndNotNull (previous.record)) {
+        for (propertyName in previous.record) {
+            if (typeof latest.record[propertyName] === "undefined")
+                latest.record[propertyName] = previous.record[propertyName];
+        }
+    }
 
     var changes = ScrapeServiceBase.getChanges (previous, latest);
     if (newProperties.length > 0) {
@@ -146,7 +158,7 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
             changes = newPropertiesStr + ", " + changes;
     }
     if (changes !== null) {
-        latest.history.push ({ action: changes, timestamp: latest.timestamp });
+        latest.history.push ({ action: changes, timestamp: latest.record.refreshed });
         return ScrapeServiceBase.UPDATED_LISTING;
     }
 
@@ -161,7 +173,7 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
     return {
 
         processListing: function (listing) {
-            var deferred = $q.defer();
+            var deferred = $q.defer ();
             
             // get previous listing
             listingStorageService.getListing (listing.id).then (function (existingListing) {
@@ -176,29 +188,29 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
         },
 
         updateListingStaleness: function () {
-            listingStorageService.getAllListings().then(function (listings) {
+            listingStorageService.getAllListings ().then (function (listings) {
                 var stalenessThreshold = new Date (new Date ().valueOf () - ScrapeServiceBase.stalenessThresholdMs);
                 for (var i = 0; i < listings.length; i++) {
-                    listings[i].isStale = new Date (listings[i].timestamp) < stalenessThreshold;
+                    listings[i].record.isStale = new Date (listings[i].record.refreshed) < stalenessThreshold;
                     listingStorageService.saveListing (listings[i]);
                 }
             });
         },
         
         checkNeedsListingDetails: function (mlsNums) {
-            var deferred = $q.defer();
+            var deferred = $q.defer ();
 
             listingStorageService.getListings (mlsNums).then (function (listings) {
                 var nums = [];
                 
                 if (Utils.isDefinedAndNotNull (listings) && listings.length > 0) {
                     for (var i = 0; i < listings.length; i++) {
-                        if (!Utils.isDefinedAndNotNull (listings[i].listingDate)
-                            || !Utils.isDefinedAndNotNull (listings[i].pictures)
-                            || listings[i].pictures.length === 0
-                            || !Utils.isDefinedAndNotNull (listings[i].rooms)
-                            || listings[i].rooms.length === 0)
-                            nums.push (listings[i].mls);
+                        if (!Utils.isDefinedAndNotNull (listings[i].record.listingDate)
+                            || !Utils.isDefinedAndNotNull (listings[i].record.pictures)
+                            || listings[i].record.pictures.length === 0
+                            || !Utils.isDefinedAndNotNull (listings[i].record.rooms)
+                            || listings[i].record.rooms.length === 0)
+                            nums.push (listings[i].record.mls);
                     }
                 }
 

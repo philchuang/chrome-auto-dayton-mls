@@ -5,8 +5,8 @@
  */
 app.factory ("listingStorageService", function ($q, listingConformerService) {
 
-    var getListingKey = function (tabId) {
-        return "listing_" + tabId;
+    var getListingKey = function (id) {
+        return "listing_" + id;
     };
 
     var saveListing = function (listing) {

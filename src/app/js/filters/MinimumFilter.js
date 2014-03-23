@@ -1,6 +1,20 @@
 ﻿"use strict";
 
 app.filter ("minimum", function () {
+    var compare = function (minFilter, item) { return true; };
+    compare = function (minFilter, item) {
+        for (var propertyName in minFilter) {
+            if (minFilter[propertyName] == "" || minFilter[propertyName] == null) continue;
+            if (typeof item[propertyName] === "undefined")
+                return false;
+            if (typeof minFilter[propertyName] === "object")
+                return compare (minFilter[propertyName], item[propertyName]);
+            if (item[propertyName] < minFilter[propertyName])
+                return false;
+        }
+        return true;
+    };
+
     return function (array, minFilter) {
         if (!angular.isArray (array)) return array;
 
@@ -16,15 +30,7 @@ app.filter ("minimum", function () {
 
         for (var i2 = 0; i2 < array.length; i2++) {
             var item = array[i2];
-            var add = true;
-            for (var propertyName in minFilter) {
-                if (minFilter[propertyName] == "" || minFilter[propertyName] == null) continue;
-                if (typeof item[propertyName] === "undefined" || item[propertyName] < minFilter[propertyName]) {
-                    add = false;
-                    break;
-                }
-            }
-            if (add) filtered.push (item);
+            if (compare (minFilter, item)) filtered.push (item);
         }
 
         return filtered;

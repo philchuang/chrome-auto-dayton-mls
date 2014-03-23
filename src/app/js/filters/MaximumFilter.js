@@ -1,6 +1,20 @@
 ﻿"use strict";
 
 app.filter ("maximum", function () {
+    var compare = function (maxFilter, item) { return true; };
+    compare = function (maxFilter, item) {
+        for (var propertyName in maxFilter) {
+            if (maxFilter[propertyName] == "" || maxFilter[propertyName] == null) continue;
+            if (typeof item[propertyName] === "undefined")
+                return false;
+            if (typeof maxFilter[propertyName] === "object")
+                return compare (maxFilter[propertyName], item[propertyName]);
+            if (item[propertyName] > maxFilter[propertyName])
+                return false;
+        }
+        return true;
+    };
+
     return function (array, maxFilter) {
         if (!angular.isArray (array)) return array;
 
@@ -16,15 +30,7 @@ app.filter ("maximum", function () {
 
         for (var i2 = 0; i2 < array.length; i2++) {
             var item = array[i2];
-            var add = true;
-            for (var propertyName in maxFilter) {
-                if (maxFilter[propertyName] == "" || maxFilter[propertyName] == null) continue;
-                if (typeof item[propertyName] === "undefined" || item[propertyName] > maxFilter[propertyName]) {
-                    add = false;
-                    break;
-                }
-            }
-            if (add) filtered.push (item);
+            if (compare (maxFilter, item)) filtered.push (item);
         }
 
         return filtered;
