@@ -4,8 +4,6 @@ WHERE TO START NOW
 * search page
 	* saved searches or last 5 searches
 * remaining TODOs
-* search page
-	* add clear-control
 
 * architecture
 	* restructure directories by functional area

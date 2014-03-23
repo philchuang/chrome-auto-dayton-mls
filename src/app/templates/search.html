@@ -24,6 +24,7 @@
   <script type="text/javascript" src="../js/services/CriteriaBookmarkService.js"></script>
   <script type="text/javascript" src="../js/services/RapmlsContentScriptMessageService.js"></script>
   <script type="text/javascript" src="../js/services/SearchService.js"></script>
+  <script type="text/javascript" src="../js/directives/ClearControl.js"></script>
 
   <link rel="stylesheet" href="../css/common.css" />
   <link rel="stylesheet" href="../css/search.css" />
@@ -54,6 +55,7 @@
               <span class="input-group input-group-sm">
                 <span class="input-group-addon">min $k</span>
                 <input type="number" name="minPrice" ng-model="criteria.minPriceK" size="4" class="form-control" placeholder="100" />
+                <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
               </span>
             </div>
           </div>
@@ -62,6 +64,7 @@
               <span class="input-group input-group-sm">
                 <span class="input-group-addon">max $k</span>
                 <input type="number" name="maxPrice" ng-model="criteria.maxPriceK" size="4" class="form-control" placeholder="200" />
+                <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
               </span>
             </div>
           </div>
@@ -81,6 +84,7 @@
                   <option>8</option>
                   <option>9</option>
                 </select>
+                <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
               </span>
               <!-- TODO get bootstrap dropdown working because it looks/acts better
                   <div class="dropdown">
@@ -108,6 +112,7 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-addon">zips</span>
                 <textarea name="zipCodes" ng-model="criteria.zipCodes" class="form-control textarea-lg" placeholder="45458, 45429"></textarea>
+                <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
               </div>
             </div>
           </div>
@@ -117,6 +122,7 @@
               <div class="input-group input-group-sm">
                 <span class="input-group-addon">MLS</span>
                 <textarea name="mls" ng-model="criteria.mlsStr" class="form-control textarea-lg" placeholder="(up to 5)"></textarea>
+                <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
               </div>
             </div>
           </div>
