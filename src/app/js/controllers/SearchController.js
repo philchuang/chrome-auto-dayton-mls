@@ -2,7 +2,7 @@
 
 var criteriaUtils = criteriaUtils || {
     updateMls: function (criteria) {
-        if (typeof criteria.mlsStr === "undefined" || criteria.mlsStr === null) {
+        if (!Utils.isDefinedAndNotNull (criteria.mlsStr)) {
             criteria.mls = [];
             return;
         }
@@ -43,12 +43,12 @@ app.controller ("SearchController",
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
         {
-            var criteria = criteriaUtils.getFromUrlSearch ($window.location.search);
-            $scope.criteria = criteria;
+            var urlCriteria = criteriaUtils.getFromUrlSearch ($window.location.search);
+            $scope.criteria = urlCriteria;
             $scope.$apply();
 
             chrome.tabs.getCurrent (function (tab) {
-                searchService.searchDaytonRapmls (criteria, tab);
+                searchService.searchDaytonRapmls (urlCriteria, tab);
             });
             return;
         }
@@ -57,8 +57,12 @@ app.controller ("SearchController",
             scrapeResults: false
         };
 
+        $scope.criteriaToString = function (criteria) {
+            return criteriaBookmarkService.getBookmarkTitle (criteria);
+        };
+
         chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-            if (typeof tabs === "undefined" || tabs === null || tabs.length === 0)
+            if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
                 $scope.canScrapeCurrentPage = false;
             chrome.tabs.sendMessage (tabs[0].id, { action: "getCanScrape" }, function (response) {
                 $scope.canScrapeCurrentPage = response === true;
@@ -67,7 +71,7 @@ app.controller ("SearchController",
 
         $scope.scrapeCurrentPage = function () {
             chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-                if (typeof tabs === "undefined" || tabs === null || tabs.length === 0)
+                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
                     return;
 
                 chrome.tabs.sendMessage (tabs[0].id, { action: "scrape" });
@@ -75,9 +79,10 @@ app.controller ("SearchController",
             });
         };
 
-        storageService.getLastCriteria().then (function (criteria) {
-            if (criteria != null) {
-                $scope.criteria = criteria;
+        storageService.getLastCriteria ().then (function (criteria) {
+            if (Utils.isDefinedAndNotNull (criteria)) {
+                $scope.criteria = criteria[0];
+                $scope.recentCriteria = criteria;
             }
         });
 

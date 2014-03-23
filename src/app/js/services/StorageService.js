@@ -3,6 +3,8 @@
 // TODO move this inside factory method
 var storageServiceBase = storageServiceBase || {
 
+    MAX_LAST_CRITERIA: 5,
+
     LAST_CRITERIA: "lastCriteria",
     LAST_FILTERS: "lastFilters",
 
@@ -24,22 +26,44 @@ var storageServiceBase = storageServiceBase || {
  * general app data persistence
  */
 app.factory ("storageService", function ($q) {
-    
+
+    // define this outside the service object b/c it's referenced internally
+    var getLastCriteria = function () {
+        var deferred = $q.defer ();
+
+        chrome.storage.sync.get (storageServiceBase.LAST_CRITERIA, function (items) {
+            var criteria = items[storageServiceBase.LAST_CRITERIA];
+            if (!Utils.isDefinedAndNotNull (criteria))
+                criteria = [];
+            else if (!angular.isArray (criteria))
+                criteria = [criteria];
+            deferred.resolve (criteria);
+        });
+
+        return deferred.promise;
+    };
+
     // define this outside the service object b/c it's referenced internally
     var saveLastCriteria = function (criteria) {
         var deferred = $q.defer ();
 
-        var items = {};
-        items[storageServiceBase.LAST_CRITERIA] = criteria;
+        getLastCriteria ().then (function (lastCriteria) {
+            lastCriteria.splice (0, 0, criteria);
+            if (lastCriteria.length > storageServiceBase.MAX_LAST_CRITERIA)
+                lastCriteria.splice (storageServiceBase.MAX_LAST_CRITERIA - 1, Number.MAX_VALUE);
 
-        chrome.storage.sync.set (items, function () {
-            var error = chrome.runtime.lastError;
-            if (typeof error !== "undefined") {
-                console.log ("Error saving " + key + ": " + error);
-                deferred.error (error);
-            } else {
-                deferred.resolve ();
-            }
+            var items = {};
+            items[storageServiceBase.LAST_CRITERIA] = lastCriteria;
+
+            chrome.storage.sync.set (items, function () {
+                var error = chrome.runtime.lastError;
+                if (typeof error !== "undefined") {
+                    console.log ("Error saving " + key + ": " + error);
+                    deferred.error (error);
+                } else {
+                    deferred.resolve ();
+                }
+            });
         });
 
         return deferred.promise;
@@ -47,18 +71,7 @@ app.factory ("storageService", function ($q) {
 
     return {
 
-        getLastCriteria: function () {
-            var deferred = $q.defer ();
-
-            chrome.storage.sync.get (storageServiceBase.LAST_CRITERIA, function (items) {
-                var criteria = items[storageServiceBase.LAST_CRITERIA];
-                if (typeof criteria === "undefined")
-                    criteria = null;
-                deferred.resolve (criteria);
-            });
-
-            return deferred.promise;
-        },
+        getLastCriteria: getLastCriteria,
 
         saveLastCriteria: saveLastCriteria,
 
@@ -84,9 +97,9 @@ app.factory ("storageService", function ($q) {
 
             var key = storageServiceBase.getCriteriaKey (tabId);
 
-            chrome.storage.local.get(key, function (items) {
+            chrome.storage.local.get (key, function (items) {
                 var data = items[key];
-                deferred.resolve(data);
+                deferred.resolve (data);
                 chrome.storage.local.remove (key);
             });
 

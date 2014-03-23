@@ -79,6 +79,9 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
         if (title.length == 0)
             title = "Empty search";
 
+        if (Utils.isDefinedAndNotNull (criteria.scrapeResults) && criteria.scrapeResults === true)
+            title += " +scrape";
+
         return title;
     };
 
@@ -101,6 +104,9 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
     };
 
     return {
+
+        getBookmarkTitle: getBookmarkTitle,
+
         addOrUpdateBookmark: function (criteria)
         {
             createOrGetBookmarkFolder (function (folderId)
@@ -125,5 +131,6 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
                 });
             });
         }
+        
     };
 });

@@ -33,7 +33,7 @@
 </head>
 <body>
 
-  <div id="page" class="container" ng-controller="SearchController">
+  <div id="page" ng-controller="SearchController" class="container" style="margin-right: 20px;">
 
     <header class="row clearfix bottom-buffer">
       <div class="col-xs-10">
@@ -152,7 +152,16 @@
           <div class="form-group">
             <div class="col-xs-4 smallPadAndAlignRight">
               <div class="pull-right">
-                <button id="searchButton" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
+                <div class="btn-group">
+                  <button id="searchButton" type="button" ng-click="executeSearch(criteria)" class="btn btn-primary" title="search now"><span class="glyphicon glyphicon-search"></span></button>
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" title="recent searches">
+                    <span class="caret"></span>
+                    <span class="sr-only">recent searches dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" style="width: 250px;">
+                    <li ng-repeat="c in recentCriteria" style="text-align: left;"><a href="#" ng-click="$parent.criteria = c" style="white-space: normal;">{{criteriaToString(c)}}</a></li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div class="col-xs-4 col-xs-offset-4">
