@@ -49,7 +49,7 @@ ListingsControllerBase.sanitizeListings = ListingsControllerBase.sanitizeListing
 };
 
 app.controller ("ListingsController",
-    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, notificationService, scrapeService) {
+    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, notificationService, listingImportService) {
 
         $scope.refresh = function () {
             var deferred = $q.defer ();
@@ -200,8 +200,7 @@ app.controller ("ListingsController",
                         || !Utils.isDefinedAndNotNull (listing.record.mls))
                         continue;
                     numProcessed++;
-                    // TODO convert to use a new importService
-                    scrapeService.processListing (listing).then (function (resultAndListing) {
+                    listingImportService.importListing (listing).then (function (resultAndListing) {
                         if (resultAndListing.result === -1)
                             numNew++;
                         else if (resultAndListing.result === 0)
@@ -213,6 +212,7 @@ app.controller ("ListingsController",
                             var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
 
                             notificationService.displayNotification ("", "Import Results", message);
+                            $scope.refresh ();
                         }
                     });
                 }
