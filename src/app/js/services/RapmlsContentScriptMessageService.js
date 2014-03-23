@@ -3,6 +3,7 @@
 /*
  * Sends a message to the given tab to execute a MLS search with the given criteria, using Chrome API
  */
+// TODO rename
 app.factory ("rapmlsContentScriptMessageService", function () {
     return {
 

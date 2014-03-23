@@ -3,7 +3,7 @@
 /*
  * Handles notifications, using Chrome API
  */
-app.factory ("notificationService", function () {
+app.factory ("browserNotificationService", function () {
     return {
 
         displayDebugNotification: function (message) {

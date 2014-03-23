@@ -3,6 +3,7 @@
 /*
  * handles persistence of listings, using Chrome API
  */
+// TODO rename browserListingStorageService
 app.factory ("listingStorageService", function ($q, listingConformerService) {
 
     var getListingKey = function (id) {

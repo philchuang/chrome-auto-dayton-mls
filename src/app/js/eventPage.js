@@ -5,7 +5,7 @@
 // lifecycle
 chrome.runtime.onInstalled.addListener (function (details) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
-    var storageService = injector.get("storageService");
+    var storageService = injector.get ("storageService");
 
     storageService.clearAllTempData ();
 });
@@ -14,9 +14,8 @@ chrome.runtime.onInstalled.addListener (function (details) {
 
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
-    var notificationService = injector.get ("notificationService");
+    var browserNotificationService = injector.get ("browserNotificationService");
     var storageService = injector.get ("storageService");
-    var listingStorageService = injector.get ("listingStorageService");
     var scrapeService = injector.get ("scrapeService");
 
     if (request.action === "consumeCriteria") {
@@ -71,7 +70,7 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     }
 
     if (request.action === "displayNotification") {
-        notificationService.displayNotification (request.id, request.title, request.message);
+        browserNotificationService.displayNotification (request.id, request.title, request.message);
         return false;
     }
 

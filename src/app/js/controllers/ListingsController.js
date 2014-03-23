@@ -49,7 +49,7 @@ ListingsControllerBase.sanitizeListings = ListingsControllerBase.sanitizeListing
 };
 
 app.controller ("ListingsController",
-    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, notificationService, listingImportService) {
+    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, browserNotificationService, listingImportService) {
 
         $scope.refresh = function () {
             var deferred = $q.defer ();
@@ -87,7 +87,7 @@ app.controller ("ListingsController",
                 var idx = $.inArray (listing, $scope.listings);
                 if (~idx) $scope.listings.splice (idx, 1);
                 listingStorageService.deleteListing (listing.id);
-                notificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.calculated.streetNumberAndName);
+                browserNotificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.calculated.streetNumberAndName);
             });
         };
 
@@ -114,7 +114,7 @@ app.controller ("ListingsController",
                     if (~idx) $scope.listings.splice (idx, 1);
                     listingStorageService.deleteListing (listing.id);
                 }
-                notificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
+                browserNotificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
             });
         };
 
@@ -183,7 +183,7 @@ app.controller ("ListingsController",
                 try {
                     listings = JSON.parse (scope.dataContext.json);
                 } catch (ex) {
-                    notificationService.displayNotification ("", "Import error", "Error parsing JSON: " + ex.message);
+                    browserNotificationService.displayNotification ("", "Import error", "Error parsing JSON: " + ex.message);
                     return;
                 }
                 if (typeof listings === "undefined" || listings === null || listings.length === 0)
@@ -211,7 +211,7 @@ app.controller ("ListingsController",
                         if (numProcessed === numNew + numNoChange + numUpdated) {
                             var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
 
-                            notificationService.displayNotification ("", "Import Results", message);
+                            browserNotificationService.displayNotification ("", "Import Results", message);
                             $scope.refresh ();
                         }
                     });

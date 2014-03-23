@@ -6,7 +6,7 @@ var searchServiceBase = searchServiceBase || {
     DAYTON_RAPMLS_URL: "http://dayton.rapmls.com/scripts/mgrqispi.dll?APPNAME=Dayton&PRGNAME=MLSLogin&ARGUMENT=1qpfrF1qRkQqOropCefZ1w%3D%3D&KeyRid=1"
 };
 
-// TODO refactor chrome calls to new service
+// TODO refactor chrome calls to new service, browserTabsService
 /*
  * Executes searches with the given criteria, using Chrome API
  */

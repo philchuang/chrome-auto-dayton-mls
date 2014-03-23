@@ -1,18 +1,17 @@
 ﻿"use strict";
 
 /*
- * handles chrome bookmarks for search criteria
+ * handles bookmarks for search criteria
  */
-// TODO extract chrome calls
-app.factory ("criteriaBookmarkService", function (notificationService) {
+app.factory ("criteriaBookmarkService", function (browserBookmarkService, browserNotificationService) {
 
     var createOrGetBookmarkFolder = function (folderIdCallback)
     {
-        chrome.bookmarks.search ("Dayton MLS searches", function (nodes)
+        browserBookmarkService.search ("Dayton MLS searches").then (function (nodes)
         {
             if (!Utils.isDefinedAndNotNull (nodes) || nodes.length === 0)
             {
-                chrome.bookmarks.create ({ title: "Dayton MLS searches" }, function (node) {
+                browserBookmarkService.create ({ title: "Dayton MLS searches" }).then (function (node) {
                     folderIdCallback (node.id);
                 });
                 return;
@@ -23,7 +22,7 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
 
     var createOrGetBookmark = function (folderId, title, nodeCallback)
     {
-        chrome.bookmarks.getChildren (folderId, function (nodes)
+        browserBookmarkService.getChildren (folderId).then (function (nodes)
         {
             if (Utils.isDefinedAndNotNull (nodes) && nodes.length > 0)
             {
@@ -118,14 +117,14 @@ app.factory ("criteriaBookmarkService", function (notificationService) {
                 {
                     if (typeof node == "undefined" || node == null)
                     {
-                        chrome.bookmarks.create ({ parentId: folderId, title: title, url: url }, function () {
-                            notificationService.displayNotification ("", "Bookmark created", title);
+                        browserBookmarkService.create ({ parentId: folderId, title: title, url: url }).then (function () {
+                            browserNotificationService.displayNotification ("", "Bookmark created", title);
                         });
                     }
                     else
                     {
-                        chrome.bookmarks.update (node.id, { url: url }, function () {
-                            notificationService.displayNotification ("", "Bookmark updated", title);
+                        browserBookmarkService.update (node.id, { url: url }).then (function () {
+                            browserNotificationService.displayNotification ("", "Bookmark updated", title);
                         });
                     }
                 });
