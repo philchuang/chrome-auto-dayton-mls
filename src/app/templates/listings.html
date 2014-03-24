@@ -409,6 +409,15 @@
     </div>
     <div class="modal-body">
       <textarea rows="5" style="width: 100%;" ng-model="dataContext.json"></textarea>
+      <div class="btn-group btn-group-sm">
+        <button title="only personal data"
+                class="btn btn-toolbar btn-sm"
+                ng-click="dataContext.toggleJsonType ()">
+          personal data only
+        </button>
+        <button class="btn btn-toolbar btn-sm" ng-click="dataContext.toggleJsonType ()" ng-class="dataContext.jsonType === 'personal' ? 'btn-success' : 'btn-default'"><span class="glyphicon" ng-class="dataContext.jsonType === 'personal' ? 'glyphicon-ok' : 'glyphicon-remove'"></span></button>
+      </div>
+
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" ng-click="close()">OK</button>

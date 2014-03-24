@@ -152,15 +152,36 @@ app.controller ("ListingsController",
             browserListingStorageService.getListings (ids).then (function (listings) {
                 ListingsControllerBase.sanitizeListings (listings);
                 var exportData = JSON.stringify (listings);
+                var personalListings = JSON.parse (exportData);
+                for (var i = 0; i < personalListings.length; i++) {
+                    delete personalListings[i].record;
+                    delete personalListings[i].history;
+                }
+                var exportDataPersonal = JSON.stringify (personalListings);
                 $modal.open ({
                     templateUrl: "ExportDialog.html",
                     controller: ModalInstanceCtrl,
                     resolve: {
                         dataContext: function () {
-                            return {
+                            var dc = {
                                 title: "Exported " + listings.length + " Listings",
-                                json: exportData
+                                json: exportData,
+                                jsonAll: exportData,
+                                jsonPersonal: exportDataPersonal,
+                                jsonType: "all"
                             };
+
+                            dc.toggleJsonType = function () {
+                                if (dc.jsonType === "all") {
+                                    dc.json = dc.jsonPersonal;
+                                    dc.jsonType = "personal";
+                                } else {
+                                    dc.json = dc.jsonAll;
+                                    dc.jsonType = "all";
+                                }
+                            };
+
+                            return dc;
                         }
                     }
                 });
