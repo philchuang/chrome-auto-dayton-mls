@@ -10,7 +10,12 @@ var searchServiceBase = searchServiceBase || {
 /*
  * Executes searches with the given criteria, using Chrome API
  */
-app.factory ("searchService", function (browserGeneralStorageService, rapmlsContentScriptMessageService) {
+app.factory ("searchService", function (browserGeneralStorageService) {
+
+    var sendCriteriaToTab = function (tabId, criteria, response) {
+        var message = { "action": "setCriteriaAndExecute", "criteria": criteria };
+        chrome.tabs.sendMessage (tabId, message, response);
+    };
     
     return {
 
@@ -42,7 +47,7 @@ app.factory ("searchService", function (browserGeneralStorageService, rapmlsCont
                     browserGeneralStorageService.publishCriteria (criteria, tabs[0].id);
                     if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
                         browserGeneralStorageService.publishScrapeOptions (tabs[0].id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
-                    rapmlsContentScriptMessageService.sendCriteriaToTab(tabs[0].id, criteria, function (response) {
+                    sendCriteriaToTab (tabs[0].id, criteria, function (response) {
                         if (typeof response !== "undefined" && response !== null && response === true)
                             browserGeneralStorageService.consumeCriteria (tabs[0].id);
                     });

@@ -47,6 +47,7 @@ app.controller ("SearchController",
             $scope.criteria = urlCriteria;
             $scope.$apply();
 
+            // TODO make call to searchService.searchDaytonRapmlsInCurrentTab
             chrome.tabs.getCurrent (function (tab) {
                 searchService.searchDaytonRapmls (urlCriteria, tab);
             });
@@ -57,6 +58,7 @@ app.controller ("SearchController",
             scrapeResults: false
         };
 
+        // TODO make call to searchService.canScrapeCurrentPage
         chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
             if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
                 $scope.canScrapeCurrentPage = false;
@@ -65,6 +67,7 @@ app.controller ("SearchController",
             });
         });
 
+        // TODO make call to searchService.scrapeCurrentPage
         $scope.scrapeCurrentPage = function () {
             chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
                 if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
@@ -99,6 +102,7 @@ app.controller ("SearchController",
             criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 
+        // TODO make call to NavigationService.openListingsPage ?
         $scope.viewListings = function () {
             var listingsUrl = chrome.runtime.getURL("/app/templates/listings.html");
 

@@ -85,7 +85,6 @@
     <Content Include="app\js\services\CriteriaBookmarkService.js" />
     <Content Include="app\js\content_scripts\search.rapmls.js" />
     <Content Include="app\js\services\ChromeListingStorageService.js" />
-    <Content Include="app\js\services\RapmlsContentScriptMessageService.js" />
     <Content Include="app\js\controllers\SearchController.js" />
     <Content Include="app\js\services\ListingImportService.js" />
     <Content Include="app\js\services\SearchService.js" />
