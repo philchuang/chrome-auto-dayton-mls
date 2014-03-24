@@ -4,8 +4,6 @@ WHERE TO START NOW
 * architecture
 	* extract all chrome related code into separate classes
 	* restructure directories by functional area?
-* listings page
-	* when clicking on MLS #, make sure details get scraped
 
 STUFF TO DO LATER
 * convert from event page back to background page for live updates to listings

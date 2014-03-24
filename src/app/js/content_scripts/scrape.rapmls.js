@@ -144,8 +144,12 @@ function handleScrapeOptions (options) {
 
     if (options.scrapeResults) {
         processRows (getResultRows (), function (resultRows) {
-            if (options.viewDetailsFirstResult)
-                openFirstResultDetailsPage (resultRows);
+            if (options.viewDetailsFirstResult) {
+                // push options back to app, so that details content script can know to scrape
+                chrome.runtime.sendMessage ({ action: "publishScrapeOptions", options: options }, function () {
+                    openFirstResultDetailsPage (resultRows);
+                });
+            }
         });
     } else {
         if (options.viewDetailsFirstResult)

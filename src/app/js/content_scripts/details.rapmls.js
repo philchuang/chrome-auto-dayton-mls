@@ -90,10 +90,10 @@ function updateMlsData () {
     };
     
     var summaryTable = $("#tdListingSummary").parent ().next ().children ().first ().children ().first ().children ();
-    var firstSummaryBlock = summaryTable.children().first().children().first().children().first();
+    var firstSummaryBlock = summaryTable.children ().first ().children ().first ().children ().first ();
     
     // mls
-    var mlsStr = firstSummaryBlock.children().first().text();
+    var mlsStr = firstSummaryBlock.children ().first ().text ();
     listing.record.mls = S($(mlsStr.split ("#")).last ()[0]).trim ().s;
     listing.id = listing.record.mls;
     
@@ -231,6 +231,11 @@ $(document).ready (function ()
 
         var idx = $.inArray (getMls (), mlsNums);
         if (~idx)
+            updateMlsData ();
+    });
+
+    chrome.runtime.sendMessage({ action: "consumeScrapeOptions" }, function (options) {
+        if (options && options.scrapeResults)
             updateMlsData ();
     });
 });

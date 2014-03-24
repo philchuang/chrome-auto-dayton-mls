@@ -31,6 +31,13 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         });
         return true; // this keeps the message channel open for asynchronous response
     }
+
+    if (request.action === "publishScrapeOptions") {
+        browserGeneralStorageService.publishScrapeOptions (sender.tab.id, request.options).then (function () {
+            sendResponse ();
+        });
+        return true; // this keeps the message channel open for asynchronous response
+    }
     
     if (request.action === "processListing") {
         scrapeService.processListing (request.listing).then (function (resultAndListing) {

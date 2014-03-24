@@ -114,11 +114,15 @@ app.factory ("browserGeneralStorageService", function ($q) {
         },
 
         publishScrapeOptions: function (tabId, options) {
-            var key = chromeGeneralStorageService.getScrapeOptionsKey(tabId);
+            var deferred = $q.defer ();
+
+            var key = chromeGeneralStorageService.getScrapeOptionsKey (tabId);
             var items = {};
             items[key] = options;
 
-            chrome.storage.local.set (items);
+            chrome.storage.local.set (items, function () { deferred.resolve (); });
+
+            return deferred.promise;
         },
 
         consumeScrapeOptions: function (tabId) {
