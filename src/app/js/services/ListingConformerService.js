@@ -126,6 +126,13 @@ app.factory ("listingConformerService", function () {
                     delete listing.history[i].$$hashKey;
                     modified = true;
                 }
+                // delete "added" messages
+                if (listing.history[i].action.indexOf ("added") === 0) {
+                    listing.history.splice (i, 1);
+                    i--;
+                    modified = true;
+                    continue;
+                }
             }
         }
 
