@@ -10,7 +10,7 @@ var searchServiceBase = searchServiceBase || {
 /*
  * Executes searches with the given criteria, using Chrome API
  */
-app.factory ('searchService', function (storageService, rapmlsContentScriptMessageService) {
+app.factory ("searchService", function (browserGeneralStorageService, rapmlsContentScriptMessageService) {
     
     return {
 
@@ -19,9 +19,9 @@ app.factory ('searchService', function (storageService, rapmlsContentScriptMessa
             if (typeof tab !== "undefined" && tab != null)
             {
                 // re-use the given tab
-                storageService.publishCriteria (criteria, tab.id);
+                browserGeneralStorageService.publishCriteria (criteria, tab.id);
                 if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
-                    storageService.publishScrapeOptions (tab.id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
+                    browserGeneralStorageService.publishScrapeOptions (tab.id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
                 chrome.tabs.update (tab.id, { url: searchServiceBase.DAYTON_RAPMLS_URL });
                 return;
             }
@@ -31,20 +31,20 @@ app.factory ('searchService', function (storageService, rapmlsContentScriptMessa
                 if (!(S(tabs[0].url).startsWith (searchServiceBase.DAYTON_RAPMLS_PARTIAL_URL)))
                 {
                     chrome.tabs.create({ url: searchServiceBase.DAYTON_RAPMLS_URL }, function (newTab) {
-                        storageService.publishCriteria (criteria, newTab.id);
+                        browserGeneralStorageService.publishCriteria (criteria, newTab.id);
                         if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
-                            storageService.publishScrapeOptions (newTab.id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
+                            browserGeneralStorageService.publishScrapeOptions (newTab.id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
                         // TODO figure out what happens if new tab calls consume before publish is called
                     });
                 }
                 else
                 {
-                    storageService.publishCriteria (criteria, tabs[0].id);
+                    browserGeneralStorageService.publishCriteria (criteria, tabs[0].id);
                     if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
-                        storageService.publishScrapeOptions (tabs[0].id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
+                        browserGeneralStorageService.publishScrapeOptions (tabs[0].id, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
                     rapmlsContentScriptMessageService.sendCriteriaToTab(tabs[0].id, criteria, function (response) {
                         if (typeof response !== "undefined" && response !== null && response === true)
-                            storageService.consumeCriteria (tabs[0].id);
+                            browserGeneralStorageService.consumeCriteria (tabs[0].id);
                     });
                 }
             });

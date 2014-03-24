@@ -89,7 +89,7 @@ ListingImportServiceBase.importListing = ListingImportServiceBase.importListing 
 /*
  * imports listing data and merges into the existing data
  */
-app.factory ("listingImportService", function ($q, listingStorageService) {
+app.factory ("listingImportService", function ($q, browserListingStorageService) {
 
     return {
 
@@ -97,11 +97,11 @@ app.factory ("listingImportService", function ($q, listingStorageService) {
             var deferred = $q.defer ();
             
             // get previous listing
-            listingStorageService.getListing (listing.id).then (function (existingListing) {
+            browserListingStorageService.getListing (listing.id).then (function (existingListing) {
                 // compare listing
                 var result = ListingImportServiceBase.importListing (existingListing, listing);
                 // save listing
-                listingStorageService.saveListing (listing);
+                browserListingStorageService.saveListing (listing);
                 deferred.resolve ({ result: result, listing: listing });
             });
 

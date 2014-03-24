@@ -38,7 +38,7 @@ criteriaUtils.getFromUrlSearch = criteriaUtils.getFromUrlSearch ||
     };
 
 app.controller ("SearchController",
-    function ($scope, $window, storageService, searchService, criteriaBookmarkService) {
+    function ($scope, $window, browserGeneralStorageService, searchService, criteriaBookmarkService) {
 
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
@@ -55,10 +55,6 @@ app.controller ("SearchController",
 
         $scope.criteria = {
             scrapeResults: false
-        };
-
-        $scope.criteriaToString = function (criteria) {
-            return criteriaBookmarkService.getBookmarkTitle (criteria);
         };
 
         chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
@@ -79,9 +75,12 @@ app.controller ("SearchController",
             });
         };
 
-        storageService.getLastCriteria ().then (function (criteria) {
+        browserGeneralStorageService.getLastCriteria ().then (function (criteria) {
             if (Utils.isDefinedAndNotNull (criteria)) {
-                $scope.criteria = criteria[0];
+                for (var i = 0; i < criteria.length; i++)
+                    criteria[i].id = Utils.getCriteriaDescription (criteria[i]);
+                if (criteria.length > 0)
+                    $scope.criteria = criteria[0];
                 $scope.recentCriteria = criteria;
             }
         });

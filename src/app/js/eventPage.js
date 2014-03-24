@@ -5,9 +5,9 @@
 // lifecycle
 chrome.runtime.onInstalled.addListener (function (details) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
-    var storageService = injector.get ("storageService");
+    var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
 
-    storageService.clearAllTempData ();
+    browserGeneralStorageService.clearAllTempData ();
 });
 
 // TODO split listeners into area/module specific files
@@ -15,18 +15,18 @@ chrome.runtime.onInstalled.addListener (function (details) {
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
     var browserNotificationService = injector.get ("browserNotificationService");
-    var storageService = injector.get ("storageService");
+    var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
     var scrapeService = injector.get ("scrapeService");
 
     if (request.action === "consumeCriteria") {
-        storageService.consumeCriteria (sender.tab.id).then (function (criteria) {
+        browserGeneralStorageService.consumeCriteria (sender.tab.id).then (function (criteria) {
              sendResponse(criteria);
         });
         return true; // this keeps the message channel open for asynchronous response
     }
 
     if (request.action === "consumeScrapeOptions") {
-        storageService.consumeScrapeOptions (sender.tab.id).then (function (options) {
+        browserGeneralStorageService.consumeScrapeOptions (sender.tab.id).then (function (options) {
             sendResponse (options);
         });
         return true; // this keeps the message channel open for asynchronous response
@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
                 sendResponse(null);
                 return;
             }
-            storageService.saveMlsDetailsFetchList (sender.tab.id, mlsNums).then (function () {
+            browserGeneralStorageService.saveMlsDetailsFetchList (sender.tab.id, mlsNums).then (function () {
                 sendResponse (mlsNums);
             });
         });
@@ -58,12 +58,12 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     }
 
     if (request.action === "saveMlsDetailsFetchList") {
-        storageService.saveMlsDetailsFetchList (sender.tab.id, request.mlsNums);
+        browserGeneralStorageService.saveMlsDetailsFetchList (sender.tab.id, request.mlsNums);
         return false;
     }
 
     if (request.action === "getMlsDetailsFetchList") {
-        storageService.getMlsDetailsFetchList (sender.tab.id).then (function (mlsNums) {
+        browserGeneralStorageService.getMlsDetailsFetchList (sender.tab.id).then (function (mlsNums) {
             sendResponse (mlsNums);
         });
         return true; // this keeps the message channel open for asynchronous response

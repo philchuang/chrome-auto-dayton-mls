@@ -19,7 +19,7 @@
 
   <script type="text/javascript" src="../js/utils/utils.js"></script>
   <script type="text/javascript" src="../js/app.js"></script>
-  <script type="text/javascript" src="../js/services/StorageService.js"></script>
+  <script type="text/javascript" src="../js/services/ChromeGeneralStorageService.js"></script>
   <script type="text/javascript" src="../js/services/ChromeNotificationService.js"></script>
   <script type="text/javascript" src="../js/services/ChromeBookmarkService.js"></script>
   <script type="text/javascript" src="../js/services/CriteriaBookmarkService.js"></script>
@@ -160,7 +160,7 @@
                     <span class="sr-only">recent searches dropdown</span>
                   </button>
                   <ul class="dropdown-menu" role="menu" style="width: 250px;">
-                    <li ng-repeat="c in recentCriteria" style="text-align: left;"><a href="#" ng-click="$parent.criteria = c" style="white-space: normal;">{{criteriaToString(c)}}</a></li>
+                    <li ng-repeat="c in recentCriteria track by c.id" style="text-align: left;"><a href="#" ng-click="$parent.criteria = c" style="white-space: normal;">{{c.id}}</a></li>
                   </ul>
                 </div>
               </div>

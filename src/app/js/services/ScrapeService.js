@@ -165,7 +165,7 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
 /*
  * processes scraped listing data and merges into the existing data
  */
-app.factory ("scrapeService", function ($q, listingStorageService) {
+app.factory ("scrapeService", function ($q, browserListingStorageService) {
 
     return {
 
@@ -173,11 +173,11 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
             var deferred = $q.defer ();
             
             // get previous listing
-            listingStorageService.getListing (listing.id).then (function (existingListing) {
+            browserListingStorageService.getListing (listing.id).then (function (existingListing) {
                 // compare listing
                 var result = ScrapeServiceBase.processChanges (existingListing, listing);
                 // save listing
-                listingStorageService.saveListing (listing);
+                browserListingStorageService.saveListing (listing);
                 deferred.resolve ({ result: result, listing: listing });
             });
 
@@ -185,11 +185,11 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
         },
 
         updateListingStaleness: function () {
-            listingStorageService.getAllListings ().then (function (listings) {
+            browserListingStorageService.getAllListings ().then (function (listings) {
                 var stalenessThreshold = new Date (new Date ().valueOf () - ScrapeServiceBase.stalenessThresholdMs);
                 for (var i = 0; i < listings.length; i++) {
                     listings[i].record.isStale = new Date (listings[i].record.refreshed) < stalenessThreshold;
-                    listingStorageService.saveListing (listings[i]);
+                    browserListingStorageService.saveListing (listings[i]);
                 }
             });
         },
@@ -197,7 +197,7 @@ app.factory ("scrapeService", function ($q, listingStorageService) {
         checkNeedsListingDetails: function (mlsNums) {
             var deferred = $q.defer ();
 
-            listingStorageService.getListings (mlsNums).then (function (listings) {
+            browserListingStorageService.getListings (mlsNums).then (function (listings) {
                 var nums = [];
                 
                 if (Utils.isDefinedAndNotNull (listings) && listings.length > 0) {

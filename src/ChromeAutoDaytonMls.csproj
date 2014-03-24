@@ -84,13 +84,13 @@
     <Content Include="app\js\services\ChromeNotificationService.js" />
     <Content Include="app\js\services\CriteriaBookmarkService.js" />
     <Content Include="app\js\content_scripts\search.rapmls.js" />
+    <Content Include="app\js\services\ChromeListingStorageService.js" />
     <Content Include="app\js\services\RapmlsContentScriptMessageService.js" />
     <Content Include="app\js\controllers\SearchController.js" />
     <Content Include="app\js\services\ListingImportService.js" />
     <Content Include="app\js\services\SearchService.js" />
     <Content Include="app\js\services\ScrapeService.js" />
-    <Content Include="app\js\services\ListingStorageService.js" />
-    <Content Include="app\js\services\StorageService.js" />
+    <Content Include="app\js\services\ChromeGeneralStorageService.js" />
     <Content Include="app\js\utils\utils.js" />
     <Content Include="app\resources\icons\icon128.png" />
     <Content Include="app\resources\icons\icon16.png" />

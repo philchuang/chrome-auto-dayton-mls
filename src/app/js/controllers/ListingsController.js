@@ -49,7 +49,7 @@ ListingsControllerBase.sanitizeListings = ListingsControllerBase.sanitizeListing
 };
 
 app.controller ("ListingsController",
-    function ($scope, $q, $timeout, $modal, listingStorageService, storageService, browserNotificationService, listingImportService) {
+    function ($scope, $q, $timeout, $modal, browserListingStorageService, browserGeneralStorageService, browserNotificationService, listingImportService) {
 
         $scope.refresh = function () {
             var deferred = $q.defer ();
@@ -58,7 +58,7 @@ app.controller ("ListingsController",
             $scope.filteredListings = null;
             $scope.listings = null;
 
-            listingStorageService.getAllListings ().then (function (listings) {
+            browserListingStorageService.getAllListings ().then (function (listings) {
                 ListingsControllerBase.prepareListings (listings);
                 $scope.listings = listings;
                 $scope.isRefreshing = false;
@@ -86,7 +86,7 @@ app.controller ("ListingsController",
             }).result.then (function (_) {
                 var idx = $.inArray (listing, $scope.listings);
                 if (~idx) $scope.listings.splice (idx, 1);
-                listingStorageService.deleteListing (listing.id);
+                browserListingStorageService.deleteListing (listing.id);
                 browserNotificationService.displayNotification ("", "Deleted listing", "Deleted " + listing.calculated.streetNumberAndName);
             });
         };
@@ -112,7 +112,7 @@ app.controller ("ListingsController",
                     var listing = listingsToDelete[i];
                     var idx = $.inArray (listing, $scope.listings);
                     if (~idx) $scope.listings.splice (idx, 1);
-                    listingStorageService.deleteListing (listing.id);
+                    browserListingStorageService.deleteListing (listing.id);
                 }
                 browserNotificationService.displayNotification ("", "Deleted listings", listingsToDelete.length + " listings deleted.");
             });
@@ -121,7 +121,7 @@ app.controller ("ListingsController",
         $scope.saveListing = function (listing) {
             var copy = JSON.parse (JSON.stringify (listing));
             ListingsControllerBase.sanitizeListing (copy);
-            listingStorageService.saveListing (copy);
+            browserListingStorageService.saveListing (copy);
         };
 
         $scope.toggleIsFavorite = function (listing) {
@@ -148,7 +148,7 @@ app.controller ("ListingsController",
         
         $scope.exportListings = function () {
             var ids = $scope.filteredListings.map (function (l) { return l.id; });
-            listingStorageService.getListings (ids).then (function (listings) {
+            browserListingStorageService.getListings (ids).then (function (listings) {
                 ListingsControllerBase.sanitizeListings (listings);
                 var exportData = JSON.stringify (listings);
                 $modal.open ({
@@ -220,7 +220,7 @@ app.controller ("ListingsController",
         };
 
         $scope.loadFilters = function () {
-            storageService.getLastListingsFilters ().then (function (filters) {
+            browserGeneralStorageService.getLastListingsFilters ().then (function (filters) {
                 if (filters) {
                     $scope.filters = filters;
                     $scope.tempDynamicJavascriptFilter = $scope.filters.dynamicJavascriptFilter;
@@ -230,7 +230,7 @@ app.controller ("ListingsController",
 
         $scope.saveFilters = function () {
             if ($scope.filters)
-                storageService.saveLastListingsFilters ($scope.filters);
+                browserGeneralStorageService.saveLastListingsFilters ($scope.filters);
         };
 
         $scope.historySortProperty = "timestamp";
