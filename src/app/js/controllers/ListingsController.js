@@ -121,7 +121,8 @@ app.controller ("ListingsController",
         $scope.saveListing = function (listing) {
             var copy = JSON.parse (JSON.stringify (listing));
             ListingsControllerBase.sanitizeListing (copy);
-            browserListingStorageService.saveListing (copy);
+            // use import service to prevent MLS record overwriting
+            listingImportService.importListing (copy);
         };
 
         $scope.toggleIsFavorite = function (listing) {
