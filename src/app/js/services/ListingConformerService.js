@@ -81,6 +81,24 @@ app.factory ("listingConformerService", function () {
         return modified;
     };
 
+    var deleteHashKey = function (obj) {
+        if (!Utils.isDefinedAndNotNull (obj)) return false;
+
+        if (angular.isArray (obj)) {
+            var modified = false;
+
+            for (var i = 0; i < obj.length; i++)
+                if (deleteHashKey (obj[i]))
+                    modified = true;
+
+            return modified;
+        } else {
+            if (!Utils.isDefinedAndNotNull (obj.$$hashKey)) return false;
+            delete obj.$$hashKey;
+            return true;
+        }
+    };
+
     var cleanse = function (listing) {
         var modified = false;
 
@@ -116,17 +134,17 @@ app.factory ("listingConformerService", function () {
         }
 
         // delete $$hashKey (gets added somehow)
+        if (deleteHashKey (listing))
+            modified = true;
 
         if (Utils.isDefinedAndNotNull (listing.history))
         {
+            if (deleteHashKey (listing.history))
+                modified = true;
+
+            // delete "added" messages
             for (var i = 0; i < listing.history.length; i++)
             {
-                if (typeof listing.history[i].$$hashKey !== "undefined")
-                {
-                    delete listing.history[i].$$hashKey;
-                    modified = true;
-                }
-                // delete "added" messages
                 if (listing.history[i].action.indexOf ("added") === 0) {
                     listing.history.splice (i, 1);
                     i--;
@@ -138,14 +156,14 @@ app.factory ("listingConformerService", function () {
 
         if (Utils.isDefinedAndNotNull (listing.record.pictures))
         {
-            for (var i2 = 0; i2 < listing.record.pictures.length; i2++)
-            {
-                if (typeof listing.record.pictures[i2].$$hashKey !== "undefined")
-                {
-                    delete listing.record.pictures[i2].$$hashKey;
-                    modified = true;
-                }
-            }
+            if (deleteHashKey (listing.record.pictures))
+                modified = true;
+        }
+
+        if (Utils.isDefinedAndNotNull (listing.record.rooms))
+        {
+            if (deleteHashKey (listing.record.rooms))
+                modified = true;
         }
 
         return modified;
