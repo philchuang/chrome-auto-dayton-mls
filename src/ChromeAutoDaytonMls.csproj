@@ -76,7 +76,7 @@
     <Content Include="app\js\filters\MaximumFilter.js" />
     <Content Include="app\js\filters\MinimumFilter.js" />
     <Content Include="app\js\filters\MlsSearchUrlFilter.js" />
-    <Content Include="app\js\filters\DaysSinceFilter.js" />
+    <Content Include="app\js\filters\TimeSinceFilter.js" />
     <Content Include="app\js\filters\EscapeFilter.js" />
     <Content Include="app\js\services\ChromeBookmarkService.js" />
     <Content Include="app\js\services\ListingFactory.js" />

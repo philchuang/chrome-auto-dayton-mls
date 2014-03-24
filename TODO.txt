@@ -1,6 +1,9 @@
 WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
+* listings page
+	* export dialog
+		* only personal data option
 * architecture
 	* extract all chrome related code into separate classes
 	* restructure directories by functional area?

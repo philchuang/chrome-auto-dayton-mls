@@ -37,7 +37,7 @@
   <script type="text/javascript" src="../js/directives/UsDebounceDirective.js"></script>
   <script type="text/javascript" src="../js/filters/DynamicJavascriptFilter.js"></script>
   <script type="text/javascript" src="../js/filters/EscapeFilter.js"></script>
-  <script type="text/javascript" src="../js/filters/DaysSinceFilter.js"></script>
+  <script type="text/javascript" src="../js/filters/TimeSinceFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MlsSearchUrlFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MinimumFilter.js"></script>
   <script type="text/javascript" src="../js/filters/MaximumFilter.js"></script>
@@ -214,7 +214,7 @@
                   <div class="col-md-2 column">${{listing.record.listPrice | number:0}}</div>
                   <div class="col-md-3 column"><strong><a ng-href="http://maps.google.com?q={{listing.record.streetNumber | escape}}+{{listing.record.streetName | escape}}+{{listing.record.city | escape}}+{{listing.record.zip}}" href="#" target="{{listing.record.mls}}" title="display on google maps">{{listing.record.streetNumber}} {{listing.record.streetName}}</a></strong></div>
                   <div class="col-md-3 column"><strong><a ng-href="http://maps.google.com?q={{listing.record.streetNumber | escape}}+{{listing.record.streetName | escape}}+{{listing.record.city | escape}}+{{listing.record.zip}}" href="#" target="{{listing.record.mls}}" title="display on google maps">{{listing.record.city}} {{listing.record.zip}}</a></strong></div>
-                  <div class="col-md-2 column text-muted small"><div class="listingTimestamp"><span title="refreshed on">{{listing.record.refreshed | date:"MM/dd/yy HH:mm"}} <span class="small">({{listing.record.refreshed | daysSince}})</span></span></div></div>
+                  <div class="col-md-2 column text-muted small"><div class="listingTimestamp"><span title="refreshed on">{{listing.record.refreshed | date:"MM/dd/yy HH:mm"}} <span class="small">({{listing.record.refreshed | timeSince}})</span></span></div></div>
                 </div>
               </div>
 
@@ -236,7 +236,7 @@
                     </div>
                     <ul class="list-group">
                       <li class="list-group-item"><span class="text-info">{{listing.record.status}}</span></li>
-                      <li class="list-group-item">Listed<br /><span class="text-info">{{listing.record.listingDate | date:"MM/dd/yy"}}</span><br /><span class="text-info small">{{listing.record.listingDate | daysSince}}</span></li>
+                      <li class="list-group-item">Listed<br /><span class="text-info">{{listing.record.listingDate | date:"MM/dd/yy"}}</span><br /><span class="text-info small">{{listing.record.listingDate | timeSince}}</span></li>
                     </ul>
                   </div>
                   <div class="col-md-10 column">
@@ -282,7 +282,7 @@
               <table class="table table-striped table-hover table-condensed table-responsive">
                 <tbody>
                   <tr ng-repeat="h in listing.history | orderBy:historySortProperty:historySortDescending">
-                    <td style="width: 0; padding-left: 10px; padding-right: 10px;"><span class="historyTimestamp">{{h.timestamp | date:"MM/dd/yy HH:mm"}} <span class="small">({{h.timestamp | daysSince}})</span></span></td>
+                    <td style="width: 0; padding-left: 10px; padding-right: 10px;"><span class="historyTimestamp">{{h.timestamp | date:"MM/dd/yy HH:mm"}} <span class="small">({{h.timestamp | timeSince}})</span></span></td>
                     <td style="width: 100%;"><span class="historyAction">{{h.action}}</span></td>
                   </tr>
                 </tbody>
