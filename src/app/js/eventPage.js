@@ -1,6 +1,6 @@
 "use strict";
 
-// TODO rewrite so that angular can inject dependencies
+// FUTURE rewrite so that angular can inject dependencies
 
 // lifecycle
 chrome.runtime.onInstalled.addListener (function (details) {
@@ -10,6 +10,7 @@ chrome.runtime.onInstalled.addListener (function (details) {
     browserGeneralStorageService.clearAllTempData ();
 });
 
+// TODO extract Chrome API calls
 // TODO split listeners into area/module specific files
 
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {

@@ -3,6 +3,7 @@ WHAT WAS JUST ACCOMPLISHED
 WHERE TO START NOW
 * architecture
 	* extract all chrome related code into separate classes
+		* remaining: content scripts and eventpage.js
 	* restructure directories by functional area?
 
 STUFF TO DO LATER

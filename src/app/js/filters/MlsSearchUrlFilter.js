@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.filter ("mlsSearchUrl", function () {
+app.filter ("mlsSearchUrl", function (browserTabsService) {
     return function (mls) {
-        return chrome.runtime.getURL("/app/templates/search.html?mlsStr=" + mls + "&scrapeResults=true");
+        return browserTabsService.getAppUrl ("/app/templates/search.html?mlsStr=" + mls + "&scrapeResults=true");
     };
 });

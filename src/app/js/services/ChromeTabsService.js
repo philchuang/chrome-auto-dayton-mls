@@ -11,11 +11,11 @@ app.factory ("browserTabsService", function ($q) {
             return chrome.runtime.getURL (relativeUrl);
         },
 
-        checkCurrentTabUrlMatches: function (url) {
+        getCurrentTabUrl: function () {
             var deferred = $q.defer ();
 
-            chrome.tabs.query ({ url: url, active: true, currentWindow: true }, function (tabs) {
-                deferred.resolve (Utils.isDefinedAndNotNull (tabs) && tabs.length > 0);
+            chrome.tabs.query ({ active: true, currentWindow: true }, function (tabs) {
+                deferred.resolve (Utils.isDefinedAndNotNull (tabs) && tabs.length > 0 ? tabs[0].url : null);
             });
 
             return deferred.promise;
@@ -32,11 +32,31 @@ app.factory ("browserTabsService", function ($q) {
             return deferred.promise;
         },
 
+        getCurrentTabId: function () {
+            var deferred = $q.defer ();
+
+            chrome.tabs.query ({ active: true, currentWindow: true }, function (tabs) {
+                deferred.resolve (Utils.isDefinedAndNotNull (tabs) && tabs.length > 0 ? tabs[0].id : null);
+            });
+
+            return deferred.promise;
+        },
+
+        updateTabUrl: function (tabId, url) {
+            var deferred = $q.defer ();
+
+            chrome.tabs.update (tabId, { url: url }, function () {
+                deferred.resolve ();
+            });
+
+            return deferred.promise;
+        },
+
         openNewTab: function (url) {
             var deferred = $q.defer ();
 
-            chrome.tabs.create ({ url: url }, function (_) {
-                deferred.resolve ();
+            chrome.tabs.create ({ url: url }, function (tab) {
+                deferred.resolve (tab.id);
             });
 
             return deferred.promise;
@@ -57,8 +77,17 @@ app.factory ("browserTabsService", function ($q) {
             });
 
             return deferred.promise;
-        }
- 
+        },
+
+        sendMessageToTab: function (tabId, message) {
+            var deferred = $q.defer();
+
+            chrome.tabs.sendMessage (tabId, message, function (response) {
+                deferred.resolve (response);
+            });
+
+            return deferred.promise;
+        } 
     };
 
 });

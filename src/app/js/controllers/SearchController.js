@@ -80,8 +80,18 @@ app.controller ("SearchController",
         };
 
         $scope.executeSearch = function (criteria) {
+            var searchUrl = browserTabsService.getAppUrl ("/app/templates/search.html");
+
             criteriaUtils.prepareCriteria (criteria);
-            searchService.searchDaytonRapmls (criteria);
+
+            // if active tab is the search page, do search in current tab - else, create a new tab
+            browserTabsService.getCurrentTabUrl ().then (function (url) {
+                if (S(url).startsWith (searchUrl)) {
+                    searchService.searchDaytonRapmlsInCurrentTab (criteria);
+                } else {
+                    searchService.searchDaytonRapmls (criteria);
+                }
+            });
         };
 
         $scope.bookmarkSearch = function (criteria) {
@@ -94,8 +104,8 @@ app.controller ("SearchController",
             var listingsUrl = browserTabsService.getAppUrl ("/app/templates/listings.html");
 
             // if active tab is the search page, open listing in current tab - else, create a new tab
-            browserTabsService.checkCurrentTabUrlMatches (searchUrl).then (function (isMatch) {
-                if (isMatch === true) {
+            browserTabsService.getCurrentTabUrl ().then (function (url) {
+                if (url === searchUrl) {
                     browserTabsService.updateCurrentTabUrl (listingsUrl);
                 } else {
                     browserTabsService.openNewTab (listingsUrl);
