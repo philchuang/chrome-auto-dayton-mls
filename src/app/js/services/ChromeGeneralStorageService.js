@@ -1,38 +1,33 @@
 ﻿"use strict";
 
-// TODO move this inside factory method
-var chromeGeneralStorageService = chromeGeneralStorageService || {
-
-    MAX_LAST_CRITERIA: 5,
-
-    LAST_CRITERIA: "lastCriteria",
-    LAST_FILTERS: "lastFilters",
-
-    getCriteriaKey: function (tabId) {
-        return "criteria_" + tabId;
-    },
-
-    getScrapeOptionsKey: function (tabId) {
-        return "scrape_" + tabId;
-    },
-
-    getMlsDetailsFetchListKey: function (tabId) {
-        return "mlsFetchList_" + tabId;
-    }
-
-};
-
 /*
  * general app data persistence
  */
 app.factory ("browserGeneralStorageService", function ($q) {
 
+    var MAX_LAST_CRITERIA = 5;
+
+    var LAST_CRITERIA = "lastCriteria";
+    var LAST_FILTERS = "lastFilters";
+
+    var getCriteriaKey = function (tabId) {
+        return "criteria_" + tabId;
+    };
+
+    var getScrapeOptionsKey = function (tabId) {
+        return "scrape_" + tabId;
+    };
+
+    var getMlsDetailsFetchListKey = function (tabId) {
+        return "mlsFetchList_" + tabId;
+    };
+
     // define this outside the service object b/c it's referenced internally
     var getLastCriteria = function () {
         var deferred = $q.defer ();
 
-        chrome.storage.sync.get (chromeGeneralStorageService.LAST_CRITERIA, function (items) {
-            var criteria = items[chromeGeneralStorageService.LAST_CRITERIA];
+        chrome.storage.sync.get (LAST_CRITERIA, function (items) {
+            var criteria = items[LAST_CRITERIA];
             if (!Utils.isDefinedAndNotNull (criteria))
                 criteria = [];
             else if (!angular.isArray (criteria))
@@ -56,11 +51,11 @@ app.factory ("browserGeneralStorageService", function ($q) {
                 lastCriteria.splice (0, 0, existingCriteria[0]);
             } else {
                 lastCriteria.splice (0, 0, criteria);
-                if (lastCriteria.length > chromeGeneralStorageService.MAX_LAST_CRITERIA)
-                    lastCriteria.splice (chromeGeneralStorageService.MAX_LAST_CRITERIA - 1, Number.MAX_VALUE);
+                if (lastCriteria.length > MAX_LAST_CRITERIA)
+                    lastCriteria.splice (MAX_LAST_CRITERIA - 1, Number.MAX_VALUE);
             }
             var items = {};
-            items[chromeGeneralStorageService.LAST_CRITERIA] = lastCriteria;
+            items[LAST_CRITERIA] = lastCriteria;
 
             chrome.storage.sync.set (items, function () {
                 var error = chrome.runtime.lastError;
@@ -83,7 +78,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
         saveLastCriteria: saveLastCriteria,
 
         publishCriteria: function (criteria, tabId) {
-            var key = chromeGeneralStorageService.getCriteriaKey (tabId);
+            var key = getCriteriaKey (tabId);
             var items = {};
             items[key] = criteria;
 
@@ -102,7 +97,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
                 return deferred.promise;
             }
 
-            var key = chromeGeneralStorageService.getCriteriaKey (tabId);
+            var key = getCriteriaKey (tabId);
 
             chrome.storage.local.get (key, function (items) {
                 var data = items[key];
@@ -116,7 +111,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
         publishScrapeOptions: function (tabId, options) {
             var deferred = $q.defer ();
 
-            var key = chromeGeneralStorageService.getScrapeOptionsKey (tabId);
+            var key = getScrapeOptionsKey (tabId);
             var items = {};
             items[key] = options;
 
@@ -134,7 +129,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
                 return deferred.promise;
             }
 
-            var key = chromeGeneralStorageService.getScrapeOptionsKey (tabId);
+            var key = getScrapeOptionsKey (tabId);
 
             chrome.storage.local.get (key, function (items) {
                 var data = items[key];
@@ -148,7 +143,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
         saveMlsDetailsFetchList: function (tabId, mlsNums) {
             var deferred = $q.defer ();
 
-            var key = chromeGeneralStorageService.getMlsDetailsFetchListKey (tabId);
+            var key = getMlsDetailsFetchListKey (tabId);
             
             if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0) {
                 chrome.storage.local.remove (key, function () { deferred.resolve(); });
@@ -172,7 +167,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
                 return deferred.promise;
             }
 
-            var key = chromeGeneralStorageService.getMlsDetailsFetchListKey (tabId);
+            var key = getMlsDetailsFetchListKey (tabId);
 
             chrome.storage.local.get(key, function (items) {
                 var data = items[key];
@@ -183,9 +178,9 @@ app.factory ("browserGeneralStorageService", function ($q) {
         },
         
         clearAllTempData: function () {
-            var criteriaKeyPrefix = chromeGeneralStorageService.getCriteriaKey ("");
-            var scrapeKeyPrefix = chromeGeneralStorageService.getScrapeOptionsKey ("");
-            var detailsKeyPrefix = chromeGeneralStorageService.getMlsDetailsFetchListKey ("");
+            var criteriaKeyPrefix = getCriteriaKey ("");
+            var scrapeKeyPrefix = getScrapeOptionsKey ("");
+            var detailsKeyPrefix = getMlsDetailsFetchListKey ("");
 
             chrome.storage.local.get(null, function (items) {
                 var keys = [];
@@ -204,7 +199,7 @@ app.factory ("browserGeneralStorageService", function ($q) {
             var deferred = $q.defer();
 
             var items = {};
-            items[chromeGeneralStorageService.LAST_FILTERS] = filters;
+            items[LAST_FILTERS] = filters;
 
             chrome.storage.sync.set (items, function () {
                 var error = chrome.runtime.lastError;
@@ -225,8 +220,8 @@ app.factory ("browserGeneralStorageService", function ($q) {
         getLastListingsFilters: function () {
             var deferred = $q.defer ();
 
-            chrome.storage.sync.get (chromeGeneralStorageService.LAST_FILTERS, function (items) {
-                var data = items[chromeGeneralStorageService.LAST_FILTERS];
+            chrome.storage.sync.get (LAST_FILTERS, function (items) {
+                var data = items[LAST_FILTERS];
                 if (typeof data === "undefined")
                     data = null;
                 deferred.resolve (data);
