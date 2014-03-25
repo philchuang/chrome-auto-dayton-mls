@@ -17,10 +17,10 @@ app.factory ("searchService", function (browserTabsService, browserGeneralStorag
                 if (!(S(url).startsWith (DAYTON_RAPMLS_PARTIAL_URL))) {
                     browserTabsService.openNewTab (DAYTON_RAPMLS_URL).then (function (tabId) {
 
-                        browserGeneralStorageService.publishCriteria(criteria, tabId);
+                        browserGeneralStorageService.publishCriteria (criteria, tabId);
                         if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
                             browserGeneralStorageService.publishScrapeOptions (tabId, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
-                        // TODO figure out what happens if new tab calls consume before publish is called
+                        // NOTE possible bug, figure out what happens if new tab calls consume before publish is called
 
                     });
                 } else {

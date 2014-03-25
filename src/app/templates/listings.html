@@ -188,7 +188,8 @@
           <div class="input-group input-group-sm bottom-buffer" style="height: auto;">
             <span class="input-group-addon">func<br />(listing)</span>
             <span class="input-group-addon btn btn-link" ng-click="filters.dynamicJavascriptFilter = tempDynamicJavascriptFilter; saveFilters();" title="apply"><span class="glyphicon glyphicon-check" title="apply"></span></span>
-            <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="tempDynamicJavascriptFilter" title="javascript function (scope) that returns true/false"></textarea>
+            <!-- TODO prevent this field from triggering reevaluation of ngrepeat -->
+            <textarea class="form-control" rows="5" style="width: 100%; height: auto;" ng-model="tempDynamicJavascriptFilter" us-debounce="10000" title="javascript function (scope) that returns true/false"></textarea>
             <!-- TODO have this clear filters.dynamicJavascriptFilter and save filters -->
             <span class="input-group-addon btn btn-link" clear-control><span class="glyphicon glyphicon-remove"></span></span>
           </div>

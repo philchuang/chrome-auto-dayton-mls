@@ -2,7 +2,7 @@
     "manifest_version": 2, 
 
     "name": "Auto Dayton MLS", 
-    "description": "This extension automates a Dayton, OH MLS search, scrapes listings details and provides a management/filtering UI.", 
+    "description": "This extension automates a Dayton, OH MLS search, scrapes listings details and provides listings management/filtering UI.", 
     "version": "2.0", 
 
     "icons": {

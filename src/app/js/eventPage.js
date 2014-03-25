@@ -10,8 +10,7 @@ chrome.runtime.onInstalled.addListener (function (details) {
     browserGeneralStorageService.clearAllTempData ();
 });
 
-// TODO extract Chrome API calls
-// TODO split listeners into area/module specific files
+// FUTURE split listeners into area/module specific files
 
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
@@ -19,9 +18,11 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
     var scrapeService = injector.get ("scrapeService");
 
+    // -- SEARCH ----------------------------------------------------------------------------------
+
     if (request.action === "consumeCriteria") {
         browserGeneralStorageService.consumeCriteria (sender.tab.id).then (function (criteria) {
-             sendResponse(criteria);
+            sendResponse (criteria);
         });
         return true; // this keeps the message channel open for asynchronous response
     }
@@ -40,6 +41,8 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         return true; // this keeps the message channel open for asynchronous response
     }
     
+    // -- SCRAPE ----------------------------------------------------------------------------------
+
     if (request.action === "processListing") {
         scrapeService.processListing (request.listing).then (function (resultAndListing) {
             sendResponse (resultAndListing);
@@ -76,6 +79,8 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
         });
         return true; // this keeps the message channel open for asynchronous response
     }
+
+    // -- NOTIFICATIONS ---------------------------------------------------------------------------
 
     if (request.action === "displayNotification") {
         browserNotificationService.displayNotification (request.id, request.title, request.message);
