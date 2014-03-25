@@ -13,7 +13,7 @@ app.factory ("browserListingStorageService", function ($q, listingConformerServi
         var deferred = $q.defer ();
 
         //if (!Utils.isDefinedAndNotNull (listing))
-        // TODO throw exception if listing is undefined or null
+        // FUTURE throw exception if listing is undefined or null
 
         listingConformerService.conform (listing);
 
@@ -55,7 +55,7 @@ app.factory ("browserListingStorageService", function ($q, listingConformerServi
         return deferred.promise;
     };
     
-    /* TODO live-update thoughts...
+    /* FUTURE live-update thoughts...
      * getAllListings renamed loadAllListings which gets saved locally, getAllListings returns that value
      * saveListing replaces local copy
      */

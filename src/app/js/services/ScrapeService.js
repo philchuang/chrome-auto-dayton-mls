@@ -61,113 +61,112 @@ var roomsComparatorProvider = function () {
     };
 };
 
-var ScrapeServiceBase = ScrapeServiceBase || {
-    stalenessThresholdMs: 1000 * 60 * 60 * 24, // 1 day in milliseconds
-
+var scrapeServiceResults = scrapeServiceResults || {
     NO_CHANGE: 0,
     NEW_LISTING: -1,
     INVALID_OPERATION: -2,
     UPDATED_LISTING: 1,
-    comparators: [
+};
+
+/*
+ * processes scraped listing data and merges into the existing data
+ */
+app.factory ("scrapeService", function ($q, browserTabsService, browserListingStorageService) {
+
+    var stalenessThresholdMs = 1000 * 60 * 60 * 24; // 1 day in milliseconds
+
+    var comparators = [
         simpleComparatorProvider ("listPrice"),
         simpleComparatorProvider ("sqft"),
         simpleComparatorProvider ("status"),
         simpleComparatorProvider ("description"),
         picturesComparatorProvider (),
         roomsComparatorProvider ()
-    ]
-};
+    ];
 
-ScrapeServiceBase.getChanges = ScrapeServiceBase.getChanges || function (previous, latest) {
-    if (!Utils.isDefinedAndNotNull (previous)
-        || !Utils.isDefinedAndNotNull (latest))
-        return null;
+    var getChanges = function (previous, latest) {
+        if (!Utils.isDefinedAndNotNull (previous)
+            || !Utils.isDefinedAndNotNull (latest))
+            return null;
 
-    var result = "";
+        var result = "";
 
-    for (var i = 0; i < ScrapeServiceBase.comparators.length; i++)
-    {
-        var comparator = ScrapeServiceBase.comparators[i];
-        var changes = comparator.getChanges (previous.record, latest.record);
-        if (changes !== null)
-            result += ", " + changes;
-    }
+        for (var i = 0; i < comparators.length; i++)
+        {
+            var comparator = comparators[i];
+            var changes = comparator.getChanges (previous.record, latest.record);
+            if (changes !== null)
+                result += ", " + changes;
+        }
 
-    if (result.length === 0)
-        return null;
+        if (result.length === 0)
+            return null;
 
-    // removes initial ", "
-    return result.substr (2);
-};
+        // removes initial ", "
+        return result.substr(2);
+    };
 
-ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function (previous, latest) {
+    var processChanges = function (previous, latest) {
 
-    if (!Utils.isDefinedAndNotNull (latest))
-        return ScrapeServiceBase.INVALID_OPERATION;
+        if (!Utils.isDefinedAndNotNull (latest))
+            return scrapeServiceResults.INVALID_OPERATION;
 
-    if (!Utils.isDefinedAndNotNull (previous))
-    {
-        latest.history = [];
-        latest.history.push ({
-            timestamp: latest.record.refreshed,
-            action: "started tracking"
-        });
-        return ScrapeServiceBase.NEW_LISTING;
-    }
+        if (!Utils.isDefinedAndNotNull (previous))
+        {
+            latest.history = [];
+            latest.history.push ({
+                timestamp: latest.record.refreshed,
+                action: "started tracking"
+            });
+            return scrapeServiceResults.NEW_LISTING;
+        }
 
-    // find values which don't exist in the previous object
-    var newProperties = [];
-    var propertyName;
+        // find values which don't exist in the previous object
+        var newProperties = [];
+        var propertyName;
 
-    if (Utils.isDefinedAndNotNull (latest.record)) {
-        for (propertyName in latest.record) {
-            if (!Utils.isDefinedAndNotNull (previous.record) || typeof previous.record[propertyName] === "undefined") {
-                newProperties.push (propertyName);
+        if (Utils.isDefinedAndNotNull (latest.record)) {
+            for (propertyName in latest.record) {
+                if (!Utils.isDefinedAndNotNull (previous.record) || typeof previous.record[propertyName] === "undefined") {
+                    newProperties.push (propertyName);
+                }
             }
         }
-    }
 
-    // ensure record obj is present
-    if (!Utils.isDefinedAndNotNull (previous.record))
-        previous.record = {};
+        // ensure record obj is present
+        if (!Utils.isDefinedAndNotNull (previous.record))
+            previous.record = {};
 
-    if (!Utils.isDefinedAndNotNull (latest.record))
-        latest.record = {};
+        if (!Utils.isDefinedAndNotNull (latest.record))
+            latest.record = {};
 
-    // copy over values which don't exist in the latest object
-    for (propertyName in previous)
-        if (typeof latest[propertyName] === "undefined")
-            latest[propertyName] = previous[propertyName];
-    if (Utils.isDefinedAndNotNull (previous.record)) {
-        for (propertyName in previous.record) {
-            if (typeof latest.record[propertyName] === "undefined")
-                latest.record[propertyName] = previous.record[propertyName];
+        // copy over values which don't exist in the latest object
+        for (propertyName in previous)
+            if (typeof latest[propertyName] === "undefined")
+                latest[propertyName] = previous[propertyName];
+        if (Utils.isDefinedAndNotNull (previous.record)) {
+            for (propertyName in previous.record) {
+                if (typeof latest.record[propertyName] === "undefined")
+                    latest.record[propertyName] = previous.record[propertyName];
+            }
         }
-    }
 
-    var changes = ScrapeServiceBase.getChanges (previous, latest);
-    // don't care to see this change right now
-    //if (newProperties.length > 0) {
-    //    var newPropertiesStr = "added " + newProperties.join (", ");
-    //    if (changes === null)
-    //        changes = newPropertiesStr;
-    //    else
-    //        changes = newPropertiesStr + ", " + changes;
-    //}
-    if (changes !== null) {
-        latest.history.push ({ action: changes, timestamp: latest.record.refreshed });
-        return ScrapeServiceBase.UPDATED_LISTING;
-    }
+        var changes = getChanges (previous, latest);
+        // don't care to see this change right now
+        //if (newProperties.length > 0) {
+        //    var newPropertiesStr = "added " + newProperties.join (", ");
+        //    if (changes === null)
+        //        changes = newPropertiesStr;
+        //    else
+        //        changes = newPropertiesStr + ", " + changes;
+        //}
+        if (changes !== null) {
+            latest.history.push ({ action: changes, timestamp: latest.record.refreshed });
+            return scrapeServiceResults.UPDATED_LISTING;
+        }
 
-    return ScrapeServiceBase.NO_CHANGE;
-};
-
-// TODO extract chrome API calls
-
-/*
- * processes scraped listing data and merges into the existing data
- */
-app.factory ("scrapeService", function ($q, browserListingStorageService) {
+        return scrapeServiceResults.NO_CHANGE;
+    };
 
     return {
         processListing: function (listing) {
@@ -176,7 +175,7 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
             // get previous listing
             browserListingStorageService.getListing (listing.id).then (function (existingListing) {
                 // compare listing
-                var result = ScrapeServiceBase.processChanges (existingListing, listing);
+                var result = processChanges (existingListing, listing);
                 // save listing
                 browserListingStorageService.saveListing (listing);
                 deferred.resolve ({ result: result, listing: listing });
@@ -187,7 +186,7 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
 
         updateListingStaleness: function () {
             browserListingStorageService.getAllListings ().then (function (listings) {
-                var stalenessThreshold = new Date (new Date ().valueOf () - ScrapeServiceBase.stalenessThresholdMs);
+                var stalenessThreshold = new Date (new Date ().valueOf () - stalenessThresholdMs);
                 for (var i = 0; i < listings.length; i++) {
                     listings[i].record.isStale = new Date (listings[i].record.refreshed) < stalenessThreshold;
                     browserListingStorageService.saveListing (listings[i]);
@@ -221,15 +220,8 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
         checkCurrentPageCanBeScraped: function () {
             var deferred = $q.defer ();
 
-            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0) {
-                    deferred.resolve (false);
-                    return;
-                }
-
-                chrome.tabs.sendMessage (tabs[0].id, { action: "getCanScrape" }, function (response) {
-                    deferred.resolve (response === true);
-                });
+            browserTabsService.sendMessageToCurrentPage ({ action: "getCanScrape" }).then (function (response) {
+                deferred.resolve (Utils.isDefinedAndNotNull (response) && response === true);
             });
 
             return deferred.promise;
@@ -237,14 +229,9 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
 
         scrapeCurrentPage: function () {
             var deferred = $q.defer ();
-            
-            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0) {
-                    deferred.resolve ();
-                    return;
-                }
 
-                chrome.tabs.sendMessage (tabs[0].id, { action: "scrape" });
+            browserTabsService.sendMessageToCurrentPage ({ action: "scrape" }).then (function (response) {
+                deferred.resolve ();
             });
 
             return deferred.promise;
