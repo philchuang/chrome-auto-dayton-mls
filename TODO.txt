@@ -3,13 +3,21 @@ WHAT WAS JUST ACCOMPLISHED
 WHERE TO START NOW
 
 STUFF TO DO LATER
+* use a DB instead of key-value store
 * listing sets
 	* personal data applies within a set
 	* think realtor managing clients
+	* associate searches with a listing set
+	* ability to run all searches for a listing set
+	* ability to run all searches for all listing sets
 * convert from event page back to background page for live updates to listings
 	* OR have an event listener for local save, replace listings live!
 * architecture
 	* restructure directories by functional area?
+* search page
+	* more search fields
+* scraping
+	* capture more data
 * listings page
 	* floating left filter bar
 	* floating top bar
