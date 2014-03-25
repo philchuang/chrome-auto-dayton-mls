@@ -38,7 +38,7 @@ criteriaUtils.getFromUrlSearch = criteriaUtils.getFromUrlSearch ||
     };
 
 app.controller ("SearchController",
-    function ($scope, $window, browserGeneralStorageService, searchService, scrapeService, criteriaBookmarkService) {
+    function ($scope, $window, browserTabsService, browserGeneralStorageService, searchService, scrapeService, criteriaBookmarkService) {
 
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
@@ -89,17 +89,16 @@ app.controller ("SearchController",
             criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 
-        // TODO make calls to browserTabsService?
         $scope.viewListings = function () {
-            var listingsUrl = chrome.runtime.getURL("/app/templates/listings.html");
+            var searchUrl = browserTabsService.getAppUrl ("/app/templates/search.html");
+            var listingsUrl = browserTabsService.getAppUrl ("/app/templates/listings.html");
 
-            // if active tab is the DAYTON MLS search page, use that - else, create a new tab
-            chrome.tabs.query ({ url: listingsUrl }, function (tabs) {
-                if (tabs.length === 0) {
-                    chrome.tabs.create ({ url: listingsUrl }, function (_) {});
-                }
-                else {
-                    chrome.tabs.update (tabs[0].id, { url: listingsUrl, active: true });
+            // if active tab is the search page, open listing in current tab - else, create a new tab
+            browserTabsService.checkCurrentTabUrlMatches (searchUrl).then (function (isMatch) {
+                if (isMatch === true) {
+                    browserTabsService.updateCurrentTabUrl (listingsUrl);
+                } else {
+                    browserTabsService.openNewTab (listingsUrl);
                 }
             });
         };
