@@ -59,7 +59,7 @@ function processRows (resultRows, finishedCallback) {
         if (i % 4 === 3) {
             // process listing
             numProcessed++;
-            chrome.runtime.sendMessage ({ action: "processListing", listing: currentListing }, function (resultAndListing) {
+            browserMessageService.sendMessage ({ action: "processListing", listing: currentListing }, function (resultAndListing) {
                 if (resultAndListing.result === -1)
                     numNew++;
                 else if (resultAndListing.result === 0)
@@ -71,9 +71,9 @@ function processRows (resultRows, finishedCallback) {
                     var message = numProcessed + " processed: " + numNew + " new, " + numUpdated + " updated, " + numNoChange + " unchanged.";
                     //console.log (message);
 
-                    chrome.runtime.sendMessage ({ action: "updateListingStaleness" });
+                    browserMessageService.sendMessage ({ action: "updateListingStaleness" });
 
-                    chrome.runtime.sendMessage ({
+                    browserMessageService.sendMessage ({
                         action: "displayNotification",
                         id: "",
                         title: "Scrape Results",
@@ -83,7 +83,7 @@ function processRows (resultRows, finishedCallback) {
                     if (typeof finishedCallback !== "undefined" && finishedCallback != null)
                         finishedCallback (resultRows);
 
-                    chrome.runtime.sendMessage ({ action: "checkNeedsListingDetails", mlsNums: scrapedMlsNums },
+                    browserMessageService.sendMessage ({ action: "checkNeedsListingDetails", mlsNums: scrapedMlsNums },
                         function (mlsNums) {
                             processMlsNumsThatNeedDetails (mlsNums);
                         });
@@ -119,7 +119,7 @@ function processMlsNumsThatNeedDetails (mlsNums)
     }
     
     if (foundLink == null) {
-        chrome.runtime.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: [] });
+        browserMessageService.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: [] });
     } else {
         foundLink.click ();
     }
@@ -146,7 +146,7 @@ function handleScrapeOptions (options) {
         processRows (getResultRows (), function (resultRows) {
             if (options.viewDetailsFirstResult) {
                 // push options back to app, so that details content script can know to scrape
-                chrome.runtime.sendMessage ({ action: "publishScrapeOptions", options: options }, function () {
+                browserMessageService.sendMessage ({ action: "publishScrapeOptions", options: options }, function () {
                     openFirstResultDetailsPage (resultRows);
                 });
             }
@@ -163,7 +163,7 @@ $(document).ready (function ()
         return; // not on the results page
     
     // currently not used
-    //chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    //browserMessageService.addListener (function (request, sender, sendResponse) {
     //    if (request.action == "scrape") {
     //        handleScrapeOptions (request.options);
     //        sendResponse (true);
@@ -174,16 +174,16 @@ $(document).ready (function ()
     //    }
     //});
 
-    chrome.runtime.sendMessage ({ action: "consumeScrapeOptions" }, function (options) {
+    browserMessageService.sendMessage ({ action: "consumeScrapeOptions" }, function (options) {
         if (options)
             handleScrapeOptions (options);
         else
-            chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+            browserMessageService.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
                 processMlsNumsThatNeedDetails (mlsNums);
             });
     });
 
-    chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    browserMessageService.addListener(function (request, sender, sendResponse) {
         if (request.action === "getCanScrape") {
             sendResponse (true);
             return true;
@@ -194,7 +194,7 @@ $(document).ready (function ()
             return false;
         }
 
-        console.log ("Don't know how to to handle request: " + request);
+        console.log ("Don't know how to to handle request: " + JSON.stringify (request));
 
         return false;
     });

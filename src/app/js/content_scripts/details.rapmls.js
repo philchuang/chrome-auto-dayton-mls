@@ -163,7 +163,7 @@ function updateMlsData () {
         }
     }
     
-    chrome.runtime.sendMessage ({ action: "processListing", listing: listing }, function (resultAndListing) {
+    browserMessageService.sendMessage ({ action: "processListing", listing: listing }, function (resultAndListing) {
         var message = "N/A";
         if (resultAndListing.result === -1)
             message = "1 new";
@@ -172,7 +172,7 @@ function updateMlsData () {
         else if (resultAndListing.result === 1)
             message = "1 updated";
                 
-        chrome.runtime.sendMessage ({
+        browserMessageService.sendMessage ({
             action: "displayNotification",
             id: "",
             title: "Scrape Results",
@@ -180,14 +180,14 @@ function updateMlsData () {
         });
     });
 
-    chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+    browserMessageService.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
             return;
 
         var idx = $.inArray (listing.record.mls, mlsNums);
         if (~idx) {
             mlsNums.splice (idx, 1);
-            chrome.runtime.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: mlsNums });
+            browserMessageService.sendMessage ({ action: "saveMlsDetailsFetchList", mlsNums: mlsNums });
             window.history.back ();
         }
     });
@@ -199,7 +199,7 @@ $(document).ready (function ()
         return; // not on the details page
 
     // currently not used
-    //chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    //browserMessageService.addListener (function (request, sender, sendResponse) {
     //    if (request.action == "scrape") {
     //        handleScrapeOptions (request.options);
     //        sendResponse (true);
@@ -210,7 +210,7 @@ $(document).ready (function ()
     //    }
     //});
 
-    chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
+    browserMessageService.addListener (function (request, sender, sendResponse) {
         if (request.action === "getCanScrape") {
             sendResponse (true);
             return true;
@@ -218,14 +218,15 @@ $(document).ready (function ()
         
         if (request.action === "scrape") {
             updateMlsData ();
+            return;
         }
 
-        console.log ("Don't know how to to handle request: " + request);
+        console.log ("Don't know how to to handle request: " + JSON.stringify (request));
 
         return false;
     });
 
-    chrome.runtime.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
+    browserMessageService.sendMessage ({ action: "getMlsDetailsFetchList" }, function (mlsNums) {
         if (typeof mlsNums === "undefined" || mlsNums === null || mlsNums.length === 0)
             return;
 
@@ -234,7 +235,7 @@ $(document).ready (function ()
             updateMlsData ();
     });
 
-    chrome.runtime.sendMessage({ action: "consumeScrapeOptions" }, function (options) {
+    browserMessageService.sendMessage ({ action: "consumeScrapeOptions" }, function (options) {
         if (options && options.scrapeResults)
             updateMlsData ();
     });
