@@ -162,16 +162,17 @@ ScrapeServiceBase.processChanges = ScrapeServiceBase.processChanges || function 
     return ScrapeServiceBase.NO_CHANGE;
 };
 
+// TODO extract chrome API calls
+
 /*
  * processes scraped listing data and merges into the existing data
  */
 app.factory ("scrapeService", function ($q, browserListingStorageService) {
 
     return {
-
         processListing: function (listing) {
             var deferred = $q.defer ();
-            
+
             // get previous listing
             browserListingStorageService.getListing (listing.id).then (function (existingListing) {
                 // compare listing
@@ -193,13 +194,13 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
                 }
             });
         },
-        
+
         checkNeedsListingDetails: function (mlsNums) {
             var deferred = $q.defer ();
 
             browserListingStorageService.getListings (mlsNums).then (function (listings) {
                 var nums = [];
-                
+
                 if (Utils.isDefinedAndNotNull (listings) && listings.length > 0) {
                     for (var i = 0; i < listings.length; i++) {
                         if (!Utils.isDefinedAndNotNull (listings[i].record.listingDate)
@@ -215,7 +216,39 @@ app.factory ("scrapeService", function ($q, browserListingStorageService) {
             });
 
             return deferred.promise;
+        },
+
+        checkCurrentPageCanBeScraped: function () {
+            var deferred = $q.defer ();
+
+            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
+                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0) {
+                    deferred.resolve (false);
+                    return;
+                }
+
+                chrome.tabs.sendMessage (tabs[0].id, { action: "getCanScrape" }, function (response) {
+                    deferred.resolve (response === true);
+                });
+            });
+
+            return deferred.promise;
+        },
+
+        scrapeCurrentPage: function () {
+            var deferred = $q.defer ();
+            
+            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
+                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0) {
+                    deferred.resolve ();
+                    return;
+                }
+
+                chrome.tabs.sendMessage (tabs[0].id, { action: "scrape" });
+            });
+
+            return deferred.promise;
         }
-        
+
     };
 });

@@ -38,7 +38,7 @@ criteriaUtils.getFromUrlSearch = criteriaUtils.getFromUrlSearch ||
     };
 
 app.controller ("SearchController",
-    function ($scope, $window, browserGeneralStorageService, searchService, criteriaBookmarkService) {
+    function ($scope, $window, browserGeneralStorageService, searchService, scrapeService, criteriaBookmarkService) {
 
         // $location.search() isn't working right, so use $window.location.search
         if ($window.location.search.length !== 0)
@@ -47,10 +47,7 @@ app.controller ("SearchController",
             $scope.criteria = urlCriteria;
             $scope.$apply();
 
-            // TODO make call to searchService.searchDaytonRapmlsInCurrentTab
-            chrome.tabs.getCurrent (function (tab) {
-                searchService.searchDaytonRapmls (urlCriteria, tab);
-            });
+            searchService.searchDaytonRapmlsInCurrentTab (urlCriteria);
             return;
         }
 
@@ -58,22 +55,12 @@ app.controller ("SearchController",
             scrapeResults: false
         };
 
-        // TODO make call to searchService.canScrapeCurrentPage
-        chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-            if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
-                $scope.canScrapeCurrentPage = false;
-            chrome.tabs.sendMessage (tabs[0].id, { action: "getCanScrape" }, function (response) {
-                $scope.canScrapeCurrentPage = response === true;
-            });
+        scrapeService.checkCurrentPageCanBeScraped ().then (function (canScrape) {
+            $scope.canScrapeCurrentPage = canScrape;
         });
 
-        // TODO make call to searchService.scrapeCurrentPage
         $scope.scrapeCurrentPage = function () {
-            chrome.tabs.query ({ currentWindow: true, active: true }, function (tabs) {
-                if (!Utils.isDefinedAndNotNull (tabs) || tabs.length === 0)
-                    return;
-
-                chrome.tabs.sendMessage (tabs[0].id, { action: "scrape" });
+            scrapeService.scrapeCurrentPage ().then (function (tabs) {
                 window.close ();
             });
         };
@@ -102,7 +89,7 @@ app.controller ("SearchController",
             criteriaBookmarkService.addOrUpdateBookmark (criteria);
         };
 
-        // TODO make call to NavigationService.openListingsPage ?
+        // TODO make calls to browserTabsService?
         $scope.viewListings = function () {
             var listingsUrl = chrome.runtime.getURL("/app/templates/listings.html");
 
