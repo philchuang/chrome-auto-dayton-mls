@@ -15,23 +15,27 @@ So I wrote an extension for Chrome that simplifies the search to the primary fie
 How do I get it?
 ----------------
 
-1. Save the [Auto Dayton-MLS.crx](https://github.com/philchuang/chrome-auto-dayton-mls/blob/master/crx/Auto%20DAY-MLS.crx) chrome extension file to your computer.
-2. Open a new Chrome tab to the extensions management page, `chrome://extensions` - *sorry, chrome blocks this from being a link, so type it in or copy & paste*.
+1. Save the [Auto Dayton-MLS.crx](https://github.com/philchuang/chrome-auto-dayton-mls/blob/master/crx/Auto%20DAY-MLS.crx) chrome extension file to your computer (click on the link, then click on "View Raw").
+2. In Chrome, open a new tab to the extensions management page, `chrome://extensions` - *sorry, chrome blocks this from being a link, so you'll have to manually type it in or copy & paste*.
 3. Drag & drop the crx file into the extensions management page.
 4. Look for it in the browser actions section to the right of the address bar.
 
 Status
 ------
 
-Current Version: **v1.3**
+Current Version: **v2.0**
 
 Latest features
 
-* Ability to scrape listings and save them, display changes over time
+* Added the ability to scrape (capture & save) listings from search results. Listings can be sorted, filtered, and managed from the listings page (click on the icon in the upper-right of the search popup).
+* When searching & scraping, you'll get notifications whenever a listing changes (list price change, status change, description change, new pictures). Sort by "Updated" descending to see the listings with the latest changes.
 
 To Dos
 
-* Add a few more search fields (perhaps make that configurable)
+* Add a few more search fields (perhaps make that configurable).
+* Add the capability to add listings to a listings set (useful if you're a realtor with multiple clients and wanted to keep track of a different set of houses for each).
+  * Associate searches with a listing set
+* Eliminate need to Refresh on the listings page when scraping search results.
 
 License
 -------
