@@ -61,6 +61,7 @@
     <Content Include="app\css\listings.css" />
     <Content Include="app\css\search.css" />
     <Content Include="app\js\app.eventPage.js" />
+    <Content Include="app\js\content_scripts\ChromeMessageService.js" />
     <Content Include="app\js\content_scripts\details.rapmls.js" />
     <Content Include="app\js\content_scripts\scrape.rapmls.js" />
     <Content Include="app\js\controllers\ListingsController.js" />
