@@ -15,19 +15,19 @@ app.filter ("dynamicJavascript", function () {
 
         /* custom filter to see if a listing has personal notes
 
-        return !(listing === null || angular.isUndefined (listing.personalNotes) || listing.personalNotes.length === 0);
+        return !(listing === null || angular.isUndefined (listing.personal) || angular.isUndefined (listing.personal.notes) || listing.personal.notes.length === 0);
 
          */
         /* custom filter to see if a listing has a study
 
-        if (listing == null || angular.isUndefined (listing.rooms) || listing.rooms.length === 0) return false;
-        return listing.rooms.filter (function (r) { return r.name.match (new RegExp ("study", "i")) != null; }).length > 0;
+        if (listing == null) return false;
+        return listing.record.rooms.filter (function (r) { return r.name.match (new RegExp ("study", "i")) != null; }).length > 0;
 
          */
 
         /* custom filter to see if a listing has changed in price
 
-        if (listing == null || angular.isUndefined (listing.history) || listing.history.length === 0) return false;
+        if (listing == null) return false;
         return listing.history.filter (function (h) { return h.action.match (new RegExp ("listPrice:", "i")) != null; }).length > 0;
 
          */

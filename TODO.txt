@@ -1,6 +1,14 @@
 WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
+* FIX search page bookmarks sometimes re-uses listing tab instead of search tab
+* MOD Allow editing of listing details and be smart about which fields to overwrite when scraping/refreshing
+	* Do not overwrite when refreshing
+		* Address fields
+		* misc listing data? i.e. sqft entered manually, prevent overwriting with null
+	* Add/Edit delete history items
+	* Display %s with listing price changes
+
 
 STUFF TO DO LATER
 * use a DB instead of key-value store
