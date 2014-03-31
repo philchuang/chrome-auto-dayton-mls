@@ -2,6 +2,7 @@ WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
 * FIX search page bookmarks sometimes re-uses listing tab instead of search tab
+* FIX import of personal notes only is broken (referencing record.mls)
 * MOD Allow editing of listing details and be smart about which fields to overwrite when scraping/refreshing
 	* Do not overwrite when refreshing
 		* Address fields
