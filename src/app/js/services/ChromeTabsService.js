@@ -5,7 +5,7 @@
  */
 app.factory ("browserTabsService", function ($q) {
 
-    return {
+    var service = {
 
         getAppUrl: function (relativeUrl) {
             return chrome.runtime.getURL (relativeUrl);
@@ -111,4 +111,9 @@ app.factory ("browserTabsService", function ($q) {
         } 
     };
 
+    // add constants
+    service.searchUrl = service.getAppUrl ("/app/templates/search.html");
+    service.listingsUrl = service.getAppUrl ("/app/templates/listings.html");
+
+    return service;
 });

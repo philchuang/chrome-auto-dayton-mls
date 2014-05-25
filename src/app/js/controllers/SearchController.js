@@ -80,13 +80,11 @@ app.controller ("SearchController",
         };
 
         $scope.executeSearch = function (criteria) {
-            var searchUrl = browserTabsService.getAppUrl ("/app/templates/search.html");
-
             criteriaUtils.prepareCriteria (criteria);
 
             // if active tab is the search page, do search in active tab - else, create a new tab
             browserTabsService.getActiveTabUrl ().then (function (url) {
-                if (Utils.isDefinedAndNotNull (url) && S(url).startsWith (searchUrl)) {
+                if (Utils.isDefinedAndNotNull (url) && S(url).startsWith (browserTabsService.searchUrl)) {
                     searchService.searchDaytonRapmlsInActiveTab (criteria);
                 } else {
                     searchService.searchDaytonRapmls (criteria);
@@ -100,15 +98,12 @@ app.controller ("SearchController",
         };
 
         $scope.viewListings = function () {
-            var searchUrl = browserTabsService.getAppUrl ("/app/templates/search.html");
-            var listingsUrl = browserTabsService.getAppUrl ("/app/templates/listings.html");
-
             // if active tab is the search page, open listing in current tab - else, create a new tab
             browserTabsService.getCurrentTabUrl ().then (function (url) {
-                if (url === searchUrl) {
-                    browserTabsService.updateCurrentTabUrl (listingsUrl);
+                if (url === browserTabsService.searchUrl) {
+                    browserTabsService.updateCurrentTabUrl (browserTabsService.listingsUrl);
                 } else {
-                    browserTabsService.openNewTab (listingsUrl);
+                    browserTabsService.openNewTab (browserTabsService.listingsUrl);
                 }
             });
         };
