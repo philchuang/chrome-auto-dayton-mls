@@ -45,7 +45,7 @@ app.controller ("SearchController",
         {
             var urlCriteria = criteriaUtils.getFromUrlSearch ($window.location.search);
             $scope.criteria = urlCriteria;
-            $scope.$apply();
+            //$scope.$apply();
 
             searchService.searchDaytonRapmlsInCurrentTab (urlCriteria);
             return;
@@ -84,10 +84,10 @@ app.controller ("SearchController",
 
             criteriaUtils.prepareCriteria (criteria);
 
-            // if active tab is the search page, do search in current tab - else, create a new tab
-            browserTabsService.getCurrentTabUrl ().then (function (url) {
-                if (S(url).startsWith (searchUrl)) {
-                    searchService.searchDaytonRapmlsInCurrentTab (criteria);
+            // if active tab is the search page, do search in active tab - else, create a new tab
+            browserTabsService.getActiveTabUrl ().then (function (url) {
+                if (Utils.isDefinedAndNotNull (url) && S(url).startsWith (searchUrl)) {
+                    searchService.searchDaytonRapmlsInActiveTab (criteria);
                 } else {
                     searchService.searchDaytonRapmls (criteria);
                 }

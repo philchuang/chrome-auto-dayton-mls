@@ -1,8 +1,18 @@
 WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
-* FIX opening MSL search in new non-active tab causes search to happen in active tab
+* MOD clicking on notification opens listings page
 * FIX when bookmark folder does not exist and user creates bookmark, only the folder is created - bookmark itself is not created
+* MOD change model & storage strategy
+	* sync storage
+		* listings set
+			* listing IDs
+			* searches that compose the set
+			* personal data
+				* listing overrides
+				* notes, score, hide/show, etc
+	* local storage
+		* source listing data
 * FIX import of personal notes only is broken (referencing record.mls)
 * MOD Allow editing of listing details and be smart about which fields to overwrite when scraping/refreshing
 	* Do not overwrite when refreshing

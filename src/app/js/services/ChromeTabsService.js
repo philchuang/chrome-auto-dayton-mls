@@ -14,6 +14,16 @@ app.factory ("browserTabsService", function ($q) {
         getCurrentTabUrl: function () {
             var deferred = $q.defer ();
 
+            chrome.tabs.getCurrent (function (tab) {
+                deferred.resolve (Utils.isDefinedAndNotNull (tab) ? tab.url : null);
+            });
+
+            return deferred.promise;
+        },
+
+        getActiveTabUrl: function () {
+            var deferred = $q.defer ();
+
             chrome.tabs.query ({ active: true, currentWindow: true }, function (tabs) {
                 deferred.resolve (Utils.isDefinedAndNotNull (tabs) && tabs.length > 0 ? tabs[0].url : null);
             });
@@ -24,8 +34,8 @@ app.factory ("browserTabsService", function ($q) {
         updateCurrentTabUrl: function (url) {
             var deferred = $q.defer ();
 
-            chrome.tabs.query ({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.update (tabs[0].id, { url: url });
+            chrome.tabs.getCurrent (function (tab) {
+                chrome.tabs.update (tab.id, { url: url });
                 deferred.resolve ();
             });
 
@@ -33,6 +43,16 @@ app.factory ("browserTabsService", function ($q) {
         },
 
         getCurrentTabId: function () {
+            var deferred = $q.defer ();
+
+            chrome.tabs.getCurrent (function (tab) {
+                deferred.resolve (Utils.isDefinedAndNotNull (tab) ? tab.id : null);
+            });
+
+            return deferred.promise;
+        },
+
+        getActiveTabId: function () {
             var deferred = $q.defer ();
 
             chrome.tabs.query ({ active: true, currentWindow: true }, function (tabs) {
@@ -52,6 +72,7 @@ app.factory ("browserTabsService", function ($q) {
             return deferred.promise;
         },
 
+        // NOTE: if called by popup, new tab opening will kill the popup & callbacks
         openNewTab: function (url) {
             var deferred = $q.defer ();
 

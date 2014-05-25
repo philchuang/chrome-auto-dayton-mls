@@ -91,3 +91,16 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
 
     return false;
 });
+
+function openNewTabAndPublishSearchCriteria (url, criteria) {
+    var injector = angular.injector (["AutoDaytonMls", "ng"]);
+    var browserTabsService = injector.get ("browserTabsService");
+    var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
+
+    browserTabsService.openNewTab (url).then (function (tabId) {
+        browserGeneralStorageService.publishCriteria (criteria, tabId);
+        if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
+            browserGeneralStorageService.publishScrapeOptions (tabId, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
+        // FIX possible issue, figure out what happens if new tab calls consume before publish is called
+    });
+}
