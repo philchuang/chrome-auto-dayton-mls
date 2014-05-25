@@ -1,7 +1,6 @@
 WHAT WAS JUST ACCOMPLISHED
 
 WHERE TO START NOW
-* FIX when bookmark folder does not exist and user creates bookmark, only the folder is created - bookmark itself is not created
 * MOD change model & storage strategy
 	* sync storage
 		* listings set

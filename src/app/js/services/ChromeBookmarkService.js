@@ -24,8 +24,8 @@ app.factory ("browserBookmarkService", function ($q) {
         
         create: function (options) {
             var deferred = $q.defer ();
-            chrome.bookmarks.create (options, function () {
-                deferred.resolve ();
+            chrome.bookmarks.create (options, function (node) {
+                deferred.resolve (node);
             });
             return deferred.promise;
         },

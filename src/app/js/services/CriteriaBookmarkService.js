@@ -71,7 +71,7 @@ app.factory ("criteriaBookmarkService", function (browserBookmarkService, browse
                 {
                     if (typeof node == "undefined" || node == null)
                     {
-                        browserBookmarkService.create ({ parentId: folderId, title: title, url: url }).then (function () {
+                        browserBookmarkService.create ({ parentId: folderId, title: title, url: url }).then (function (newNode) {
                             browserNotificationService.displayNotification ("", "Bookmark created", title);
                         });
                     }
