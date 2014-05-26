@@ -18,7 +18,7 @@ app.factory ("searchService", function (browserTabsService, browserGeneralStorag
             browserTabsService.getActiveTabUrl ().then (function (url) {
                 if (!Utils.isDefinedAndNotNull (url) || !(S(url).startsWith (DAYTON_RAPMLS_PARTIAL_URL))) {
                     // have to use background page to open new tab & publish b/c new tab opening kills popup process
-                    chrome.extension.getBackgroundPage().openNewTabAndPublishSearchCriteria(DAYTON_RAPMLS_URL, criteria);
+                    chrome.runtime.sendMessage ({ action: "openNewTabAndPublishSearchCriteria", url: DAYTON_RAPMLS_URL, criteria: criteria });
                 } else {
                     browserTabsService.getActiveTabId ().then (function (tabId) {
 

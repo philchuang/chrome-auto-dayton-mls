@@ -14,11 +14,23 @@ chrome.runtime.onInstalled.addListener (function (details) {
 
 chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
     var injector = angular.injector (["AutoDaytonMls", "ng"]);
+    var browserTabsService = injector.get ("browserTabsService");
     var browserNotificationService = injector.get ("browserNotificationService");
     var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
     var scrapeService = injector.get ("scrapeService");
 
     // -- SEARCH ----------------------------------------------------------------------------------
+
+    // I believe this is the only message so far that gets sent by the popup
+    if (request.action === "openNewTabAndPublishSearchCriteria") {
+        browserTabsService.openNewTab (request.url).then (function (tabId) {
+            browserGeneralStorageService.publishCriteria (request.criteria, tabId);
+            if (request.criteria.scrapeResults === true || request.criteria.viewDetailsFirstResult === true)
+                browserGeneralStorageService.publishScrapeOptions (tabId, { scrapeResults: request.criteria.scrapeResults, viewDetailsFirstResult: request.criteria.viewDetailsFirstResult });
+            // FIX possible issue, figure out what happens if new tab calls consume before publish is called
+        });
+        return false;
+    }
 
     if (request.action === "consumeCriteria") {
         browserGeneralStorageService.consumeCriteria (sender.tab.id).then (function (criteria) {
@@ -91,16 +103,3 @@ chrome.runtime.onMessage.addListener (function (request, sender, sendResponse) {
 
     return false;
 });
-
-function openNewTabAndPublishSearchCriteria (url, criteria) {
-    var injector = angular.injector (["AutoDaytonMls", "ng"]);
-    var browserTabsService = injector.get ("browserTabsService");
-    var browserGeneralStorageService = injector.get ("browserGeneralStorageService");
-
-    browserTabsService.openNewTab (url).then (function (tabId) {
-        browserGeneralStorageService.publishCriteria (criteria, tabId);
-        if (criteria.scrapeResults === true || criteria.viewDetailsFirstResult === true)
-            browserGeneralStorageService.publishScrapeOptions (tabId, { scrapeResults: criteria.scrapeResults, viewDetailsFirstResult: criteria.viewDetailsFirstResult });
-        // FIX possible issue, figure out what happens if new tab calls consume before publish is called
-    });
-}
