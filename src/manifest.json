@@ -5,7 +5,7 @@
     "description": "This extension automates a Dayton, OH MLS search, scrapes listings details and provides listings management/filtering UI.", 
     "version": "2.0", 
 
-    "update_url": "https://github.com/philchuang/chrome-auto-dayton-mls/blob/dev/crx/crx_update.xml",
+    "update_url": "https://raw.githubusercontent.com/philchuang/chrome-auto-dayton-mls/dev/crx/crx_update.xml",
 
     "icons": {
         "128": "/app/resources/icons/icon128.png", 
